@@ -124,7 +124,7 @@ namespace Bezpieczeństwo.Algorithms
                     catch (IndexOutOfRangeException e)
                     { }
                 }
-                output += buffer.ToString();
+                if(buffer[0] != '\0')output += new String(buffer).TrimEnd('\0');
             }
             return output;
         }

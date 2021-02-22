@@ -24,11 +24,15 @@ namespace UnitTests
             PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             string key = "3,1,4,2";
             string notCiphered = "CRYPTOGRAPHY";
-            string ciphered = "YCPRGTROHAY";
-            
+            string ciphered = "YCPRGTROHAYP";
+
             Assert.AreEqual(true, algorytm.PrepareKey(key, ','));
-            Assert.AreEqual(ciphered, algorytm.CipherString(notCiphered));
-            Assert.AreEqual(notCiphered, algorytm.CipherString(ciphered));
+            string cipheredWithAlgorythm =algorytm.CipherString(notCiphered);
+            string notCipheredWithAlgorythm = algorytm.DecipherString(ciphered);
+            
+            
+            Assert.AreEqual(ciphered, cipheredWithAlgorythm);
+            Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
         }
 
         [Test]
@@ -55,7 +59,7 @@ namespace UnitTests
         {
             PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             Random rand = new Random();
-            string key = "3-1-4-2";
+            string key = "4-3-1-2";
             string notCiphered = "";
             int n = rand.Next(10, 50);
             for(int i = 0; i < n; i++)
@@ -66,7 +70,8 @@ namespace UnitTests
             Assert.AreEqual(true, algorytm.PrepareKey(key, '-'));
             string ciphered = algorytm.CipherString(notCiphered);
 
-            Assert.AreEqual(algorytm.DecipherString(ciphered), notCiphered);
+            string notCipheredAgain = algorytm.DecipherString(ciphered);
+            Assert.AreEqual(notCipheredAgain, notCiphered);
         }
     }
 }
