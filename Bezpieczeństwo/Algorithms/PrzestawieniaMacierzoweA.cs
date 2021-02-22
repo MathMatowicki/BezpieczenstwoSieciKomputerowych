@@ -10,9 +10,9 @@ namespace Bezpieczeństwo.Algorithms
         private int[] key;
         private char[] buffer;
 
-        public bool PrepareKey(String key, char[] separators)
+        public bool PrepareKey(String sequence, char separator)
         {
-            String[] stringOrder = key.Split(separators);
+            string[] stringOrder = sequence.Split(separator);
             this.key = new int[stringOrder.Length];
             int index = 0;
             foreach(String column in stringOrder)
@@ -31,6 +31,11 @@ namespace Bezpieczeństwo.Algorithms
                 if (x > n || x <= 0) return false;
             }
             return true;
+        }
+
+        public void ClearKey()
+        {
+            this.key = null;
         }
 
         //pojedyncze elementy ciagu - rozmiar klucza
