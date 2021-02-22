@@ -6,16 +6,70 @@ namespace UnitTests
 {
     public class Tests
     {
+        private RailFence alghoritmRailFence;
+
         [SetUp]
         public void Setup()
         {
-            
+            alghoritmRailFence = new RailFence();
         }
 
         [Test]
         public void Test1()
         {
             Assert.Pass();
+        }
+
+
+        [Test]
+        public void TestRailFenceKey()
+        {
+
+            String key = "1";
+
+            Assert.AreEqual(true, alghoritmRailFence.PrepareKey(key));
+
+            key = "0";
+
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+
+            key = "-2";
+
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+
+            key = "Dowolny String";
+
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+        }
+
+        [Test]
+        public void TestRailFenceCipherAlghoritm()
+        {
+            string notCiphered = "CRYPTOGRAPHY";
+            string ciphered = "CYTGAHRPORPY";
+            String key = "2";
+
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, key));
+
+            key = "3";
+            ciphered = "CTARPORPYYGH";
+
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, key));
+        }
+
+        [Test]
+        public void TestRailFenceDecryptAlghoritm()
+        {
+            string notDecrypted = "CYTGAHRPORPY";
+            string decrypted = "CRYPTOGRAPHY";
+            String key = "2";
+
+           Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, key));
+
+            key = "3";
+            notDecrypted = "CTARPORPYYGH";
+
+            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, key));
         }
 
         [Test]
@@ -62,7 +116,7 @@ namespace UnitTests
             string key = "4-3-1-2";
             string notCiphered = "";
             int n = rand.Next(10, 50);
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 char letter = (char)rand.Next(65, 90);
                 notCiphered += letter.ToString();
