@@ -75,12 +75,6 @@ namespace Bezpieczeństwo.Algorithms
         }
 
         //Zwraca tablicę na podstawie słowa klucz
-        /*public int[] GetKey()
-        {
-            int[] i = new int[] { 1, 6, 2, 4, 8, 3, 5, 7, 9, 10};
-            return i; 
-        }*/
-
         private char[] QuickSort(char[]d, int l, int r)
         {
             int i, j;
@@ -116,13 +110,27 @@ namespace Bezpieczeństwo.Algorithms
             for(int j = 0; j < ckey.Length; j++)
             {
                 int p = 0;
-                while (ckey[j] != key[p]) p++;
+                while (ckey[j] != key[p] || i[p]!=0) p++;
                 i[p] = j+1;
             }
             
             return i;
         }
 
+
+        //sprawdzanie poprawności klucza - do usunięcia potem
+        public String key(String key)
+        {
+            String s="";
+            char[] ckey = new char[key.Length];
+            for (int j = 0; j < key.Length; j++)
+                ckey[j] = key[j];
+            int l = 0, r = key.Length - 1;
+            ckey = QuickSort(ckey, l, r);
+
+            foreach (char c in ckey) s += c;
+            return s;
+        }
 
     }
 }
