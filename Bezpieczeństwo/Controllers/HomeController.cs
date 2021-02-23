@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bezpieczeństwo.Models;
+using Bezpieczeństwo.Algorithms;
 
 namespace Bezpieczeństwo.Controllers
 {
@@ -20,6 +21,11 @@ namespace Bezpieczeństwo.Controllers
 
         public IActionResult Index()
         {
+            PrzestawieniaMacierzoweB b = new PrzestawieniaMacierzoweB();
+            String tab = b.Cipher("To jest szyfr i nie wiesz co tu jest napisane");
+            String result = b.Decipher("Tywui rejas  t0j sentnc 0ofi s ion0eizsese a0z tp0");
+            ViewBag.tab = tab;
+            ViewBag.result = result;
             return View();
         }
 
