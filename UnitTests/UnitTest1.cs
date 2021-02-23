@@ -7,7 +7,7 @@ namespace UnitTests
     public class Tests
     {
         private RailFence alghoritmRailFence;
-
+        private string keyRailFence = "";
         [SetUp]
         public void Setup()
         {
@@ -15,31 +15,24 @@ namespace UnitTests
         }
 
         [Test]
-        public void Test1()
-        {
-            Assert.Pass();
-        }
-
-
-        [Test]
         public void TestRailFenceKey()
         {
 
-            String key = "1";
+            keyRailFence = "1";
 
-            Assert.AreEqual(true, alghoritmRailFence.PrepareKey(key));
+            Assert.AreEqual(true, alghoritmRailFence.PrepareKey(keyRailFence));
 
-            key = "0";
+            keyRailFence = "0";
 
-            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(keyRailFence));
 
-            key = "-2";
+            keyRailFence = "-2";
 
-            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(keyRailFence));
 
-            key = "Dowolny String";
+            keyRailFence = "Random string";
 
-            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(key));
+            Assert.AreEqual(false, alghoritmRailFence.PrepareKey(keyRailFence));
         }
 
         [Test]
@@ -47,14 +40,17 @@ namespace UnitTests
         {
             string notCiphered = "CRYPTOGRAPHY";
             string ciphered = "CYTGAHRPORPY";
-            String key = "2";
 
-            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, key));
+            keyRailFence = "1";
+            Assert.AreEqual(notCiphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
 
-            key = "3";
+            keyRailFence = "2";
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
+
+            keyRailFence = "3";
             ciphered = "CTARPORPYYGH";
 
-            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, key));
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
         }
 
         [Test]
@@ -62,14 +58,16 @@ namespace UnitTests
         {
             string notDecrypted = "CYTGAHRPORPY";
             string decrypted = "CRYPTOGRAPHY";
-            String key = "2";
+            
+            keyRailFence = "1";
+            Assert.AreEqual(notDecrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
 
-           Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, key));
+            keyRailFence = "2";
+            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
 
-            key = "3";
+            keyRailFence = "3";
             notDecrypted = "CTARPORPYYGH";
-
-            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, key));
+            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
         }
 
         [Test]
@@ -81,10 +79,10 @@ namespace UnitTests
             string ciphered = "YCPRGTROHAYP";
 
             Assert.AreEqual(true, algorytm.PrepareKey(key, ','));
-            string cipheredWithAlgorythm =algorytm.CipherString(notCiphered);
+            string cipheredWithAlgorythm = algorytm.CipherString(notCiphered);
             string notCipheredWithAlgorythm = algorytm.DecipherString(ciphered);
-            
-            
+
+
             Assert.AreEqual(ciphered, cipheredWithAlgorythm);
             Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
         }
@@ -140,7 +138,7 @@ namespace UnitTests
             string ciphered1 = "RBGAYISA";
             string ciphered2 = "RBGYAISA";
             string cipheredLong = "AIGYAGBSRSBARIY";
-            
+
 
             Assert.AreEqual(true, algorytm.PrepareKey(key1, ','));
             Assert.AreEqual(notCiphered, algorytm.DecipherString(ciphered1));
