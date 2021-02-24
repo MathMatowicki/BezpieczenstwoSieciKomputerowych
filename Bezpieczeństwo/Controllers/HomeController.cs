@@ -24,8 +24,10 @@ namespace Bezpieczeństwo.Controllers
             PrzestawieniaMacierzoweB b = new PrzestawieniaMacierzoweB();
             //String tab = b.Cipher("To jest szyfr i nie wiesz co tu jest napisane","afbdhcegij");
             //String result = b.Decipher("Tywui rejas  t0j sentnc 0ofi s ion0eizsese a0z tp0", "afbdhcegij");
-            String tab = b.Cipher("HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION", "CONVENIENCE");
-            String result = b.Decipher("HECRN CEYI ISEP SGDI RNTO AAES RMPN SSRO EEBT ETIA EEHS", "CONVENIENCE");
+            String tab = b.Cipher("HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION", "CONVENIENCE");
+            String result = b.Decipher("HECRNCEYI0ISEP0SGDI0RNTO0AAES0RMPN0SSRO0EEBT0ETIA0EEHS0", "CONVENIENCE");
+            int[] i = b.GetKey("CONVENIENCE");
+            int leanth = i.Length;
 
             //sprawdzanie czy klucz dobrze dziala - do usuniecia potem
             /*
@@ -35,6 +37,8 @@ namespace Bezpieczeństwo.Controllers
             foreach(int j in i)tab = tab+j+" ";
             String result = b.key(k);*/
             ViewBag.tab = tab;
+            ViewBag.i = i;
+            ViewBag.leanth = leanth;
             ViewBag.result = result;
             return View();
         }

@@ -135,9 +135,11 @@ namespace Bezpieczeństwo.Algorithms
     }
 }
 
-//1 6 2 4 8 3 5 7 9 10
-//T o   j e s t   s z
-//y f r   i   n i e 
-//w i e s z   c o   t
-//u   j e s t   n a p
-//i s a n e 0 0 0 0 0
+//1 10 7 11 3 8 6 4 9 2 5 
+//H  E R  E   I S   S E C
+//R  E T    M E S S A G E
+//   E N  C I P H E R E D
+//   B Y    T R A N S P O
+//S  I T  I O N 0 0 0 0 0
+
+//HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION
