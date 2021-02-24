@@ -1,5 +1,5 @@
-using NUnit.Framework;
-using Bezpiecze�stwo.Algorithms;
+﻿using NUnit.Framework;
+using Bezpieczeństwo.Algorithms;
 using System;
 
 namespace UnitTests
@@ -154,6 +154,70 @@ namespace UnitTests
             Assert.AreEqual(notCipheredLong, algorytm.DecipherString(cipheredLong));
             Assert.AreEqual(cipheredLong, algorytm.CipherString(notCipheredLong));
         }
+
+        [Test]
+        public void TestPrzestawieniaMacierzoweBKey()
+        {
+            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
+            string key1 = "CONVENIENCE";
+            int[] key1result = new int[] {1,10,7,11,3,8,6,4,9,2,5};
+            string key2 = "BEZPIECZENSTWO";
+            int[] key2result = new int[] { 1, 3, 13, 9, 6, 4, 2, 14, 5, 7, 10, 11, 12, 8 };
+
+            Assert.AreEqual(algorytm.GetKey(key1), key1result);
+            Assert.AreEqual(algorytm.GetKey(key2), key2result);
+            
+        }
+
+        [Test]
+        public void TestPrzestawieniaMacierzoweBSpaces()
+        {
+            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
+            string s = "A B";
+            int[] i = algorytm.whereSpace(s);
+
+            Assert.AreEqual(algorytm.withoutSpace(s), "AB");
+            Assert.AreEqual(algorytm.addSpace("AB", i), s);
+
+        }
+
+        [Test]
+        public void TestPrzestawieniaMacierzoweBCipher()
+        {
+            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
+            string m1 = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            string c1 = "HECR NC E YIISEP SGDIRNT OAAESRMPNS SR OEEBTETIAEEHS";
+            string key1 = "CONVENIENCE";
+
+            string m2 = "CRYPTOGRAPHYOSA";
+            string c2 = "RTRHSCPGPOYOAYA";
+            string key2 = "TRY";
+
+            Assert.AreEqual(algorytm.Cipher(m1,key1), c1);
+            Assert.AreEqual(algorytm.Cipher(m2,key2), c2);
+
+        }
+
+        [Test]
+        public void TestPrzestawieniaMacierzoweBDecipher()
+        {
+            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
+            string m1 = "HECRNCEYI0ISEP0SGDI0RNTO0AAES0RMPN0SSRO0EEBT0ETIA0EEHS0";
+            string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION0000000000";
+            //string m1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
+            //string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
+            string key1 = "CONVENIENCE";
+
+            string m2 = "RTRHSCPGPOYOAYA";
+            string c2 = "CRYPTOGRAPHYOSA";
+            string key2 = "TRY";
+
+            Assert.AreEqual(algorytm.Decipher(m1, key1), c1);
+            Assert.AreEqual(algorytm.Decipher(m2, key2), c2);
+
+        }
+
+
 
     }
 }

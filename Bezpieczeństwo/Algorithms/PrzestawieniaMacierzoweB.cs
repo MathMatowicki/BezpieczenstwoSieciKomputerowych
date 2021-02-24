@@ -10,6 +10,8 @@ namespace Bezpieczeństwo.Algorithms
         public String Cipher(string text, String userKey)
         {
             int[] key = GetKey(userKey);
+            int[] wSpace = this.whereSpace(text);
+            text = this.withoutSpace(text);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
             int index = 0;
@@ -25,7 +27,8 @@ namespace Bezpieczeństwo.Algorithms
                     }
                     else
                     {
-                        tab[i, j] = '0';
+                        //tab[i, j] = '0';
+                        tab[i, j] = ' ';
                     }
                 }
             }
@@ -38,6 +41,10 @@ namespace Bezpieczeństwo.Algorithms
                         output += tab[Array.IndexOf(key, i+1), j];
                 }
             }
+
+            output = this.withoutSpace(output);
+            output = this.addSpace(output, wSpace);
+
             return output;
         }
 
@@ -46,6 +53,8 @@ namespace Bezpieczeństwo.Algorithms
             int[] key = GetKey(userKey);
             Console.WriteLine(key.Length);
             String output = "";
+            //int[] wSpace = this.whereSpace(text);
+            //text = this.withoutSpace(text);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             int index = 0;
 
@@ -70,6 +79,9 @@ namespace Bezpieczeństwo.Algorithms
                     output += tab[g, k];
                 }
             }
+
+            //output = this.withoutSpace(output);
+            //output = this.addSpace(output, wSpace);
 
             return output;
         }
@@ -116,6 +128,59 @@ namespace Bezpieczeństwo.Algorithms
             
             return i;
         }
+
+        public String withoutSpace(String text)
+        {
+            String result = "";
+            foreach (char c in text)
+                if (c != ' ') result += c;
+            return result;
+        }
+
+        public int[] whereSpace(String text)
+        {
+            int i = 0;
+            foreach (char c in text)
+                if (c == ' ') i++;
+            int[] result = new int[i];
+            i = 0;
+            for (int j = 0; j < text.Length; j++)
+                if (text[j] == ' ')
+                {
+                    result[i] = j;
+                    i++;
+                }
+
+            return result;
+        }
+
+        public String addSpace(String text, int[] where)
+        {
+            String result = "";
+            int p = 0, index = 0, ile = 0;
+            if (where.Length > 0)
+            {
+                p = where[index];
+                for (int i = 0; i < text.Length; i++)
+                {
+                    if (i == p + ile)
+                    {
+                        result += " ";
+                        index++;
+                        if (index < where.Length)
+                        {
+                            p = where[index];
+                            ile--;
+                        }
+                    }
+                    result += text[i];
+                }
+            }
+            else return text;
+
+            return result;
+        }
+
 
 
         //sprawdzanie poprawności klucza - do usunięcia potem
