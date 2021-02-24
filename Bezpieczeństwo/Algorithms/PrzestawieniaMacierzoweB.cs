@@ -10,8 +10,8 @@ namespace Bezpieczeństwo.Algorithms
         public String Cipher(string text, String userKey)
         {
             int[] key = GetKey(userKey);
-            int[] wSpace = this.whereSpace(text);
-            text = this.withoutSpace(text);
+            //int[] wSpace = this.whereSpace(text);
+            //text = this.withoutSpace(text);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
             int index = 0;
@@ -27,8 +27,8 @@ namespace Bezpieczeństwo.Algorithms
                     }
                     else
                     {
-                        //tab[i, j] = '0';
-                        tab[i, j] = ' ';
+                        tab[i, j] = '0';
+                        //tab[i, j] = ' ';
                     }
                 }
             }
@@ -42,8 +42,8 @@ namespace Bezpieczeństwo.Algorithms
                 }
             }
 
-            output = this.withoutSpace(output);
-            output = this.addSpace(output, wSpace);
+            //output = this.withoutSpace(output);
+            //output = this.addSpace(output, wSpace);
 
             return output;
         }
