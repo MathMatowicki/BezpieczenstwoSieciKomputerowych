@@ -7,9 +7,9 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class PrzestawieniaMacierzoweB
     {
-        public String Cipher(string text)
+        public String Cipher(string text, String userKey)
         {
-            int[] key = GetKey();
+            int[] key = GetKey(userKey);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
             int index = 0;
@@ -41,9 +41,9 @@ namespace Bezpieczeństwo.Algorithms
             return output;
         }
 
-        public String Decipher(String text)
+        public String Decipher(String text, String userKey)
         {
-            int[] key = GetKey();
+            int[] key = GetKey(userKey);
             Console.WriteLine(key.Length);
             String output = "";
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
@@ -75,17 +75,69 @@ namespace Bezpieczeństwo.Algorithms
         }
 
         //Zwraca tablicę na podstawie słowa klucz
-        public int[] GetKey()
+        private char[] QuickSort(char[]d, int l, int r)
         {
-            int[] i = new int[] { 1, 5, 2, 4, 8, 3, 6, 7, 9};
-            return i; 
+            int i, j;
+            char p, swap;
+
+            i = (l + r) / 2;
+            p = d[i]; d[i] = d[r];
+            for (j = i = l; i < r; i++)
+                if (d[i] < p)
+                {
+                    swap = d[i];
+                    d[i] = d[j];
+                    d[j] = swap;
+                    j++;
+                }
+            d[r] = d[j]; d[j] = p;
+            if (l < j - 1) QuickSort(d, l, j - 1);
+            if (j + 1 < r) QuickSort(d, j + 1, r);
+
+            return d;
         }
+
+        public int[] GetKey(String key)
+        {
+            char[] ckey = new char[key.Length];
+            for (int j = 0; j < key.Length; j++)
+                ckey[j] = key[j];
+
+            int l = 0, r = key.Length - 1;
+            ckey = QuickSort(ckey, l, r);
+
+            int[] i = new int[key.Length];
+            for(int j = 0; j < ckey.Length; j++)
+            {
+                int p = 0;
+                while (ckey[j] != key[p] || i[p]!=0) p++;
+                i[p] = j+1;
+            }
+            
+            return i;
+        }
+
+
+        //sprawdzanie poprawności klucza - do usunięcia potem
+        public String key(String key)
+        {
+            String s="";
+            char[] ckey = new char[key.Length];
+            for (int j = 0; j < key.Length; j++)
+                ckey[j] = key[j];
+            int l = 0, r = key.Length - 1;
+            ckey = QuickSort(ckey, l, r);
+
+            foreach (char c in ckey) s += c;
+            return s;
+        }
+
     }
 }
 
-//1 5 2 4 8 3 6 7 9
-//T o   j e s t   s
-//z y f r   i   n i 
-//e   w i e s z   c 
-//o   t u   j e s t  
-//n a p i s a n e 0
+//1 6 2 4 8 3 5 7 9 10
+//T o   j e s t   s z
+//y f r   i   n i e 
+//w i e s z   c o   t
+//u   j e s t   n a p
+//i s a n e 0 0 0 0 0
