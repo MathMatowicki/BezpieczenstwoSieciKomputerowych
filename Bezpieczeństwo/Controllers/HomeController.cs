@@ -22,8 +22,8 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Index()
         {
             PrzestawieniaMacierzoweB b = new PrzestawieniaMacierzoweB();
-            String tab = b.Cipher("To jest szyfr i nie wiesz co tu jest napisane");
-            String result = b.Decipher("Tywui rejas  t0j sentnc 0ofi s ion0eizsese a0z tp0");
+            String tab = b.Cipher("Tojestszyfriniewieszcotujestnapisane");
+            String result = b.Decipher("Tfst0jica0teus0enop0orzn0swja0zien0siti0yese0");
             ViewBag.tab = tab;
             ViewBag.result = result;
             return View();

@@ -77,15 +77,15 @@ namespace Bezpieczeństwo.Algorithms
         //Zwraca tablicę na podstawie słowa klucz
         public int[] GetKey()
         {
-            int[] i = new int[] { 1, 6, 2, 4, 8, 3, 5, 7, 9, 10};
+            int[] i = new int[] { 1, 5, 2, 4, 8, 3, 6, 7, 9};
             return i; 
         }
     }
 }
 
-//1 6 2 4 8 3 5 7 9 10
-//T o   j e s t   s z
-//y f r   i   n i e 
-//w i e s z   c o   t
-//u   j e s t   n a p
-//i s a n e 0 0 0 0 0
+//1 5 2 4 8 3 6 7 9
+//T o   j e s t   s
+//z y f r   i   n i 
+//e   w i e s z   c 
+//o   t u   j e s t  
+//n a p i s a n e 0
