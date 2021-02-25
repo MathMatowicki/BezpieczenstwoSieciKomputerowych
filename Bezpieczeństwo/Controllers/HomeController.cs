@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
+using System.IO;
 
 namespace Bezpieczeństwo.Controllers
 {
@@ -39,6 +40,59 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.tab = tab;
             ViewBag.i = i;
             ViewBag.leanth = leanth;
+            ViewBag.result = result;
+            return View();
+        }
+
+        public IActionResult Algorithms()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Algorithms(String key, String algorithm, bool option, Object file)
+        {
+            //var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
+            if (file == null)
+            {
+                ViewBag.Message = "Nie wybrano obrazu do przesłania";
+                return View("AddImage");
+            }
+
+            //Uruchamianie algorytmow szkielet
+            String result = "";
+            switch (algorithm)
+            {
+                case "RF":
+                    RailFence rf = new RailFence();
+                    rf.PrepareKey(key);
+                    if (option)
+                        result = rf.Cipher("abcde", key);
+                    else
+                        result = rf.Decrypt("abcde", key);
+                    break;
+
+                case "PMA":
+                    PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                    pma.PrepareKey(key, '-');
+                    if (option)
+                        result = pma.CipherString("abcde");
+                    else
+                        result = pma.DecipherString("abcde");
+                    break;
+
+                case "PMB":
+                    PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                    pmb.key(key);
+                    if (option)
+                        result = pmb.Cipher("abcde", key);
+                    else
+                        result = pmb.Decipher("abcde", key);
+
+                    break;
+                default:
+                    break;
+            }
             ViewBag.result = result;
             return View();
         }
