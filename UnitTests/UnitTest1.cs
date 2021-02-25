@@ -186,7 +186,7 @@ namespace UnitTests
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
             string m1 = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
-            string c1 = "HECR NC E YIISEP SGDIRNT OAAESRMPNS SR OEEBTETIAEEHS";
+            string c1 = "HEGEP SEN TNYT EPRNSARSSMITORR  SI C IASHAECEDOEEEBI";
             string key1 = "CONVENIENCE";
 
             string m2 = "CRYPTOGRAPHYOSA";
@@ -202,8 +202,8 @@ namespace UnitTests
         public void TestPrzestawieniaMacierzoweBDecipher()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
-            string m1 = "HECRNCEYI0ISEP0SGDI0RNTO0AAES0RMPN0SSRO0EEBT0ETIA0EEHS0";
-            string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION0000000000";
+            string m1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
+            string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
             //string m1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
             //string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
             string key1 = "CONVENIENCE";

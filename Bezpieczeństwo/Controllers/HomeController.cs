@@ -24,9 +24,9 @@ namespace Bezpieczeństwo.Controllers
             PrzestawieniaMacierzoweB b = new PrzestawieniaMacierzoweB();
             //String tab = b.Cipher("To jest szyfr i nie wiesz co tu jest napisane","afbdhcegij");
             //String result = b.Decipher("Tywui rejas  t0j sentnc 0ofi s ion0eizsese a0z tp0", "afbdhcegij");
-            String tab = b.Cipher("kupić gęślą", "CONVENIENCE");
-            String result = b.Decipher("k0l0ć0ę0ą0g0p0 0ś0u0i0", "CONVENIENCE");
-            int[] i = b.GetKey("CONVENIENCE");
+            String tab = b.Cipher("", "TRY");
+            string result = b.Decipher("RTRHSCPGPOYOAYA", "TRY");
+            int[] i = b.GetKey("TRY");
             int leanth = i.Length;
 
             //sprawdzanie czy klucz dobrze dziala - do usuniecia potem

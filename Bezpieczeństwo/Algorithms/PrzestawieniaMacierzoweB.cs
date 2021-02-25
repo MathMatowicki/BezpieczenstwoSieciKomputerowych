@@ -25,20 +25,15 @@ namespace Bezpieczeństwo.Algorithms
                         tab[i, j] = text[index];
                         index++;
                     }
-                    else
-                    {
-                        tab[i, j] = '0';
-                        //tab[i, j] = ' ';
-                    }
                 }
             }
 
-            for (int i = 0; i < key.Length ; i++)
+            for (int i = 0; i < key.Length; i++)
             {
                 for (int j = 0; j < (int)text.Length / key.Length + 1; j++)
                 {
-                    //if(tab[i,j] != '0')
-                        output += tab[Array.IndexOf(key, i+1), j];
+                    if(tab[Array.IndexOf(key, i + 1), j] != '\0')
+                        output += tab[Array.IndexOf(key, i + 1), j]; 
                 }
             }
 
@@ -56,32 +51,51 @@ namespace Bezpieczeństwo.Algorithms
             //int[] wSpace = this.whereSpace(text);
             //text = this.withoutSpace(text);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
+            int modulo = text.Length % key.Length;
+            Console.WriteLine(text.Length);
+            Console.WriteLine(modulo);
+            Console.WriteLine((int)(text.Length / key.Length));
+
             int index = 0;
 
             for (int i = 0; i < key.Length; i++)
             {
-                for (int j = 0; j < (int)text.Length / key.Length; j++)
+                if (Array.IndexOf(key, i + 1) < modulo)
                 {
-                    if (index <= text.Length - 1)
+                    for (int j = 0; j < (int)text.Length / key.Length + 1; j++)
                     {
-                        tab[Array.IndexOf(key, i + 1), j] = text[index];
+                        if (index <= text.Length - 1)
+                        {
+                            tab[Array.IndexOf(key, i + 1), j] = text[index];
 
-                        index++;
+                            index++;
+                        }
                     }
                 }
+                else
+                {
+                    for (int j = 0; j < (int)text.Length / key.Length; j++)
+                    {
+                        if (index <= text.Length - 1)
+                        {
+                            tab[Array.IndexOf(key, i + 1), j] = text[index];
+
+                            index++;
+                        }
+                    }
+                }
+
             }
 
-            for (int k = 0; k < (int)text.Length / key.Length; k++)
+            for (int k = 0; k < (int)text.Length / key.Length + 1; k++)
             {
 
                 for (int g = 0; g < key.Length; g++)
                 {
-                    output += tab[g, k];
+                    if(tab[g, k] != '\0')
+                        output += tab[g, k];
                 }
             }
-
-            //output = this.withoutSpace(output);
-            //output = this.addSpace(output, wSpace);
 
             return output;
         }
@@ -201,10 +215,11 @@ namespace Bezpieczeństwo.Algorithms
 }
 
 //1 10 7 11 3 8 6 4 9 2 5 
-//H  E R  E   I S   S E C
-//R  E T    M E S S A G E
-//   E N  C I P H E R E D
-//   B Y    T R A N S P O
-//S  I T  I O N 0 0 0 0 0
+//N  i e    w i e m   o  
+//c  o    h o d z i   w   
+//t  y m    p r o b l e m  
+//i  e    i   n i e   w i
+//e  m    c z y   j e s t
+//   d o  b r z e 0 0 0 0
 
 //HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION
