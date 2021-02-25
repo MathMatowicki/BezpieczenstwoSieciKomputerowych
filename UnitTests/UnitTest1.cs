@@ -7,11 +7,13 @@ namespace UnitTests
     public class Tests
     {
         private RailFence alghoritmRailFence;
+        private PrzestawieniaMacierzoweA alghoritmPMA;
         private string keyRailFence = "";
         [SetUp]
         public void Setup()
         {
             alghoritmRailFence = new RailFence();
+            alghoritmPMA = new PrzestawieniaMacierzoweA();
         }
 
         [Test]
@@ -73,14 +75,14 @@ namespace UnitTests
         [Test]
         public void TestPrzestawieniaMacierzoweABasic()
         {
-            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             string key = "3,1,4,2";
             string notCiphered = "CRYPTOGRAPHY";
             string ciphered = "YCPRGTROHAYP";
 
-            Assert.AreEqual(true, algorytm.PrepareKey(key, ','));
-            string cipheredWithAlgorythm = algorytm.CipherString(notCiphered);
-            string notCipheredWithAlgorythm = algorytm.DecipherString(ciphered);
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key, ','));
+            string cipheredWithAlgorythm = alghoritmPMA.CipherString(notCiphered);
+            string notCipheredWithAlgorythm = alghoritmPMA.DecipherString(ciphered);
 
 
             Assert.AreEqual(ciphered, cipheredWithAlgorythm);
@@ -90,13 +92,13 @@ namespace UnitTests
         [Test]
         public void TestPrzestawieniaMacierzoweABasic2()
         {
-            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             string key = "3,1,4,2";
             string notCiphered = "CRYP   TOGRA  PHY";
 
-            Assert.AreEqual(true, algorytm.PrepareKey(key, ','));
-            string cipheredWithAlgorythm = algorytm.CipherString(notCiphered);
-            string notCipheredWithAlgorythm = algorytm.DecipherString(cipheredWithAlgorythm);
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key, ','));
+            string cipheredWithAlgorythm = alghoritmPMA.CipherString(notCiphered);
+            string notCipheredWithAlgorythm = alghoritmPMA.DecipherString(cipheredWithAlgorythm);
 
             Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
         }
@@ -104,28 +106,27 @@ namespace UnitTests
         [Test]
         public void TestPrzestawieniaMacierzoweAKey()
         {
-            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             string key1 = "3-1-4-2";
             string key2 = "3-1-4";
             string key3 = "3-a-4-2";
             string key4 = "3-0-4-2";
 
-            Assert.AreEqual(true, algorytm.PrepareKey(key1, '-'));
-            algorytm.ClearKey();
-            Assert.AreEqual(false, algorytm.PrepareKey(key2, '-'));
-            algorytm.ClearKey();
-            Assert.AreEqual(false, algorytm.PrepareKey(key3, '-'));
-            algorytm.ClearKey();
-            Assert.AreEqual(false, algorytm.PrepareKey(key4, '-'));
-            algorytm.ClearKey();
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key1, '-'));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(false, alghoritmPMA.PrepareKey(key2, '-'));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(false, alghoritmPMA.PrepareKey(key3, '-'));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(false, alghoritmPMA.PrepareKey(key4, '-'));
+            alghoritmPMA.ClearKey();
         }
 
         [Test]
         public void TestPrzestawieniaMacierzoweA()
         {
-            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             Random rand = new Random();
-            string key = "4-3-1-2";
+            string key = "4 -  3-1-2";
             string notCiphered = "";
             int n = rand.Next(10, 50);
             for (int i = 0; i < n; i++)
@@ -133,17 +134,17 @@ namespace UnitTests
                 char letter = (char)rand.Next(65, 90);
                 notCiphered += letter.ToString();
             }
-            Assert.AreEqual(true, algorytm.PrepareKey(key, '-'));
-            string ciphered = algorytm.CipherString(notCiphered);
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key, '-'));
+            string ciphered = alghoritmPMA.CipherString(notCiphered);
 
-            string notCipheredAgain = algorytm.DecipherString(ciphered);
+            string notCipheredAgain = alghoritmPMA.DecipherString(ciphered);
             Assert.AreEqual(notCipheredAgain, notCiphered);
         }
 
         [Test]
         public void TestPrzestawieniaMacierzoweAMore()
         {
-            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
             string key1 = "9,4,3,1,8,5,7,6,2";
             string key2 = "4,3,1,9,5,8,7,6,2";
             string key3 = "8,7,9,5,2,1,3,6,4";
@@ -153,20 +154,20 @@ namespace UnitTests
             string ciphered2 = "RBGYAISA";
             string cipheredLong = "AIGYAGBSRSBARIY";
 
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key1, ','));
+            Assert.AreEqual(notCiphered, alghoritmPMA.DecipherString(ciphered1));
+            Assert.AreEqual(ciphered1, alghoritmPMA.CipherString(notCiphered));
 
-            Assert.AreEqual(true, algorytm.PrepareKey(key1, ','));
-            Assert.AreEqual(notCiphered, algorytm.DecipherString(ciphered1));
-            Assert.AreEqual(ciphered1, algorytm.CipherString(notCiphered));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key2, ','));
+            Assert.AreEqual(notCiphered, alghoritmPMA.DecipherString(ciphered2));
+            Assert.AreEqual(ciphered2, alghoritmPMA.CipherString(notCiphered));
 
-            algorytm.ClearKey();
-            Assert.AreEqual(true, algorytm.PrepareKey(key2, ','));
-            Assert.AreEqual(notCiphered, algorytm.DecipherString(ciphered2));
-            Assert.AreEqual(ciphered2, algorytm.CipherString(notCiphered));
-
-            algorytm.ClearKey();
-            Assert.AreEqual(true, algorytm.PrepareKey(key3, ','));
-            Assert.AreEqual(notCipheredLong, algorytm.DecipherString(cipheredLong));
-            Assert.AreEqual(cipheredLong, algorytm.CipherString(notCipheredLong));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(true, alghoritmPMA.PrepareKey(key3, ','));
+            Assert.AreEqual(notCipheredLong, alghoritmPMA.DecipherString(cipheredLong));
+            Assert.AreEqual(cipheredLong, alghoritmPMA.CipherString(notCipheredLong));
         }
 
         [Test]

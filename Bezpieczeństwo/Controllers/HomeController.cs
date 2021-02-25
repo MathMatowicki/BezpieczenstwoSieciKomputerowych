@@ -46,54 +46,54 @@ namespace Bezpieczeństwo.Controllers
 
         public IActionResult Algorithms()
         {
-            /*var result = "";
-            Array userData = null;
-            char[] delimiterChar = { ',' };
-
-            var dataFile = Server.MapPath("~/App_Data/data.txt");
-
-            if (File.Exists(dataFile))
-            {
-                userData = File.ReadAllLines(dataFile);
-                if (userData == null)
-                {
-                    // Empty file.
-                    result = "The file is empty.";
-                }
-            }
-            else
-            {
-                // File does not exist.
-                result = "The file does not exist.";
-            }*/
             return View();
         }
 
         [HttpPost]
-        public IActionResult Algorithms(int id)
+        public IActionResult Algorithms(String key, String algorithm, bool option, Object file)
         {
-            var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
+            //var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
             if (file == null)
             {
                 ViewBag.Message = "Nie wybrano obrazu do przesłania";
                 return View("AddImage");
             }
-            /*if (file != null && file.ContentLength > 0)
-                try
-                {
-                    string path = Path.Combine(Server.MapPath("~/Images"),
-                                               Path.GetFileName(file.FileName));
-                    file.SaveAs(path);
-                    ViewBag.Message = "File uploaded successfully";
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
-                }
-            else
+
+            //Uruchamianie algorytmow szkielet
+            String result = "";
+            switch (algorithm)
             {
-                ViewBag.Message = "You have not specified a file.";
-            }*/
+                case "RF":
+                    RailFence rf = new RailFence();
+                    rf.PrepareKey(key);
+                    if (option)
+                        result = rf.Cipher("abcde", key);
+                    else
+                        result = rf.Decrypt("abcde", key);
+                    break;
+
+                case "PMA":
+                    PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                    pma.PrepareKey(key, '-');
+                    if (option)
+                        result = pma.CipherString("abcde");
+                    else
+                        result = pma.DecipherString("abcde");
+                    break;
+
+                case "PMB":
+                    PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                    pmb.key(key);
+                    if (option)
+                        result = pmb.Cipher("abcde", key);
+                    else
+                        result = pmb.Decipher("abcde", key);
+
+                    break;
+                default:
+                    break;
+            }
+            ViewBag.result = result;
             return View();
         }
 

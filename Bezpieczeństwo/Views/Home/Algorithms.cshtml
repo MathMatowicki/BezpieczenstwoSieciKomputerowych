@@ -4,12 +4,44 @@
 }
 @using (Html.BeginForm("Algorithms", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+
     @Html.ValidationSummary();
-    <ol>
-        <li class="lifile">
-            <input type="file" id="fileToUpload" name="file" />
-            <span class="field-validation-error" id="spanfile"></span>
-        </li>
-    </ol>
-    <input type="submit" id="btnSubmit" value="Upload" />
+    <label for="key">Podaj klucz: (format liczba-liczba-..-liczba) </label>
+    @Html.TextBox("key")
+
+    <label for="algorithm">Wybierz algorytm:</label>
+    @Html.RadioButton("algorithm", "RF", true)<text>Rail Fence</text>
+    <br />
+    @Html.RadioButton("algorithm", "PMA")<text>Przestawenia Macierzowe A</text>
+    <br />
+    @Html.RadioButton("algorithm", "PMB")<text>Przestawenia Macierzowe B</text>
+    <br />
+
+    <label for="">Wybierz opcje:</label>
+    @Html.RadioButton("option", true , true)<text>Szyfrowanie</text>
+    <br />
+    @Html.RadioButton("option", false)<text>Deszyfrowanie</text>
+
+    <!--
+    <input type="text" id="key" name="key" placeholder="Tutaj wprowadź klucz" />
+    <input type="radio" id="algorithm1" name="algorithm" value="RF" />
+
+    <label for="algorithm1">Rail Fence</label>
+    <br />
+    <input type="radio" id="algorithm2" name="algorithm" value="PMA">
+    <label for="algorithm2">Przestawenia Macierzowe A</label>
+    <br />
+    <input type="radio" id="algorithm3" name="algorithm" value="PMB">
+    <label for="algorithm3">Przestawenia Macierzowe B</label>-->
+    <br />
+    <br />
+    <input type="file" id="fileToUpload" name="file" />
+    <span class="field-validation-error" id="spanfile"></span>
+    <br />
+    <br />
+    <input type="submit" id="btnSubmit" value="Generuj Wynik" />
 }
+
+<h3>Output:</h3>
+<p>@ViewBag.results</p>
+
