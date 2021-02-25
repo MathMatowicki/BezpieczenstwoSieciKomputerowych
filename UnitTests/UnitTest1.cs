@@ -88,6 +88,20 @@ namespace UnitTests
         }
 
         [Test]
+        public void TestPrzestawieniaMacierzoweABasic2()
+        {
+            PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();
+            string key = "3,1,4,2";
+            string notCiphered = "CRYP   TOGRA  PHY";
+
+            Assert.AreEqual(true, algorytm.PrepareKey(key, ','));
+            string cipheredWithAlgorythm = algorytm.CipherString(notCiphered);
+            string notCipheredWithAlgorythm = algorytm.DecipherString(cipheredWithAlgorythm);
+
+            Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
+        }
+
+        [Test]
         public void TestPrzestawieniaMacierzoweAKey()
         {
             PrzestawieniaMacierzoweA algorytm = new PrzestawieniaMacierzoweA();

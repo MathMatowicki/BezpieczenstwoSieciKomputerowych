@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
+using System.IO;
 
 namespace Bezpieczeństwo.Controllers
 {
@@ -40,6 +41,59 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.i = i;
             ViewBag.leanth = leanth;
             ViewBag.result = result;
+            return View();
+        }
+
+        public IActionResult Algorithms()
+        {
+            /*var result = "";
+            Array userData = null;
+            char[] delimiterChar = { ',' };
+
+            var dataFile = Server.MapPath("~/App_Data/data.txt");
+
+            if (File.Exists(dataFile))
+            {
+                userData = File.ReadAllLines(dataFile);
+                if (userData == null)
+                {
+                    // Empty file.
+                    result = "The file is empty.";
+                }
+            }
+            else
+            {
+                // File does not exist.
+                result = "The file does not exist.";
+            }*/
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Algorithms(int id)
+        {
+            var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
+            if (file == null)
+            {
+                ViewBag.Message = "Nie wybrano obrazu do przesłania";
+                return View("AddImage");
+            }
+            /*if (file != null && file.ContentLength > 0)
+                try
+                {
+                    string path = Path.Combine(Server.MapPath("~/Images"),
+                                               Path.GetFileName(file.FileName));
+                    file.SaveAs(path);
+                    ViewBag.Message = "File uploaded successfully";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
+                }
+            else
+            {
+                ViewBag.Message = "You have not specified a file.";
+            }*/
             return View();
         }
 
