@@ -2,46 +2,47 @@
 
 
 }
-@using (Html.BeginForm("Algorithms", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
+<form method="post" enctype="multipart/form-data">
+    @*file*@
+    <div class="form-group">
+        <label for="exampleFormControlFile1">Plik</label>
+        <input type="file" class="form-control-file" id="file" name="file">
+    </div>
+    <div>
+        <label for="key">Key</label>
+        <input type="text" name="key" id="key" class="form-control" placeholder="Key" />
+    </div>
+    <div>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="algorithm" id="algorithm" checked="checked" value="1"> RailFence
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="algorithm" id="algorithm" value="2"> Przestawienie MAcierzowe A
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="algorithm" id="algorithm" value="3"> Przestawienie MAcierzowe B
+            </label>
+        </div>
+    </div>
+    <div>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="option" id="option" checked="checked" value="1"> Szyfrowanie
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="option" id="option" value="0"> Deszyfrowanie
+            </label>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div>
 
-    @Html.ValidationSummary();
-    <label for="key">Podaj klucz: (format liczba-liczba-..-liczba) </label>
-    @Html.TextBox("key")
+    </div>
+</form>
+<label>Output:</label>
+<pre>@ViewBag.result</pre>
 
-    <label for="algorithm">Wybierz algorytm:</label>
-    @Html.RadioButton("algorithm", "RF", true)<text>Rail Fence</text>
-    <br />
-    @Html.RadioButton("algorithm", "PMA")<text>Przestawenia Macierzowe A</text>
-    <br />
-    @Html.RadioButton("algorithm", "PMB")<text>Przestawenia Macierzowe B</text>
-    <br />
-
-    <label for="">Wybierz opcje:</label>
-    @Html.RadioButton("option", true , true)<text>Szyfrowanie</text>
-    <br />
-    @Html.RadioButton("option", false)<text>Deszyfrowanie</text>
-
-    <!--
-    <input type="text" id="key" name="key" placeholder="Tutaj wprowadź klucz" />
-    <input type="radio" id="algorithm1" name="algorithm" value="RF" />
-
-    <label for="algorithm1">Rail Fence</label>
-    <br />
-    <input type="radio" id="algorithm2" name="algorithm" value="PMA">
-    <label for="algorithm2">Przestawenia Macierzowe A</label>
-    <br />
-    <input type="radio" id="algorithm3" name="algorithm" value="PMB">
-    <label for="algorithm3">Przestawenia Macierzowe B</label>-->
-    <br />
-    <br />
-    <input type="file" id="fileToUpload" name="file" />
-    <span class="field-validation-error" id="spanfile"></span>
-    <br />
-    <br />
-    <input type="submit" id="btnSubmit" value="Generuj Wynik" />
-}
-
-<h3>Output:</h3>
-<p>@ViewBag.results</p>
 

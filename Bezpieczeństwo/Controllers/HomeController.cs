@@ -1,46 +1,33 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
-using System.IO;
+
 
 namespace Bezpieczeństwo.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IHostingEnvironment _env;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHostingEnvironment env)
         {
             _logger = logger;
+            _env = env;
         }
 
         public IActionResult Index()
         {
-            PrzestawieniaMacierzoweB b = new PrzestawieniaMacierzoweB();
-            //String tab = b.Cipher("To jest szyfr i nie wiesz co tu jest napisane","afbdhcegij");
-            //String result = b.Decipher("Tywui rejas  t0j sentnc 0ofi s ion0eizsese a0z tp0", "afbdhcegij");
-            String tab = b.Cipher("", "TRY");
-            string result = b.Decipher("RTRHSCPGPOYOAYA", "TRY");
-            int[] i = b.GetKey("TRY");
-            int leanth = i.Length;
-
-            //sprawdzanie czy klucz dobrze dziala - do usuniecia potem
-            /*
-            String k = "CONVENIENCE";
-            int[] i =  b.GetKey(k);
-            String tab = "";
-            foreach(int j in i)tab = tab+j+" ";
-            String result = b.key(k);*/
-            ViewBag.tab = tab;
-            ViewBag.i = i;
-            ViewBag.leanth = leanth;
-            ViewBag.result = result;
+            
             return View();
         }
 
@@ -50,8 +37,14 @@ namespace Bezpieczeństwo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Algorithms(String key, String algorithm, bool option, Object file)
+        public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file)
         {
+            string filePath = "file.txt";
+            var dir = _env.ContentRootPath;
+            using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+            {
+                file.CopyTo(fileStream);
+            }
             //var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
             if (file == null)
             {
@@ -59,40 +52,45 @@ namespace Bezpieczeństwo.Controllers
                 return View("AddImage");
             }
 
+            string code = System.IO.File.ReadAllText(filePath);
+
             //Uruchamianie algorytmow szkielet
-            String result = "";
+            String result = "abcd";
             switch (algorithm)
             {
-                case "RF":
+                case 1:
                     RailFence rf = new RailFence();
                     rf.PrepareKey(key);
-                    if (option)
-                        result = rf.Cipher("abcde", key);
+                    if (option == 1)
+                        result = rf.Cipher(code, key);
                     else
-                        result = rf.Decrypt("abcde", key);
+                        result = rf.Decrypt(code, key);
                     break;
 
-                case "PMA":
+                case 2:
                     PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
                     pma.PrepareKey(key, '-');
-                    if (option)
-                        result = pma.CipherString("abcde");
+                    if (option == 1)
+                        result = pma.CipherString(code);
                     else
-                        result = pma.DecipherString("abcde");
+                        result = pma.DecipherString(code);
                     break;
 
-                case "PMB":
+                case 3:
                     PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
                     pmb.key(key);
-                    if (option)
-                        result = pmb.Cipher("abcde", key);
+                    if (option == 1)
+                        result = pmb.Cipher(code, key);
                     else
-                        result = pmb.Decipher("abcde", key);
+                        result = pmb.Decipher(code, key);
 
                     break;
                 default:
                     break;
             }
+            ViewBag.key = key;
+            ViewBag.option = option;
+            ViewBag.algorithm = algorithm;
             ViewBag.result = result;
             return View();
         }

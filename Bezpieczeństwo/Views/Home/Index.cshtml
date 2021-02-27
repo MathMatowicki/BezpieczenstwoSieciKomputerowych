@@ -2,21 +2,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
 <div>
-    <input style=" width: 100%" value="@ViewBag.tab"/>
-</div>
-<div>
-    <a><code>@ViewBag.result</code></a>
-</div>
-<div>
-    @for (int i = 0; i< ViewBag.leanth; i++)
-    {
-        <a>@ViewBag.i[i]</a>
-    }
-
+    <a class="btn btn-primary" href="/Home/Algorithms" role="button">Zadanie 1</a>
 </div>
