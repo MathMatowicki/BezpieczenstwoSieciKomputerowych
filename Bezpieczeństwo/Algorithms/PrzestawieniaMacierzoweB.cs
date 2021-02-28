@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bezpieczeństwo.Algorithms
@@ -9,6 +10,9 @@ namespace Bezpieczeństwo.Algorithms
     {
         public String Cipher(string text, String userKey)
         {
+            text = text.ToUpper();
+            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
+
             int[] key = GetKey(userKey);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
@@ -30,8 +34,8 @@ namespace Bezpieczeństwo.Algorithms
             {
                 for (int j = 0; j < (int)text.Length / key.Length + 1; j++)
                 {
-                    if(tab[Array.IndexOf(key, i + 1), j] != '\0')
-                        output += tab[Array.IndexOf(key, i + 1), j]; 
+                    if (tab[Array.IndexOf(key, i + 1), j] != '\0')
+                        output += tab[Array.IndexOf(key, i + 1), j];
                 }
             }
 
@@ -41,6 +45,8 @@ namespace Bezpieczeństwo.Algorithms
 
         public String Decipher(String text, String userKey)
         {
+            text = text.ToUpper();
+            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
             int[] key = GetKey(userKey);
             Console.WriteLine(key.Length);
             String output = "";
@@ -86,7 +92,7 @@ namespace Bezpieczeństwo.Algorithms
 
                 for (int g = 0; g < key.Length; g++)
                 {
-                    if(tab[g, k] != '\0')
+                    if (tab[g, k] != '\0')
                         output += tab[g, k];
                 }
             }
@@ -95,7 +101,7 @@ namespace Bezpieczeństwo.Algorithms
         }
 
         //Zwraca tablicę na podstawie słowa klucz
-        private char[] QuickSort(char[]d, int l, int r)
+        private char[] QuickSort(char[] d, int l, int r)
         {
             int i, j;
             char p, swap;
@@ -127,13 +133,13 @@ namespace Bezpieczeństwo.Algorithms
             ckey = QuickSort(ckey, l, r);
 
             int[] i = new int[key.Length];
-            for(int j = 0; j < ckey.Length; j++)
+            for (int j = 0; j < ckey.Length; j++)
             {
                 int p = 0;
-                while (ckey[j] != key[p] || i[p]!=0) p++;
-                i[p] = j+1;
+                while (ckey[j] != key[p] || i[p] != 0) p++;
+                i[p] = j + 1;
             }
-            
+
             return i;
         }
 
@@ -194,7 +200,7 @@ namespace Bezpieczeństwo.Algorithms
         //sprawdzanie poprawności klucza - do usunięcia potem
         public String key(String key)
         {
-            String s="";
+            String s = "";
             char[] ckey = new char[key.Length];
             for (int j = 0; j < key.Length; j++)
                 ckey[j] = key[j];

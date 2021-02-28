@@ -60,7 +60,7 @@ namespace UnitTests
         {
             string notDecrypted = "CYTGAHRPORPY";
             string decrypted = "CRYPTOGRAPHY";
-            
+
             keyRailFence = "1";
             Assert.AreEqual(notDecrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
 
@@ -175,13 +175,13 @@ namespace UnitTests
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
             string key1 = "CONVENIENCE";
-            int[] key1result = new int[] {1,10,7,11,3,8,6,4,9,2,5};
+            int[] key1result = new int[] { 1, 10, 7, 11, 3, 8, 6, 4, 9, 2, 5 };
             string key2 = "BEZPIECZENSTWO";
             int[] key2result = new int[] { 1, 3, 13, 9, 6, 4, 2, 14, 5, 7, 10, 11, 12, 8 };
 
             Assert.AreEqual(algorytm.GetKey(key1), key1result);
             Assert.AreEqual(algorytm.GetKey(key2), key2result);
-            
+
         }
 
         [Test]
@@ -201,15 +201,18 @@ namespace UnitTests
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
             string m1 = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
-            string c1 = "HEGEP SEN TNYT EPRNSARSSMITORR  SI C IASHAECEDOEEEBI";
+            string c1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
             string key1 = "CONVENIENCE";
 
             string m2 = "CRYPTOGRAPHYOSA";
             string c2 = "RTRHSCPGPOYOAYA";
             string key2 = "TRY";
 
-            Assert.AreEqual(algorytm.Cipher(m1,key1), c1);
-            Assert.AreEqual(algorytm.Cipher(m2,key2), c2);
+            string m3 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
+
+            Assert.AreEqual(algorytm.Cipher(m1, key1), c1);
+            Assert.AreEqual(algorytm.Cipher(m2, key2), c2);
+            Assert.AreEqual(algorytm.Cipher(m3, key1), c1);
 
         }
 
