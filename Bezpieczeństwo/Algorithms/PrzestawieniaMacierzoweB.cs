@@ -10,8 +10,8 @@ namespace Bezpieczeństwo.Algorithms
     {
         public String Cipher(string text, String userKey)
         {
-            text = text.ToUpper();
-            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
+            //text = text.ToUpper();
+            text = Regex.Replace(text, @"\n", string.Empty);
 
             int[] key = GetKey(userKey);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
@@ -45,16 +45,13 @@ namespace Bezpieczeństwo.Algorithms
 
         public String Decipher(String text, String userKey)
         {
-            text = text.ToUpper();
-            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
+            //text = text.ToUpper();
+            text = Regex.Replace(text, @"\n", string.Empty);
+
             int[] key = GetKey(userKey);
-            Console.WriteLine(key.Length);
             String output = "";
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             int modulo = text.Length % key.Length;
-            Console.WriteLine(text.Length);
-            Console.WriteLine(modulo);
-            Console.WriteLine((int)(text.Length / key.Length));
 
             int index = 0;
 

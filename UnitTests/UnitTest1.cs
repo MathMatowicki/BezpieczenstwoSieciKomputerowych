@@ -201,18 +201,15 @@ namespace UnitTests
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
             string m1 = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
-            string c1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
+            string c1 = "HEGEP SEN TNYT EPRNSARSSMITORR  SI C IASHAECEDOEEEBI";
             string key1 = "CONVENIENCE";
 
             string m2 = "CRYPTOGRAPHYOSA";
             string c2 = "RTRHSCPGPOYOAYA";
             string key2 = "TRY";
 
-            string m3 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
-
             Assert.AreEqual(algorytm.Cipher(m1, key1), c1);
             Assert.AreEqual(algorytm.Cipher(m2, key2), c2);
-            Assert.AreEqual(algorytm.Cipher(m3, key1), c1);
 
         }
 

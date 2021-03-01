@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
+using System.Text.RegularExpressions;
 
 
 namespace Bezpieczeństwo.Controllers
@@ -39,20 +40,39 @@ namespace Bezpieczeństwo.Controllers
         [HttpPost]
         public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file)
         {
-            string filePath = "file.txt";
+            string filePath = "file.rtf";
+            string code;
             var dir = _env.ContentRootPath;
-            using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
-            {
-                file.CopyTo(fileStream);
-            }
-            //var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
+
             if (file == null)
             {
-                ViewBag.Message = "Nie wybrano obrazu do przesłania";
                 return View("AddImage");
             }
 
-            string code = System.IO.File.ReadAllText(filePath);
+            string type = file.ContentType;
+
+            if(type == "text/plain")
+            {
+                filePath = "file.txt";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                code = System.IO.File.ReadAllText(filePath);
+            }
+            else
+            {
+                filePath = "file.rtf";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.rtf"), FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                string m = ReadFromRTF();
+                code = RemoveRTFFormatting(m);
+
+            }
 
             //Uruchamianie algorytmow szkielet
             String result = "abcd";
@@ -92,6 +112,8 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.option = option;
             ViewBag.algorithm = algorithm;
             ViewBag.result = result;
+            ViewBag.code = code;
+            ViewBag.type = type;
             return View();
         }
 
@@ -104,6 +126,37 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private string ReadFromRTF()
+        {
+            StreamReader myRTFReader = new StreamReader("file.rtf");
+            string output = myRTFReader.ReadToEnd();
+            myRTFReader.Close();
+            return output;
+        }
+
+
+        private string RemoveRTFFormatting(string rtfContent)
+        {
+            rtfContent = rtfContent.Trim();
+
+
+            Regex rtfRegEx = new Regex("({\\\\)(.+?)(})|(\\\\)(.+?)(\\b)",
+                                            RegexOptions.IgnoreCase
+                                            | RegexOptions.Multiline
+                                            | RegexOptions.Singleline
+                                            | RegexOptions.ExplicitCapture
+                                            | RegexOptions.IgnorePatternWhitespace
+                                            | RegexOptions.Compiled
+                                            );
+            string output = rtfRegEx.Replace(rtfContent, string.Empty);
+            output = Regex.Replace(output, @"\}", string.Empty); //replacing the remaining braces
+            string text = output.Remove(output.Length - 1);
+
+            return text.Remove(0, 6);
+
+
         }
     }
 }
