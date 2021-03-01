@@ -28,7 +28,7 @@ namespace Bezpieczeństwo.Controllers
 
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
@@ -44,14 +44,23 @@ namespace Bezpieczeństwo.Controllers
             string code;
             var dir = _env.ContentRootPath;
 
-            if (file == null)
+            if (file == null && (sequence == null || sequence == ""))
             {
-                return View("AddImage");
+                ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
+                return View();
+            }
+            if (file != null && sequence != null && sequence != "")
+            {
+                ViewBag.Message =
+                    "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
+                return View();
             }
 
             string type = file.ContentType;
-
-            if(type == "text/plain")
+            if (file == null)
+                code = sequence;
+            else
+            if (type == "text/plain")
             {
                 filePath = "file.txt";
                 using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
@@ -73,45 +82,12 @@ namespace Bezpieczeństwo.Controllers
                 code = RemoveRTFFormatting(m);
 
             }
-
-            //Uruchamianie algorytmow szkielet
-            String result = "abcd";
-            switch (algorithm)
-            {
-                case 1:
-                    RailFence rf = new RailFence();
-                    rf.PrepareKey(key);
-                    if (option == 1)
-                        result = rf.Cipher(code, key);
-                    else
-                        result = rf.Decrypt(code, key);
-                    break;
-
-                case 2:
-                    PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
-                    pma.PrepareKey(key, '-');
-                    if (option == 1)
-                        result = pma.CipherString(code);
-                    else
-                        result = pma.DecipherString(code);
-                    break;
-
-                case 3:
-                    PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
-                    pmb.key(key);
-                    if (option == 1)
-                        result = pmb.Cipher(code, key);
-                    else
-                        result = pmb.Decipher(code, key);
-
-                    break;
-                default:
-                    break;
-            }
+            
+            ViewBag.Message = "";
             ViewBag.key = key;
             ViewBag.option = option;
             ViewBag.algorithm = algorithm;
-            ViewBag.result = result;
+            ViewBag.result = launchAlgorithm(code, key, algorithm, option);
             ViewBag.code = code;
             ViewBag.type = type;
             return View();
@@ -126,6 +102,44 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private String launchAlgorithm(String code, String key, int algorithm, int option)
+        {
+            String result = "";
+                switch (algorithm)
+                {
+                    case 1:
+                        RailFence rf = new RailFence();
+                        rf.PrepareKey(key);
+                        if (option == 1)
+                            result = rf.Cipher(code, key);
+                        else
+                            result = rf.Decrypt(code, key);
+                        break;
+
+                    case 2:
+                        PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                        pma.PrepareKey(key, '-');
+                        if (option == 1)
+                            result = pma.CipherString(code);
+                        else
+                            result = pma.DecipherString(code);
+                        break;
+
+                    case 3:
+                        PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                        pmb.key(key);
+                        if (option == 1)
+                            result = pmb.Cipher(code, key);
+                        else
+                            result = pmb.Decipher(code, key);
+
+                        break;
+                    default:
+                        break;
+                }
+            return result;
         }
 
         private string ReadFromRTF()
