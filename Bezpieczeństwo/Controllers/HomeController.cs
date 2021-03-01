@@ -37,7 +37,7 @@ namespace Bezpieczeństwo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file)
+        public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file, String sequence)
         {
             string filePath = "file.txt";
             var dir = _env.ContentRootPath;
@@ -45,17 +45,41 @@ namespace Bezpieczeństwo.Controllers
             {
                 file.CopyTo(fileStream);
             }
-            //var file = Request.Form.Files.Count != 0 ? Request.Form.Files[0] : null;
-            if (file == null)
+            if (file == null && (sequence == null || sequence ==""))
             {
-                ViewBag.Message = "Nie wybrano obrazu do przesłania";
-                return View("AddImage");
+                ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
+                return View();
             }
+            if(file != null && sequence != null && sequence != "")
+            {
+                ViewBag.Message = 
+                    "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
+                return View();
+            }
+            string code = file != null ? System.IO.File.ReadAllText(filePath) : sequence;
 
-            string code = System.IO.File.ReadAllText(filePath);
+            String result = launchAlgorithm(code, key, algorithm, option);
+            ViewBag.key = key;
+            ViewBag.option = option;
+            ViewBag.algorithm = algorithm;
+            ViewBag.result = result;
+            return View();
+        }
 
-            //Uruchamianie algorytmow szkielet
-            String result = "abcd";
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private String launchAlgorithm(String code, String key, int algorithm, int option)
+        {
+            String result = "";
             switch (algorithm)
             {
                 case 1:
@@ -88,22 +112,7 @@ namespace Bezpieczeństwo.Controllers
                 default:
                     break;
             }
-            ViewBag.key = key;
-            ViewBag.option = option;
-            ViewBag.algorithm = algorithm;
-            ViewBag.result = result;
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return result;
         }
     }
 }
