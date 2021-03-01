@@ -185,6 +185,28 @@ namespace UnitTests
         }
 
         [Test]
+        public void TestPrzestawieniaMacierzoweBPrepareKey()
+        {
+            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
+            string key1 = "CONVENIENCE";
+            string key2 = "beZPIECzENSTWo";
+            string key3 = "bezpieczenstwo";
+            string key4 = "";
+            string key5 = "bez pieczenstwo";
+            string key6 = "bez-pieczenstwo";
+            string key7 = "bez1pie2czen3stwo";
+
+            Assert.AreEqual(algorytm.PrepareKey(key1),true);
+            Assert.AreEqual(algorytm.PrepareKey(key2),true);
+            Assert.AreEqual(algorytm.PrepareKey(key3),true);
+            Assert.AreEqual(algorytm.PrepareKey(key4),false);
+            Assert.AreEqual(algorytm.PrepareKey(key5),false);
+            Assert.AreEqual(algorytm.PrepareKey(key6),false);
+            Assert.AreEqual(algorytm.PrepareKey(key7),false);
+
+        }
+
+        [Test]
         public void TestPrzestawieniaMacierzoweBCipher()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
@@ -192,12 +214,15 @@ namespace UnitTests
             string c1 = "HEGEP SEN TNYT EPRNSARSSMITORR  SI C IASHAECEDOEEEBI";
             string key1 = "CONVENIENCE";
 
+            algorytm.PrepareKey(key1);
+            Assert.AreEqual(algorytm.Cipher(m1), c1);
+
             string m2 = "CRYPTOGRAPHYOSA";
             string c2 = "RTRHSCPGPOYOAYA";
             string key2 = "TRY";
 
-            Assert.AreEqual(algorytm.Cipher(m1, key1), c1);
-            Assert.AreEqual(algorytm.Cipher(m2, key2), c2);
+            algorytm.PrepareKey(key2);
+            Assert.AreEqual(algorytm.Cipher(m2), c2);
 
         }
 
@@ -207,16 +232,17 @@ namespace UnitTests
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
             string m1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
             string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
-            //string m1 = "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS";
-            //string c1 = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
             string key1 = "CONVENIENCE";
+
+            algorytm.PrepareKey(key1);
+            Assert.AreEqual(algorytm.Decipher(m1), c1);
 
             string m2 = "RTRHSCPGPOYOAYA";
             string c2 = "CRYPTOGRAPHYOSA";
             string key2 = "TRY";
 
-            Assert.AreEqual(algorytm.Decipher(m1, key1), c1);
-            Assert.AreEqual(algorytm.Decipher(m2, key2), c2);
+            algorytm.PrepareKey(key2);
+            Assert.AreEqual(algorytm.Decipher(m2), c2);
 
         }
 
