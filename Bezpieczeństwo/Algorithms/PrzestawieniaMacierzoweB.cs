@@ -8,12 +8,25 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class PrzestawieniaMacierzoweB
     {
-        public String Cipher(string text, String userKey)
+        private int[] key;
+        public bool PrepareKey(String key)
+        {
+            key = key.ToUpper();
+            Regex reg = new Regex("[A-Z]");
+            if (key.Length>0 && reg.Matches(key).Count==key.Length)
+            {
+                this.key = null;
+                this.key = GetKey(key);
+                return true;
+            }
+            return false;
+        }
+        public String Cipher(string text)
         {
             //text = text.ToUpper();
             text = Regex.Replace(text, @"\n", string.Empty);
 
-            int[] key = GetKey(userKey);
+            //int[] key = GetKey(userKey);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
             int index = 0;
@@ -43,12 +56,12 @@ namespace Bezpieczeństwo.Algorithms
             return output;
         }
 
-        public String Decipher(String text, String userKey)
+        public String Decipher(String text)
         {
             //text = text.ToUpper();
             text = Regex.Replace(text, @"\n", string.Empty);
 
-            int[] key = GetKey(userKey);
+            //int[] key = GetKey(userKey);
             String output = "";
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             int modulo = text.Length % key.Length;
@@ -140,20 +153,6 @@ namespace Bezpieczeństwo.Algorithms
             return i;
         }
 
-
-        //sprawdzanie poprawności klucza - do usunięcia potem
-        public String key(String key)
-        {
-            String s = "";
-            char[] ckey = new char[key.Length];
-            for (int j = 0; j < key.Length; j++)
-                ckey[j] = key[j];
-            int l = 0, r = key.Length - 1;
-            ckey = QuickSort(ckey, l, r);
-
-            foreach (char c in ckey) s += c;
-            return s;
-        }
 
     }
 }

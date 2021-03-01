@@ -55,6 +55,40 @@ namespace Bezpieczeństwo.Controllers
                     "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
             }
 
+            //key validation
+            if(key==null || key.Length==0 || key=="")
+            {
+                ViewBag.Message = "Nie podano żadnego klucza.";
+                return View();
+            }
+            else if (algorithm == 1 )
+            {
+                RailFence rf = new RailFence();
+                if (!rf.PrepareKey(key)) 
+                { 
+                    ViewBag.Message = "W algorytmie Rail Fence kluczem musi być liczba.";
+                    return View();
+                }
+            }
+            else if (algorithm == 2)
+            {
+                PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                if (!pma.PrepareKey(key,'-'))
+                {
+                    ViewBag.Message = "W algorytmie Przestawienia Macierzowe A kluczem muszą być liczby oddzielone myślnikami.";
+                    return View();
+                }
+            }
+            else if (algorithm == 3)
+            {
+                PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                if (!pmb.PrepareKey(key))
+                {
+                    ViewBag.Message = "W algorytmie Przestawienia Macierzowe B kluczem musi być wyraz.";
+                    return View();
+                }
+            }
+
             if (file == null)
                 code = sequence;
             else
@@ -131,11 +165,11 @@ namespace Bezpieczeństwo.Controllers
 
                     case 3:
                         PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
-                        pmb.key(key);
+                        pmb.PrepareKey(key);
                         if (option == 1)
-                            result = pmb.Cipher(code, key);
+                            result = pmb.Cipher(code);
                         else
-                            result = pmb.Decipher(code, key);
+                            result = pmb.Decipher(code);
 
                         break;
                     default:
