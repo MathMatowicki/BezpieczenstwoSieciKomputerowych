@@ -140,59 +140,6 @@ namespace Bezpieczeństwo.Algorithms
             return i;
         }
 
-        public String withoutSpace(String text)
-        {
-            String result = "";
-            foreach (char c in text)
-                if (c != ' ') result += c;
-            return result;
-        }
-
-        public int[] whereSpace(String text)
-        {
-            int i = 0;
-            foreach (char c in text)
-                if (c == ' ') i++;
-            int[] result = new int[i];
-            i = 0;
-            for (int j = 0; j < text.Length; j++)
-                if (text[j] == ' ')
-                {
-                    result[i] = j;
-                    i++;
-                }
-
-            return result;
-        }
-
-        public String addSpace(String text, int[] where)
-        {
-            String result = "";
-            int p = 0, index = 0, ile = 0;
-            if (where.Length > 0)
-            {
-                p = where[index];
-                for (int i = 0; i < text.Length; i++)
-                {
-                    if (i == p + ile)
-                    {
-                        result += " ";
-                        index++;
-                        if (index < where.Length)
-                        {
-                            p = where[index];
-                            ile--;
-                        }
-                    }
-                    result += text[i];
-                }
-            }
-            else return text;
-
-            return result;
-        }
-
-
 
         //sprawdzanie poprawności klucza - do usunięcia potem
         public String key(String key)

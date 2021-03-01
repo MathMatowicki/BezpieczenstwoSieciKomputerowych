@@ -185,18 +185,6 @@ namespace UnitTests
         }
 
         [Test]
-        public void TestPrzestawieniaMacierzoweBSpaces()
-        {
-            PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
-            string s = "A B";
-            int[] i = algorytm.whereSpace(s);
-
-            Assert.AreEqual(algorytm.withoutSpace(s), "AB");
-            Assert.AreEqual(algorytm.addSpace("AB", i), s);
-
-        }
-
-        [Test]
         public void TestPrzestawieniaMacierzoweBCipher()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
