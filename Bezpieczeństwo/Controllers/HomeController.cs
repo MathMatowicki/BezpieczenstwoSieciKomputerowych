@@ -53,34 +53,37 @@ namespace Bezpieczeństwo.Controllers
             {
                 ViewBag.Message =
                     "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
-                return View();
             }
 
-            string type = file.ContentType;
             if (file == null)
                 code = sequence;
             else
-            if (type == "text/plain")
             {
-                filePath = "file.txt";
-                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                string type = file.ContentType;
+                if (type == "text/plain")
                 {
-                    file.CopyTo(fileStream);
+                    filePath = "file.txt";
+                    using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    code = System.IO.File.ReadAllText(filePath);
+                }
+                else
+                {
+                    filePath = "file.rtf";
+                    using (var fileStream = new FileStream(Path.Combine(dir, "file.rtf"), FileMode.Create, FileAccess.Write))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    string m = ReadFromRTF();
+                    code = RemoveRTFFormatting(m);
+
                 }
 
-                code = System.IO.File.ReadAllText(filePath);
-            }
-            else
-            {
-                filePath = "file.rtf";
-                using (var fileStream = new FileStream(Path.Combine(dir, "file.rtf"), FileMode.Create, FileAccess.Write))
-                {
-                    file.CopyTo(fileStream);
-                }
-
-                string m = ReadFromRTF();
-                code = RemoveRTFFormatting(m);
-
+                ViewBag.type = type;
             }
             
             ViewBag.Message = "";
@@ -89,7 +92,6 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.algorithm = algorithm;
             ViewBag.result = launchAlgorithm(code, key, algorithm, option);
             ViewBag.code = code;
-            ViewBag.type = type;
             return View();
         }
 
