@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
+using System.Text.RegularExpressions;
 
 
 namespace Bezpieczeństwo.Controllers
@@ -39,47 +40,42 @@ namespace Bezpieczeństwo.Controllers
         [HttpPost]
         public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file, String sequence)
         {
-            string filePath = "file.txt";
+            string filePath = "file.rtf";
+            string code;
             var dir = _env.ContentRootPath;
-            using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+
+            if (file == null)
             {
-                file.CopyTo(fileStream);
+                return View("AddImage");
             }
-            if (file == null && (sequence == null || sequence ==""))
+
+            string type = file.ContentType;
+
+            if(type == "text/plain")
             {
-                ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
-                return View();
+                filePath = "file.txt";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                code = System.IO.File.ReadAllText(filePath);
             }
-            if(file != null && sequence != null && sequence != "")
+            else
             {
-                ViewBag.Message = 
-                    "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
-                return View();
+                filePath = "file.rtf";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.rtf"), FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                string m = ReadFromRTF();
+                code = RemoveRTFFormatting(m);
+
             }
-            string code = file != null ? System.IO.File.ReadAllText(filePath) : sequence;
 
-            String result = launchAlgorithm(code, key, algorithm, option);
-            ViewBag.key = key;
-            ViewBag.option = option;
-            ViewBag.algorithm = algorithm;
-            ViewBag.result = result;
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        private String launchAlgorithm(String code, String key, int algorithm, int option)
-        {
-            String result = "";
+            //Uruchamianie algorytmow szkielet
+            String result = "abcd";
             switch (algorithm)
             {
                 case 1:
@@ -112,7 +108,55 @@ namespace Bezpieczeństwo.Controllers
                 default:
                     break;
             }
-            return result;
+            ViewBag.key = key;
+            ViewBag.option = option;
+            ViewBag.algorithm = algorithm;
+            ViewBag.result = result;
+            ViewBag.code = code;
+            ViewBag.type = type;
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private string ReadFromRTF()
+        {
+            StreamReader myRTFReader = new StreamReader("file.rtf");
+            string output = myRTFReader.ReadToEnd();
+            myRTFReader.Close();
+            return output;
+        }
+
+
+        private string RemoveRTFFormatting(string rtfContent)
+        {
+            rtfContent = rtfContent.Trim();
+
+
+            Regex rtfRegEx = new Regex("({\\\\)(.+?)(})|(\\\\)(.+?)(\\b)",
+                                            RegexOptions.IgnoreCase
+                                            | RegexOptions.Multiline
+                                            | RegexOptions.Singleline
+                                            | RegexOptions.ExplicitCapture
+                                            | RegexOptions.IgnorePatternWhitespace
+                                            | RegexOptions.Compiled
+                                            );
+            string output = rtfRegEx.Replace(rtfContent, string.Empty);
+            output = Regex.Replace(output, @"\}", string.Empty); //replacing the remaining braces
+            string text = output.Remove(output.Length - 1);
+
+            return text.Remove(0, 6);
+
+
         }
     }
 }
