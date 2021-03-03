@@ -58,6 +58,11 @@ namespace UnitTests
             notCiphered = "CART CART";
             ciphered = "C TATCRRA";
             Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
+
+            keyRailFence = "2";
+            notCiphered = "CART CART";
+            ciphered = "CR ATATCR";
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
         }
 
         [Test]
@@ -74,6 +79,16 @@ namespace UnitTests
 
             keyRailFence = "3";
             notDecrypted = "CTARPORPYYGH";
+            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
+
+            keyRailFence = "3";
+            notDecrypted = "C TATCRRA";
+            decrypted = "CART CART";
+            Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
+
+            keyRailFence = "2";
+            notDecrypted = "CR ATATCR";
+            decrypted = "CART CART";
             Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
         }
 
