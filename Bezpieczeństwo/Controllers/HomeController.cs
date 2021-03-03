@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Bezpieczeństwo.Models;
 using Bezpieczeństwo.Algorithms;
 using System.Text.RegularExpressions;
-
+using System.Text;
 
 namespace Bezpieczeństwo.Controllers
 {
@@ -56,16 +56,16 @@ namespace Bezpieczeństwo.Controllers
             }
 
             //key validation
-            if(key==null || key.Length==0 || key=="")
+            if (key == null || key.Length == 0 || key == "")
             {
                 ViewBag.Message = "Nie podano żadnego klucza.";
                 return View();
             }
-            else if (algorithm == 1 )
+            else if (algorithm == 1)
             {
                 RailFence rf = new RailFence();
-                if (!rf.PrepareKey(key)) 
-                { 
+                if (!rf.PrepareKey(key))
+                {
                     ViewBag.Message = "W algorytmie Rail Fence kluczem musi być liczba.";
                     return View();
                 }
@@ -73,7 +73,7 @@ namespace Bezpieczeństwo.Controllers
             else if (algorithm == 2)
             {
                 PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
-                if (!pma.PrepareKey(key,'-'))
+                if (!pma.PrepareKey(key, '-'))
                 {
                     ViewBag.Message = "W algorytmie Przestawienia Macierzowe A kluczem muszą być liczby oddzielone myślnikami.";
                     return View();
@@ -119,12 +119,19 @@ namespace Bezpieczeństwo.Controllers
 
                 ViewBag.type = type;
             }
-            
+
             ViewBag.Message = "";
             ViewBag.key = key;
             ViewBag.option = option;
             ViewBag.algorithm = algorithm;
             ViewBag.result = launchAlgorithm(code, key, algorithm, option);
+
+            filePath = "output.txt";
+            using (var fileStream = new FileStream(Path.Combine(dir, "output.txt"), FileMode.Create, FileAccess.Write))
+            {
+                fileStream.Write(Encoding.UTF8.GetBytes(ViewBag.result), 0, ViewBag.result.Length);
+            }
+
             ViewBag.code = code;
             return View();
         }
@@ -143,41 +150,40 @@ namespace Bezpieczeństwo.Controllers
         private String launchAlgorithm(String code, String key, int algorithm, int option)
         {
             String result = "";
-                switch (algorithm)
-                {
-                    case 1:
-                        RailFence rf = new RailFence();
-                        rf.PrepareKey(key);
-                        if (option == 1)
-                            result = rf.Cipher(code, key);
-                        else
-                            result = rf.Decrypt(code, key);
-                        break;
+            switch (algorithm)
+            {
+                case 1:
+                    RailFence rf = new RailFence();
+                    rf.PrepareKey(key);
+                    if (option == 1)
+                        result = rf.Cipher(code, key);
+                    else
+                        result = rf.Decrypt(code, key);
+                    break;
 
-                    case 2:
-                        PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
-                        pma.PrepareKey(key, '-');
-                        if (option == 1)
-                            result = pma.CipherString(code);
-                        else
-                            result = pma.DecipherString(code);
-                        break;
+                case 2:
+                    PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                    pma.PrepareKey(key, '-');
+                    if (option == 1)
+                        result = pma.CipherString(code);
+                    else
+                        result = pma.DecipherString(code);
+                    break;
 
-                    case 3:
-                        PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
-                        pmb.PrepareKey(key);
-                        if (option == 1)
-                            result = pmb.Cipher(code);
-                        else
-                            result = pmb.Decipher(code);
+                case 3:
+                    PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                    pmb.PrepareKey(key);
+                    if (option == 1)
+                        result = pmb.Cipher(code);
+                    else
+                        result = pmb.Decipher(code);
 
-                        break;
-                    default:
-                        break;
-                }
+                    break;
+                default:
+                    break;
+            }
             return result;
         }
-
         private string ReadFromRTF()
         {
             StreamReader myRTFReader = new StreamReader("file.rtf");
