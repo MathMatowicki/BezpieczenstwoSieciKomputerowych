@@ -45,11 +45,13 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     <div>
-
+        <label>Output:</label>
+        @foreach (string line in ViewBag.result)
+        {
+            <pre>@line</pre>
+        }
     </div>
 </form>
-<label>Output:</label>
-<pre>@ViewBag.result</pre>
-<pre>@ViewBag.code</pre>
+
 
 

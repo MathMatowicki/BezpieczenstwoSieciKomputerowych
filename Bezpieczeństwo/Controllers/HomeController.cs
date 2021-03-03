@@ -34,6 +34,8 @@ namespace Bezpieczeństwo.Controllers
 
         public IActionResult Algorithms()
         {
+            List<String> result = new List<string>();
+            ViewBag.result = result;
             return View();
         }
 
@@ -41,7 +43,7 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Algorithms(String key, int algorithm, int option, IFormFile file, String sequence)
         {
             string filePath = "file.rtf";
-            string code;
+            string[] code;
             var dir = _env.ContentRootPath;
 
             if (file == null && (sequence == null || sequence == ""))
@@ -90,46 +92,39 @@ namespace Bezpieczeństwo.Controllers
             }
 
             if (file == null)
-                code = sequence;
+            {
+                code = new string[1];
+                code[0] = sequence;
+            }
+                
             else
             {
                 string type = file.ContentType;
-                if (type == "text/plain")
+
+                filePath = "file.txt";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
                 {
-                    filePath = "file.txt";
-                    using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-
-                    code = System.IO.File.ReadAllText(filePath);
+                    file.CopyTo(fileStream);
                 }
-                else
-                {
-                    filePath = "file.rtf";
-                    using (var fileStream = new FileStream(Path.Combine(dir, "file.rtf"), FileMode.Create, FileAccess.Write))
-                    {
-                        file.CopyTo(fileStream);
-                    }
 
-                    string m = ReadFromRTF();
-                    code = RemoveRTFFormatting(m);
-
-                }
+                code = System.IO.File.ReadAllLines(filePath);
 
                 ViewBag.type = type;
             }
+
+
 
             ViewBag.Message = "";
             ViewBag.key = key;
             ViewBag.option = option;
             ViewBag.algorithm = algorithm;
-            ViewBag.result = launchAlgorithm(code, key, algorithm, option);
+            List<String> result = launchAlgorithm(code, key, algorithm, option);
+            ViewBag.result = result;
 
             filePath = "output.txt";
             using (var fileStream = new FileStream(Path.Combine(dir, "output.txt"), FileMode.Create, FileAccess.Write))
             {
-                fileStream.Write(Encoding.UTF8.GetBytes(ViewBag.result), 0, ViewBag.result.Length);
+                //fileStream.Write(Encoding.UTF8.GetBytes(ViewBag.result), 0, ViewBag.result.Length);
             }
 
             ViewBag.code = code;
@@ -147,72 +142,71 @@ namespace Bezpieczeństwo.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private String launchAlgorithm(String code, String key, int algorithm, int option)
+        private List<String> launchAlgorithm(String[] code, String key, int algorithm, int option)
         {
-            String result = "";
+            List<String> result = new List<string>();
             switch (algorithm)
             {
                 case 1:
                     RailFence rf = new RailFence();
                     rf.PrepareKey(key);
                     if (option == 1)
-                        result = rf.Cipher(code, key);
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(rf.Cipher(code[i], key));
+                        }
+                    }
                     else
-                        result = rf.Decrypt(code, key);
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(rf.Decrypt(code[i], key));
+                        }
+                    }
                     break;
 
                 case 2:
                     PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
                     pma.PrepareKey(key, '-');
                     if (option == 1)
-                        result = pma.CipherString(code);
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(pma.CipherString(code[i]));
+                        }
+                    }  
                     else
-                        result = pma.DecipherString(code);
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(pma.DecipherString(code[i]));
+                        }
+                    }  
                     break;
 
                 case 3:
                     PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
                     pmb.PrepareKey(key);
                     if (option == 1)
-                        result = pmb.Cipher(code);
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(pmb.Cipher(code[i]));
+                        }
+                    }
                     else
-                        result = pmb.Decipher(code);
-
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            result.Add(pmb.Decipher(code[i]));
+                        }
+                    }
                     break;
                 default:
                     break;
             }
             return result;
-        }
-        private string ReadFromRTF()
-        {
-            StreamReader myRTFReader = new StreamReader("file.rtf");
-            string output = myRTFReader.ReadToEnd();
-            myRTFReader.Close();
-            return output;
-        }
-
-
-        private string RemoveRTFFormatting(string rtfContent)
-        {
-            rtfContent = rtfContent.Trim();
-
-
-            Regex rtfRegEx = new Regex("({\\\\)(.+?)(})|(\\\\)(.+?)(\\b)",
-                                            RegexOptions.IgnoreCase
-                                            | RegexOptions.Multiline
-                                            | RegexOptions.Singleline
-                                            | RegexOptions.ExplicitCapture
-                                            | RegexOptions.IgnorePatternWhitespace
-                                            | RegexOptions.Compiled
-                                            );
-            string output = rtfRegEx.Replace(rtfContent, string.Empty);
-            output = Regex.Replace(output, @"\}", string.Empty); //replacing the remaining braces
-            string text = output.Remove(output.Length - 1);
-
-            return text.Remove(0, 6);
-
-
         }
     }
 }
