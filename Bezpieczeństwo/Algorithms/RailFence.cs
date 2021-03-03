@@ -23,12 +23,9 @@ namespace Bezpieczeństwo.Algorithms
 
         public String Cipher(String text, String key)
         {
-            if(!PrepareKey(key)) return "ERROR";
+            if (!PrepareKey(key)) return "ERROR";
             // Edge case if line is only 1 than alghoritm will return decrypted text
             if (this.key == 1) return text;
-            // Removes all non-alphanumerical characters on the text
-            text = text.ToUpper();
-            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
 
             var lines = new List<StringBuilder>();
 
@@ -68,9 +65,6 @@ namespace Bezpieczeństwo.Algorithms
             if (!PrepareKey(key)) return "ERROR";
             // Edge case if line is only 1 than alghoritm will return encrypted text
             if (this.key == 1) return text;
-            // Removes all non-alphanumerical characters on the text
-            text = text.ToUpper();
-            text = Regex.Replace(text, @"[^A-Z0-9]", string.Empty);
 
             var lines = new List<StringBuilder>();
 
@@ -143,6 +137,6 @@ namespace Bezpieczeństwo.Algorithms
             return result.ToString();
         }
 
-        
+
     }
 }
