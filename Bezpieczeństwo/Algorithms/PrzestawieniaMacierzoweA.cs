@@ -15,18 +15,18 @@ namespace Bezpieczeństwo.Algorithms
             string[] stringOrder = sequence.Split(separator);
             this.key = new int[stringOrder.Length];
             int index = 0;
-            foreach(String column in stringOrder)
+            foreach (String column in stringOrder)
             {
-                bool result = int.TryParse(column,out this.key[index]);
+                bool result = int.TryParse(column, out this.key[index]);
                 //niewlasciwa wartosc
                 if (!result) return result;
                 index++;
             }
             buffer = new char[key.Length];
             int n = key.Length;
-            
+
             //niewłaściwa wartosc w tablicy
-            foreach(int x in key)
+            foreach (int x in key)
             {
                 if (x > n || x <= 0) return false;
             }
@@ -42,16 +42,18 @@ namespace Bezpieczeństwo.Algorithms
         private String Cipher(String orginal)
         {
             String output = "";
-            if(orginal.Length <= key.Length)
+            if (orginal.Length <= key.Length)
             {
-                foreach(int index in key)
+                foreach (int index in key)
                 {
                     try
                     {
                         output += orginal[index - 1];
                     }
-                    catch(IndexOutOfRangeException e)
-                    { }
+                    catch (IndexOutOfRangeException e)
+                    {
+                        Console.WriteLine("Exception caught.", e);
+                    }
                 }
             }
             return output;
@@ -60,7 +62,7 @@ namespace Bezpieczeństwo.Algorithms
         //pojedyncze elementy ciagu - rozmiar klucza
         private String Decipher(String ciphered)
         {
-            for(int i = 0; i < buffer.Length;i++)
+            for (int i = 0; i < buffer.Length; i++)
                 buffer[i] = '\0';
 
             int cipheredIndex = 0;
@@ -75,7 +77,9 @@ namespace Bezpieczeństwo.Algorithms
                         cipheredIndex++;
                     }
                     catch (IndexOutOfRangeException e)
-                    { }
+                    {
+                        Console.WriteLine("Exception caught.", e);
+                    }
                 }
                 return buffer.ToString();
             }
@@ -85,25 +89,27 @@ namespace Bezpieczeństwo.Algorithms
         public String CipherString(String sequence)
         {
             String output = "";
-            for(int i = 0; i < sequence.Length; i+=key.Length)
+            for (int i = 0; i < sequence.Length; i += key.Length)
             {
                 foreach (int index in key)
                 {
                     try
                     {
-                       output += sequence[i + index - 1];
+                        output += sequence[i + index - 1];
                     }
                     catch (IndexOutOfRangeException e)
-                    { }
-                
+                    {
+                        Console.WriteLine("Exception caught.", e);
+                    }
+
                 }
             }
-            
+
             return output;
         }
 
         public String DecipherString(String sequence)
-        { 
+        {
             int cipheredIndex = 0;
             String output = "";
             for (int i = 0; i < sequence.Length; i += key.Length)
@@ -122,9 +128,11 @@ namespace Bezpieczeństwo.Algorithms
                         cipheredIndex++;
                     }
                     catch (IndexOutOfRangeException e)
-                    { }
+                    {
+                        Console.WriteLine("Exception caught.", e);
+                    }
                 }
-                if(buffer[0] != '\0')output += new String(buffer).TrimEnd('\0');
+                if (buffer[0] != '\0') output += new String(buffer).TrimEnd('\0');
             }
             return output;
         }
