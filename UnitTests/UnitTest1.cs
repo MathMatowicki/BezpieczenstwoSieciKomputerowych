@@ -53,6 +53,11 @@ namespace UnitTests
             ciphered = "CTARPORPYYGH";
 
             Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
+
+            keyRailFence = "3";
+            notCiphered = "CART CART";
+            ciphered = "C TATCRRA";
+            Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
         }
 
         [Test]
@@ -196,13 +201,13 @@ namespace UnitTests
             string key6 = "bez-pieczenstwo";
             string key7 = "bez1pie2czen3stwo";
 
-            Assert.AreEqual(algorytm.PrepareKey(key1),true);
-            Assert.AreEqual(algorytm.PrepareKey(key2),true);
-            Assert.AreEqual(algorytm.PrepareKey(key3),true);
-            Assert.AreEqual(algorytm.PrepareKey(key4),false);
-            Assert.AreEqual(algorytm.PrepareKey(key5),false);
-            Assert.AreEqual(algorytm.PrepareKey(key6),false);
-            Assert.AreEqual(algorytm.PrepareKey(key7),false);
+            Assert.AreEqual(algorytm.PrepareKey(key1), true);
+            Assert.AreEqual(algorytm.PrepareKey(key2), true);
+            Assert.AreEqual(algorytm.PrepareKey(key3), true);
+            Assert.AreEqual(algorytm.PrepareKey(key4), false);
+            Assert.AreEqual(algorytm.PrepareKey(key5), false);
+            Assert.AreEqual(algorytm.PrepareKey(key6), false);
+            Assert.AreEqual(algorytm.PrepareKey(key7), false);
 
         }
 
