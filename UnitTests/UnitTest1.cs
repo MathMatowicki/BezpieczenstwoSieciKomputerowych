@@ -96,8 +96,8 @@ namespace UnitTests
         public void TestPrzestawieniaMacierzoweABasic()
         {
             string key = "3,1,4,2";
-            string notCiphered = "CRYPTOGRAPHY";
-            string ciphered = "YCPRGTROHAYP";
+            string notCiphered = "CRY,?OGRAP.Y";
+            string ciphered = "YC,RG?RO.AYP";
 
             alghoritmPMA.ClearKey();
             Assert.AreEqual(true, alghoritmPMA.PrepareKey(key, ','));
