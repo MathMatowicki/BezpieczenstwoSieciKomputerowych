@@ -45,6 +45,11 @@ namespace Bezpieczeństwo.Controllers
             string filePath = "file.rtf";
             string[] code;
             var dir = _env.ContentRootPath;
+            ViewBag.Message = "";
+            ViewBag.key = key;
+            ViewBag.option = option;
+            ViewBag.algorithm = algorithm;
+            ViewBag.result = new List<String>();
 
             if (file == null && (sequence == null || sequence == ""))
             {
@@ -112,12 +117,6 @@ namespace Bezpieczeństwo.Controllers
                 ViewBag.type = type;
             }
 
-
-
-            ViewBag.Message = "";
-            ViewBag.key = key;
-            ViewBag.option = option;
-            ViewBag.algorithm = algorithm;
             List<String> result = launchAlgorithm(code, key, algorithm, option);
             ViewBag.result = result;
 
