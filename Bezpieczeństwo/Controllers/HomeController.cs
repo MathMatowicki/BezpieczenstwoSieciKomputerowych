@@ -101,7 +101,7 @@ namespace Bezpieczeństwo.Controllers
                 code = new string[1];
                 code[0] = sequence;
             }
-                
+
             else
             {
                 string type = file.ContentType;
@@ -123,7 +123,11 @@ namespace Bezpieczeństwo.Controllers
             filePath = "output.txt";
             using (var fileStream = new FileStream(Path.Combine(dir, "output.txt"), FileMode.Create, FileAccess.Write))
             {
-                //fileStream.Write(Encoding.UTF8.GetBytes(ViewBag.result), 0, ViewBag.result.Length);
+                foreach (String line in result)
+                {
+                    fileStream.Write(Encoding.UTF8.GetBytes(line), 0, line.Length);
+                    fileStream.Write(Encoding.UTF8.GetBytes(System.Environment.NewLine), 0, System.Environment.NewLine.Length);
+                }
             }
 
             ViewBag.code = code;
@@ -174,14 +178,14 @@ namespace Bezpieczeństwo.Controllers
                         {
                             result.Add(pma.CipherString(code[i]));
                         }
-                    }  
+                    }
                     else
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
                             result.Add(pma.DecipherString(code[i]));
                         }
-                    }  
+                    }
                     break;
 
                 case 3:
