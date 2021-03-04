@@ -24,7 +24,7 @@ namespace Bezpieczeństwo.Algorithms
         public String Cipher(String text, String key)
         {
             if (!PrepareKey(key)) return "ERROR";
-            // Edge case if line is only 1 than alghoritm will return decrypted text
+            // Edge case if line is only 1 than algorithm will return decrypted text
             if (this.key == 1) return text;
 
             var lines = new List<StringBuilder>();
@@ -63,7 +63,7 @@ namespace Bezpieczeństwo.Algorithms
         {
 
             if (!PrepareKey(key)) return "ERROR";
-            // Edge case if line is only 1 than alghoritm will return encrypted text
+            // Edge case if line is only 1 than algorithm will return encrypted text
             if (this.key == 1) return text;
 
             var lines = new List<StringBuilder>();
