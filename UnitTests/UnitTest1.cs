@@ -130,6 +130,7 @@ namespace UnitTests
             string key2 = "3-1-4";
             string key3 = "3-a-4-2";
             string key4 = "3-0-4-2";
+            string key5 = "3-2-4-2";
 
             alghoritmPMA.ClearKey();
             Assert.AreEqual(true, alghoritmPMA.PrepareKey(key1, '-'));
@@ -139,6 +140,8 @@ namespace UnitTests
             Assert.AreEqual(false, alghoritmPMA.PrepareKey(key3, '-'));
             alghoritmPMA.ClearKey();
             Assert.AreEqual(false, alghoritmPMA.PrepareKey(key4, '-'));
+            alghoritmPMA.ClearKey();
+            Assert.AreEqual(false, alghoritmPMA.PrepareKey(key5, '-'));
             alghoritmPMA.ClearKey();
         }
 
