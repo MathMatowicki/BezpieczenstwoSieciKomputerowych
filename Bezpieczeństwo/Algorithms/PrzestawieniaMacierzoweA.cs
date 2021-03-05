@@ -20,7 +20,11 @@ namespace Bezpieczeństwo.Algorithms
             {
                 bool result = int.TryParse(column, out this.key[index]);
                 //niewlasciwa wartosc
-                if (!result) return result;
+                if (!result)
+                {
+                    key = null;
+                    return result;
+                }
                 index++;
             }
             buffer = new char[key.Length];
@@ -29,7 +33,20 @@ namespace Bezpieczeństwo.Algorithms
             //niewłaściwa wartosc w tablicy
             foreach (int x in key)
             {
-                if (x > n || x <= 0) return false;
+                if (x > n || x <= 0)
+                {
+                    key = null;
+                    return false;
+                } 
+            }
+
+            for(int i = 1; i <= n; i++)
+            {
+                if (!key.Contains(i))
+                {
+                    key = null;
+                    return false;
+                }
             }
             return true;
         }
@@ -42,6 +59,7 @@ namespace Bezpieczeństwo.Algorithms
         //pojedyncze elementy ciagu - rozmiar klucza
         private String Cipher(String orginal)
         {
+            if (key == null) return "ERROR";
             String output = "";
             if (orginal.Length <= key.Length)
             {
@@ -63,6 +81,7 @@ namespace Bezpieczeństwo.Algorithms
         //pojedyncze elementy ciagu - rozmiar klucza
         private String Decipher(String ciphered)
         {
+            if (key == null) return "ERROR";
             for (int i = 0; i < buffer.Length; i++)
                 buffer[i] = '\0';
 
@@ -89,6 +108,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public String CipherString(String sequence)
         {
+            if (key == null) return "ERROR";
             StringBuilder output = new StringBuilder("");
             for (int i = 0; i < sequence.Length; i += key.Length)
             {
@@ -111,6 +131,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public String DecipherString(String sequence)
         {
+            if (key == null) return "ERROR";
             int cipheredIndex = 0;
             StringBuilder output = new StringBuilder("");
             for (int i = 0; i < sequence.Length; i += key.Length)
