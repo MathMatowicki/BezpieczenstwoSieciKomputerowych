@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Bezpieczeństwo.Algorithms
@@ -88,14 +89,14 @@ namespace Bezpieczeństwo.Algorithms
 
         public String CipherString(String sequence)
         {
-            String output = "";
+            StringBuilder output = new StringBuilder("");
             for (int i = 0; i < sequence.Length; i += key.Length)
             {
                 foreach (int index in key)
                 {
                     try
                     {
-                        output += sequence[i + index - 1];
+                        output.Append(sequence[i + index - 1]);
                     }
                     catch (IndexOutOfRangeException e)
                     {
@@ -105,13 +106,13 @@ namespace Bezpieczeństwo.Algorithms
                 }
             }
 
-            return output;
+            return output.ToString();
         }
 
         public String DecipherString(String sequence)
         {
             int cipheredIndex = 0;
-            String output = "";
+            StringBuilder output = new StringBuilder("");
             for (int i = 0; i < sequence.Length; i += key.Length)
             {
                 for (int j = 0; j < buffer.Length; j++)
@@ -132,9 +133,14 @@ namespace Bezpieczeństwo.Algorithms
                         Console.WriteLine("Exception caught.", e);
                     }
                 }
-                if (buffer[0] != '\0') output += new String(buffer).TrimEnd('\0');
+                int index2 = 0;
+                while (index2 < key.Length && buffer[index2] != '\0')
+                {
+                    output.Append(buffer[index2]);
+                    index2++;
+                } 
             }
-            return output;
+            return output.ToString();
         }
     }
 }
