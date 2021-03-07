@@ -23,10 +23,7 @@ namespace Bezpieczeństwo.Algorithms
         }
         public String Cipher(string text)
         {
-            //text = text.ToUpper();
             text = Regex.Replace(text, @"\n", string.Empty);
-
-            //int[] key = GetKey(userKey);
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             String output = "";
             int index = 0;
@@ -52,16 +49,12 @@ namespace Bezpieczeństwo.Algorithms
                 }
             }
 
-
             return output;
         }
 
         public String Decipher(String text)
         {
-            //text = text.ToUpper();
             text = Regex.Replace(text, @"\n", string.Empty);
-
-            //int[] key = GetKey(userKey);
             String output = "";
             char[,] tab = new char[key.Length, (int)text.Length / key.Length + 1];
             int modulo = text.Length % key.Length;
