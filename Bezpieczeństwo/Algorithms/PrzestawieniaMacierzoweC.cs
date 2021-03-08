@@ -56,7 +56,7 @@ namespace Bezpieczeństwo.Algorithms
                 sequence.Length/ numberOfLettersWithWholeMatrixFilled();
             int numberOfLeftOvers = sequence.Length % numberOfLettersWithWholeMatrixFilled();
 
-            for (int i = 0; i<=n; i++)
+            for (int i = 0; i<n; i++)
             {
                 numOfElemInColumn[i] = 0;
                 currentIndexOfElemInColumn[i] = 0;
@@ -69,6 +69,7 @@ namespace Bezpieczeństwo.Algorithms
                 numberOfRows++;
             }
 
+            numberOfRows--;
             numOfElemInColumn[key[n - 2]] = key[n - 2] <= numberOfRows ? 1 : 0;
             for (int i = n - 3; i >= 0; i--)
             {
@@ -78,22 +79,33 @@ namespace Bezpieczeństwo.Algorithms
                     numOfElemInColumn[key[i]] = numOfElemInColumn[key[i + 1]];
             }
 
-            for(int i=0; i< key.Length; i++)
+            if (numberOfLeftOvers < numberOfLetters)
+            {
+                int index = invertedKey[numberOfRows];
+                for (int i = index; numberOfLetters - numberOfLeftOvers > invertedKey[numberOfRows] - i; i--)
+                    numOfElemInColumn[key[i]]--;
+            }
+            for (int i=0; i< key.Length; i++)
                 numOfElemInColumn[key[i]] += (key.Length - invertedKey[key[i]]) * numberOfFullKeys;
 
-            for(int i=1; i<=n; i++)
+            for(int i=1; i<n; i++)
                 currentIndexOfElemInColumn[i] = currentIndexOfElemInColumn[i - 1] + numOfElemInColumn[i - 1];
 
             StringBuilder output = new StringBuilder("");
-            for(int i=1; i < numberOfRows + key.Length * numberOfFullKeys; i++)
+            for(int i=1; i <= numberOfRows + key.Length * numberOfFullKeys; i++)
             {
-                for(int j=0; j< key.Length && key[j] != i%(key.Length + 1)+1 ; j++)
+                for(int j=0; j< key.Length ; j++)
                 {
-                    output.Append(sequence[currentIndexOfElemInColumn[key[j]]]);
+                    int x = currentIndexOfElemInColumn[key[j]];
+                    output.Append(sequence[x]);
                     currentIndexOfElemInColumn[key[j]]++;
+                    if (key[j] == i % key.Length || (key[j] == key.Length && i % key.Length == 0)) break;
+                    if (output.Length == sequence.Length) break;
                 }
+                if (output.Length == sequence.Length) break;
             }
-            return output.ToString();
+            String returnValue = output.ToString();
+            return returnValue;
         }
     }
 }

@@ -275,5 +275,53 @@ namespace UnitTests
 
         }
 
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweDecipher()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("CONVENIENCE");
+            string ciphered = "ABLR1!FIOZ267DIRK0CFPW5CMT+HMWIZ8XAPZ+HY7EW?OYDNT3AHKR49FKTGX6DNU!NXJ9YBCMS2?GJP138EJSEOU4BLS50GLU";
+            string answer = "ABCDEFGHIJKLMNOPRSTUWXYZ1234567890+!?ABCDEFGHIJKLMNOPRSTUWXYZ1234567890+!?ABCDEFGHIJKLMNOPRSTUWXYZ";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
+
+        public void TestPrzestawieniaMacierzoweDecipherBasic()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("CONVENIENCE");
+            string ciphered = "HEESPNIRRSSEESEIYASCBTEMGEPNANDICTRTAHSOIEERO";
+            string answer = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweDecipherBasic2()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("MAMYTO");
+            string ciphered = "oe.fniosT,jtyawadoszramczswao ";
+            string answer = "To,jest.zaszyfrowana wiadomosc";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweDecipherBasicShortKey()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("M");
+            string ciphered = "To,jest.zaszyfrowana wiadomosc";
+            string answer = "To,jest.zaszyfrowana wiadomosc";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweDecipherBasicKeyLonger()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("MAMYTO");
+            string ciphered = "E,JST";
+            string answer = "JEST,";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
     }
 }
