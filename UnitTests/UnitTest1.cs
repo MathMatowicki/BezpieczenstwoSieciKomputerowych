@@ -16,7 +16,7 @@ namespace UnitTests
             alghoritmPMA = new PrzestawieniaMacierzoweA();
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestRailFenceKey()
         {
 
@@ -37,7 +37,7 @@ namespace UnitTests
             Assert.AreEqual(false, alghoritmRailFence.PrepareKey(keyRailFence));
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestRailFenceCipherAlghoritm()
         {
             string notCiphered = "CRYPTOGRAPHY";
@@ -65,7 +65,7 @@ namespace UnitTests
             Assert.AreEqual(ciphered, alghoritmRailFence.Cipher(notCiphered, keyRailFence));
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestRailFenceDecryptAlghoritm()
         {
             string notDecrypted = "CYTGAHRPORPY";
@@ -92,7 +92,7 @@ namespace UnitTests
             Assert.AreEqual(decrypted, alghoritmRailFence.Decrypt(notDecrypted, keyRailFence));
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweABasic()
         {
             string key = "3,1,4,2";
@@ -109,7 +109,7 @@ namespace UnitTests
             Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweABasic2()
         {
             string key = "3,1,4,2";
@@ -123,7 +123,7 @@ namespace UnitTests
             Assert.AreEqual(notCiphered, notCipheredWithAlgorythm);
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweAKey()
         {
             string key1 = "3-1-4-2";
@@ -145,7 +145,7 @@ namespace UnitTests
             alghoritmPMA.ClearKey();
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweA()
         {
             Random rand = new Random();
@@ -165,7 +165,7 @@ namespace UnitTests
             Assert.AreEqual(notCipheredAgain, notCiphered);
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweAMore()
         {
             string key1 = "9,4,3,1,8,5,7,6,2";
@@ -193,7 +193,7 @@ namespace UnitTests
             Assert.AreEqual(cipheredLong, alghoritmPMA.CipherString(notCipheredLong));
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweBKey()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
@@ -207,7 +207,7 @@ namespace UnitTests
 
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweBPrepareKey()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
@@ -229,7 +229,7 @@ namespace UnitTests
 
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweBCipher()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
@@ -249,7 +249,7 @@ namespace UnitTests
 
         }
 
-        [Test]
+        [Test, Category("Exercies1")]
         public void TestPrzestawieniaMacierzoweBDecipher()
         {
             PrzestawieniaMacierzoweB algorytm = new PrzestawieniaMacierzoweB();
@@ -269,7 +269,11 @@ namespace UnitTests
 
         }
 
+        [Test, Category("Exercies2")]
+        public void TestVigenereCipher()
+        {
 
+        }
 
     }
 }
