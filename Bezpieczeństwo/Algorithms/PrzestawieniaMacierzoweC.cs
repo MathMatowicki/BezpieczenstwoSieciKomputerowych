@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Bezpieczeństwo.Algorithms
@@ -78,12 +79,21 @@ namespace Bezpieczeństwo.Algorithms
             }
 
             for(int i=0; i< key.Length; i++)
-                numOfElemInColumn[key[i]] += (key.Length - invertedKey[key[i]])* numberOfFullKeys;
+                numOfElemInColumn[key[i]] += (key.Length - invertedKey[key[i]]) * numberOfFullKeys;
 
             for(int i=1; i<=n; i++)
                 currentIndexOfElemInColumn[i] = currentIndexOfElemInColumn[i - 1] + numOfElemInColumn[i - 1];
-               
-            return "";
+
+            StringBuilder output = new StringBuilder("");
+            for(int i=1; i < numberOfRows + key.Length * numberOfFullKeys; i++)
+            {
+                for(int j=0; j< key.Length && key[j] != i%(key.Length + 1)+1 ; j++)
+                {
+                    output.Append(sequence[currentIndexOfElemInColumn[key[j]]]);
+                    currentIndexOfElemInColumn[key[j]]++;
+                }
+            }
+            return output.ToString();
         }
     }
 }

@@ -202,8 +202,8 @@ namespace UnitTests
             string key2 = "BEZPIECZENSTWO";
             int[] key2result = new int[] { 1, 3, 13, 9, 6, 4, 2, 14, 5, 7, 10, 11, 12, 8 };
 
-            Assert.AreEqual(algorytm.GetKey(key1), key1result);
-            Assert.AreEqual(algorytm.GetKey(key2), key2result);
+            Assert.AreEqual(algorytm.PrepareKey(key1), key1result);
+            Assert.AreEqual(algorytm.PrepareKey(key2), key2result);
 
         }
 
