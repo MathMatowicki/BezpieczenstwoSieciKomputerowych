@@ -8,6 +8,7 @@ namespace Bezpieczeństwo.Algorithms
     public class PrzestawieniaMacierzoweC
     {
         private int[] key;
+        private int[] invertedKey;
         public bool PrepareKey(String key)
         {
             WordKey wk = new WordKey();
@@ -16,24 +17,52 @@ namespace Bezpieczeństwo.Algorithms
             else return false;
         }
 
+        private void PrepareInvertedKey()
+        {
+            invertedKey = new int[key.Length+1];
+            for (int i = 0; i < key.Length; i++)
+            {
+                invertedKey[key[i]] = i;
+            }
+            invertedKey[0] = 0;
+        }
+
+        private int numberOfLettersWithWholeMatrixFilled()
+        {
+            int numberOfLetters = 0;
+            for(int i = 1; i <= key.Length; i++)
+                numberOfLetters += invertedKey[i] + 1;
+            return numberOfLetters;
+        }
+
+        /*private int[] fullMatrixFilled()
+        {
+            int[] numOfElemInColumn = new int[key.Length + 1];
+            numOfElemInColumn[key[key.Length - 1]] = 1;
+            for (int i = key.Length - 2; i >= 0; i--)
+                numOfElemInColumn[key[i]] = numOfElemInColumn[key[i + 1]] + 1;
+
+            return numOfElemInColumn;
+        }*/
+
         public string Decipher(string sequence)
         {
             int n = key.Length + 1;
-            int[] invertedKey = new int[n];
+            this.PrepareInvertedKey();
             int[] numOfElemInColumn = new int[n];
             int[] currentIndexOfElemInColumn = new int[n];
-            for(int i=0; i < key.Length; i++)
+            int numberOfFullKeys = 
+                sequence.Length/ numberOfLettersWithWholeMatrixFilled();
+            int numberOfLeftOvers = sequence.Length % numberOfLettersWithWholeMatrixFilled();
+
+            for (int i = 0; i<=n; i++)
             {
-                invertedKey[key[i]] = i;
                 numOfElemInColumn[i] = 0;
                 currentIndexOfElemInColumn[i] = 0;
             }
-            invertedKey[0] = 0;
-            numOfElemInColumn[0] = 0;
-            currentIndexOfElemInColumn[0] = 0;
 
             int numberOfRows = 1, numberOfLetters = 0;
-            while(numberOfLetters < sequence.Length)
+            while(numberOfLetters < numberOfLeftOvers)
             {
                 numberOfLetters += invertedKey[numberOfRows] + 1;
                 numberOfRows++;
@@ -47,6 +76,13 @@ namespace Bezpieczeństwo.Algorithms
                 else
                     numOfElemInColumn[key[i]] = numOfElemInColumn[key[i + 1]];
             }
+
+            for(int i=0; i< key.Length; i++)
+                numOfElemInColumn[key[i]] += (key.Length - invertedKey[key[i]])* numberOfFullKeys;
+
+            for(int i=1; i<=n; i++)
+                currentIndexOfElemInColumn[i] = currentIndexOfElemInColumn[i - 1] + numOfElemInColumn[i - 1];
+               
             return "";
         }
     }
