@@ -9,7 +9,7 @@ namespace Bezpieczeństwo.Algorithms
     public class PrzestawieniaMacierzoweB
     {
         private int[] key;
-        public bool PrepareKey(String key)
+        /*public bool PrepareKey(String key)
         {
             key = key.ToUpper();
             Regex reg = new Regex("[A-Z]");
@@ -20,7 +20,15 @@ namespace Bezpieczeństwo.Algorithms
                 return true;
             }
             return false;
+        }*/
+        public bool PrepareKey(String key)
+        {
+            WordKey wk = new WordKey();
+            this.key = wk.GetKey(key);
+            if (this.key != null) return true;
+            else return false;
         }
+
         public String Cipher(string text)
         {
             text = Regex.Replace(text, @"\n", string.Empty);
@@ -104,7 +112,7 @@ namespace Bezpieczeństwo.Algorithms
         }
 
         //Zwraca tablicę na podstawie słowa klucz
-        private char[] QuickSort(char[] d, int l, int r)
+        /*private char[] QuickSort(char[] d, int l, int r)
         {
             int i, j;
             char p, swap;
@@ -144,7 +152,7 @@ namespace Bezpieczeństwo.Algorithms
             }
 
             return i;
-        }
+        }*/
 
 
     }
