@@ -424,5 +424,15 @@ namespace UnitTests
             answer = "E";
             Assert.AreEqual(answer, algorytm.Decipher(ciphered));
         }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweCipherDecipher()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("Klucz");
+            string notCiphered = "here is a secret message, please keep it a secret! It will be awesome :)";
+            string ciphered = algorytm.Cipher(notCiphered);
+            Assert.AreEqual(notCiphered, algorytm.Decipher(ciphered));
+        }
     }
 }
