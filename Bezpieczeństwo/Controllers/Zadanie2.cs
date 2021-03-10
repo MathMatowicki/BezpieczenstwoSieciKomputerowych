@@ -11,6 +11,8 @@ namespace Bezpieczeństwo.Controllers
     {
         public IActionResult Index()
         {
+
+            return View();
         }
     }
 }
