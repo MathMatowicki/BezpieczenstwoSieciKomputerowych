@@ -20,26 +20,51 @@ namespace Bezpieczeństwo.Algorithms
                 if (!char.IsLetter(sign))
                     return false;
             }
-            key.ToUpper();
             this.key = key;
             return true;
         }
 
         public String Cipher(String text, String key)
         {
-            String outText = String.Empty;
-            //Validate input key if not console err message and return empty value
-            if (!PrepareKey(key))
+            if (PrepareKey(key))
             {
-                Console.WriteLine("Wrong validation of Vigenere key");
-                return String.Empty;
-            }
+                String cipher_text = "";
 
-            foreach (var letter in text)
+                for (int i = 0; i < text.Length; i++)
+                {
+                    // converting in range 0-25 
+                    int x = (text[i] + this.key[i]) % 26;
+
+                    // convert into alphabets(ASCII) 
+                    x += 'A';
+
+                    cipher_text += (char)(x);
+                }
+
+                return cipher_text;
+            }
+            return "ERROR!";
+        }
+
+        public String Decrypt(String text, String key)
+        {
+            if (PrepareKey(key))
             {
+                String orig_text = "";
 
+                for (int i = 0; i < text.Length && i < key.Length; i++)
+                {
+                    // converting in range 0-25 
+                    int x = (text[i] - key[i] + 26) % 26;
+
+                    // convert into alphabets(ASCII) 
+                    x += 'A';
+
+                    orig_text += (char)(x);
+                }
+                return orig_text;
             }
-            return outText;
+            return "ERROR!";
         }
     }
 }
