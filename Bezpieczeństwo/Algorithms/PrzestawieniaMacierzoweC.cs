@@ -45,69 +45,6 @@ namespace Bezpieczeństwo.Algorithms
 
             return numOfElemInColumn;
         }*/
-        /*
-        public string Cipher(string sequence)
-        {
-            string result = "";
-
-            int n = this.key.Length;
-            int w = 1,s=1;
-            while (s < sequence.Length)
-            {
-                w++;
-                s += w;
-            }
-            //w najgorszym przypadku w wierszy - kiedy litery z klucza są w kolejności alfabetycznej
-            char[,] tab = new char[w, n];
-
-            s = 0;
-            int pom = 1;
-            //uzupełnianie tablicy
-            while (s < sequence.Length)
-            {
-                for(int i = 0; i < n; i++)
-                {
-                    if (this.key[i] != pom)
-                    {
-                        tab[pom - 1, i] = sequence[s];
-                        s++;
-                    }
-                    else
-                    {
-                        tab[pom - 1, i] = sequence[s];
-                        s++;
-                        pom++;
-                        break;
-                    }
-                }
-            }
-            s = 0;
-            pom = 1;
-            //odczytywanie wyniku
-            while (s < sequence.Length)
-            {
-                for(int i=0;i<n;i++)
-                {
-                    if (key[i] == pom)
-                    {
-                        for(int j=0;j<w;j++)
-                        {
-                            if(tab[j, i]!=null)
-                            { 
-                            result += tab[j, i];
-                            }
-                        }
-
-
-                        w++;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-        */
 
         public string Cipher(string sequence)
         {
@@ -127,11 +64,13 @@ namespace Bezpieczeństwo.Algorithms
                 {
                     if (this.key[i] != pom)
                     {
+                        if (s >= sequence.Length) break;
                         list[i].Add(sequence[s]);
                         s++;
                     }
                     else
                     {
+                        if (s >= sequence.Length) break;
                         list[i].Add(sequence[s]);
                         s++;
                         pom++;

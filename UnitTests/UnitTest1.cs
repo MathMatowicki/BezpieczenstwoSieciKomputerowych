@@ -311,8 +311,42 @@ namespace UnitTests
             string m = "SZYFROWANIEJESTOK";
             string c = "FSZONJOSRWAETKYIE";
             Assert.AreEqual(c, algorytm.Cipher(m));
+
+            algorytm.PrepareKey("CONVENIENCE");
+            m = "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION";
+            c = "HEESPNIRRSSEESEIYASCBTEMGEPNANDICTRTAHSOIEERO";
+            Assert.AreEqual(c, algorytm.Cipher(m));
         }
 
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweCipherSpecialSigns()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("CONVENIENCE");
+            string m = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            string c = "HEE   NONSEITSITIAEED GHAERENYPISAPRO RRCMEBSS ESC T";
+            Assert.AreEqual(c, algorytm.Cipher(m));
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweCipherShortKey()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("C");
+            string m = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            string c = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            Assert.AreEqual(c, algorytm.Cipher(m));
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweCipherKeyLonger()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("CONVENIENCE");
+            string m = "Szyfr!";
+            string c = "Sz!fyr";
+            Assert.AreEqual(c, algorytm.Cipher(m));
+        }
 
         [Test, Category("Exercies2")]
         public void TestPrzestawieniaMacierzoweDecipher()
