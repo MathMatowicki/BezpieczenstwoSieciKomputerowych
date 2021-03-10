@@ -134,6 +134,107 @@ namespace Bezpieczeństwo.Controllers
             return View();
         }
 
+        public IActionResult AlgorithmsZad2()
+        {
+            List<String> result = new List<string>();
+            ViewBag.result = result;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AlgorithmsZad2(String key, int algorithm, int option, IFormFile file, String sequence)
+        {
+            string filePath = "file.rtf";
+            string[] code;
+            var dir = _env.ContentRootPath;
+            ViewBag.Message = "";
+            ViewBag.key = key;
+            ViewBag.option = option;
+            ViewBag.algorithm = algorithm;
+            ViewBag.result = new List<String>();
+
+            if (file == null && (sequence == null || sequence == ""))
+            {
+                ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
+                return View();
+            }
+            if (file != null && sequence != null && sequence != "")
+            {
+                ViewBag.Message =
+                    "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
+            }
+
+            //key validation
+            if (key == null || key.Length == 0 || key == "")
+            {
+                ViewBag.Message = "Nie podano żadnego klucza.";
+                return View();
+            }
+            else if (algorithm == 1)
+            {
+                RailFence rf = new RailFence();
+                if (!rf.PrepareKey(key))
+                {
+                    ViewBag.Message = "W algorytmie Rail Fence kluczem musi być liczba.";
+                    return View();
+                }
+            }
+            else if (algorithm == 2)
+            {
+                PrzestawieniaMacierzoweA pma = new PrzestawieniaMacierzoweA();
+                if (!pma.PrepareKey(key, '-'))
+                {
+                    ViewBag.Message = "W algorytmie Przestawienia Macierzowe A kluczem muszą być liczby oddzielone myślnikami.";
+                    return View();
+                }
+            }
+            else if (algorithm == 3)
+            {
+                PrzestawieniaMacierzoweB pmb = new PrzestawieniaMacierzoweB();
+                if (!pmb.PrepareKey(key))
+                {
+                    ViewBag.Message = "W algorytmie Przestawienia Macierzowe B kluczem musi być wyraz.";
+                    return View();
+                }
+            }
+
+            if (file == null)
+            {
+                code = new string[1];
+                code[0] = sequence;
+            }
+
+            else
+            {
+                string type = file.ContentType;
+
+                filePath = "file.txt";
+                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                code = System.IO.File.ReadAllLines(filePath);
+
+                ViewBag.type = type;
+            }
+
+            List<String> result = launchAlgorithm(code, key, algorithm, option);
+            ViewBag.result = result;
+
+            filePath = "output.txt";
+            using (var fileStream = new FileStream(Path.Combine(dir, "output.txt"), FileMode.Create, FileAccess.Write))
+            {
+                foreach (String line in result)
+                {
+                    fileStream.Write(Encoding.UTF8.GetBytes(line), 0, line.Length);
+                    fileStream.Write(Encoding.UTF8.GetBytes(System.Environment.NewLine), 0, System.Environment.NewLine.Length);
+                }
+            }
+
+            ViewBag.code = code;
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

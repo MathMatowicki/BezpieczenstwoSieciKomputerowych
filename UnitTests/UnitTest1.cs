@@ -323,5 +323,18 @@ namespace UnitTests
             string answer = "JEST,";
             Assert.AreEqual(answer, algorytm.Decipher(ciphered));
         }
+
+        [Test, Category("Exercies2")]
+        public void TestPrzestawieniaMacierzoweDecipherShorts()
+        {
+            PrzestawieniaMacierzoweC algorytm = new PrzestawieniaMacierzoweC();
+            algorytm.PrepareKey("Klucz");
+            string ciphered = "";
+            string answer = "";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+            ciphered = "E";
+            answer = "E";
+            Assert.AreEqual(answer, algorytm.Decipher(ciphered));
+        }
     }
 }
