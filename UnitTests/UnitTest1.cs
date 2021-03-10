@@ -196,17 +196,32 @@ namespace UnitTests
         }
 
         [Test, Category("Exercies1")]
-        public void TestPrzestawieniaMacierzoweBKey()
+        public void TestWordKey()
         {
             WordKey wk = new WordKey();
             string key1 = "CONVENIENCE";
             int[] key1result = new int[] { 1, 10, 7, 11, 3, 8, 6, 4, 9, 2, 5 };
             string key2 = "BEZPIECZENSTWO";
             int[] key2result = new int[] { 1, 3, 13, 9, 6, 4, 2, 14, 5, 7, 10, 11, 12, 8 };
+            string key3 = "abcd";
+            int[] key3result = new int[] { 1, 2, 3, 4 };
 
             Assert.AreEqual(wk.GetKey(key1), key1result);
             Assert.AreEqual(wk.GetKey(key2), key2result);
+            Assert.AreEqual(wk.GetKey(key3), key3result);
+        }
 
+        [Test, Category("Exercies1")]
+        public void TestWordKeyPrepareKey()
+        {
+            WordKey wk = new WordKey();
+            string key1 = "bezpieczenstwo";
+            string key2 = "";
+            string key3 = "bez pieczenstwo";
+
+            Assert.AreEqual(wk.PrepareKey(key1), true);
+            Assert.AreEqual(wk.PrepareKey(key2), false);
+            Assert.AreEqual(wk.PrepareKey(key3), false);
         }
 
         [Test, Category("Exercies1")]
