@@ -45,7 +45,126 @@ namespace Bezpieczeństwo.Algorithms
 
             return numOfElemInColumn;
         }*/
+        /*
+        public string Cipher(string sequence)
+        {
+            string result = "";
 
+            int n = this.key.Length;
+            int w = 1,s=1;
+            while (s < sequence.Length)
+            {
+                w++;
+                s += w;
+            }
+            //w najgorszym przypadku w wierszy - kiedy litery z klucza są w kolejności alfabetycznej
+            char[,] tab = new char[w, n];
+
+            s = 0;
+            int pom = 1;
+            //uzupełnianie tablicy
+            while (s < sequence.Length)
+            {
+                for(int i = 0; i < n; i++)
+                {
+                    if (this.key[i] != pom)
+                    {
+                        tab[pom - 1, i] = sequence[s];
+                        s++;
+                    }
+                    else
+                    {
+                        tab[pom - 1, i] = sequence[s];
+                        s++;
+                        pom++;
+                        break;
+                    }
+                }
+            }
+            s = 0;
+            pom = 1;
+            //odczytywanie wyniku
+            while (s < sequence.Length)
+            {
+                for(int i=0;i<n;i++)
+                {
+                    if (key[i] == pom)
+                    {
+                        for(int j=0;j<w;j++)
+                        {
+                            if(tab[j, i]!=null)
+                            { 
+                            result += tab[j, i];
+                            }
+                        }
+
+
+                        w++;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+        */
+
+        public string Cipher(string sequence)
+        {
+            string result = "";
+            int n = this.key.Length;
+            List<List<char>> list = new List<List<char>>();
+            for (int i = 0; i < n; i++)
+            {
+                list.Add(new List<char>());
+            }
+
+            int s=0, pom = 1;
+            //uzupełnianie listy
+            while (s < sequence.Length)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    if (this.key[i] != pom)
+                    {
+                        list[i].Add(sequence[s]);
+                        s++;
+                    }
+                    else
+                    {
+                        list[i].Add(sequence[s]);
+                        s++;
+                        pom++;
+                        if (pom > n) pom = 1;
+                        break;
+                    }
+                }
+            }
+            s = 0;
+            pom = 1;
+            //odczytywanie wyniku
+
+            while (s < sequence.Length)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    if (key[i] == pom)
+                    {
+                        for(int j = 0;j < list[i].Count(); j++)
+                        {
+                            result += list[i][j];
+                            s++;
+                        }
+                        pom++;
+                        if (pom > n) pom = 1;
+                        break;
+                    }
+                }
+            }
+
+
+            return result;
+        }
         public string Decipher(string sequence)
         {
             int n = key.Length + 1;
