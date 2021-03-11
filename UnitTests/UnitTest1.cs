@@ -302,8 +302,20 @@ namespace UnitTests
         {
             string text = "CRYPTOGRAPHY";
             string key = "BREAKBREAKBR";
-            Assert.True(algorithmViegnere.PrepareKey(key));
 
+            Assert.True(algorithmViegnere.PrepareKey(key));
+            Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
+
+            text = "cryptography";
+            key = "breakbreakbr";
+
+            Assert.True(algorithmViegnere.PrepareKey(key));
+            Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
+
+            text = "cryptogr$$#?.  aphy";
+            key = "breakbr  eakbr";
+
+            Assert.False(algorithmViegnere.PrepareKey(key));
             Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
 
         }

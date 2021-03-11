@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace Bezpieczeństwo.Algorithms
 {
@@ -20,12 +21,18 @@ namespace Bezpieczeństwo.Algorithms
                 if (!char.IsLetter(sign))
                     return false;
             }
-            this.key = key;
+            this.key = key.ToUpper();
             return true;
         }
 
         public String Cipher(String text, String key)
         {
+            text = text.ToUpper();
+            key = key.ToUpper();
+
+            text = Regex.Replace(text, @"[^A-Z]", "");
+            key = Regex.Replace(key, @"[^A-Z]", "");
+
             if (PrepareKey(key))
             {
                 String cipher_text = "";
@@ -48,6 +55,13 @@ namespace Bezpieczeństwo.Algorithms
 
         public String Decrypt(String text, String key)
         {
+
+            text = text.ToUpper();
+            key = key.ToUpper();
+
+            // text = Regex.Replace(text, @"[^A-Z]", "");
+            // key = Regex.Replace(key, @"[^A-Z]", "");
+
             if (PrepareKey(key))
             {
                 String orig_text = "";
