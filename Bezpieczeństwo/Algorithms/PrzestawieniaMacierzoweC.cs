@@ -106,6 +106,7 @@ namespace Bezpieczeństwo.Algorithms
         }
         public string Decipher(string sequence)
         {
+            if(key == null) return "ERROR";
             int n = key.Length + 1;
             this.PrepareInvertedKey();
             int[] numOfElemInColumn = new int[n];
