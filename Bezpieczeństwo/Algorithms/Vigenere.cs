@@ -33,7 +33,7 @@ namespace Bezpieczeństwo.Algorithms
             text = Regex.Replace(text, @"[^A-Z]", "");
             key = Regex.Replace(key, @"[^A-Z]", "");
 
-            if (PrepareKey(key))
+            if (PrepareKey(key) && key.Length == text.Length)
             {
                 String cipher_text = "";
 
@@ -50,7 +50,7 @@ namespace Bezpieczeństwo.Algorithms
 
                 return cipher_text;
             }
-            return "ERROR!";
+            return "ERROR! Długość klucza i tekstu muszą byc sobie równe";
         }
 
         public String Decrypt(String text, String key)
@@ -59,10 +59,10 @@ namespace Bezpieczeństwo.Algorithms
             text = text.ToUpper();
             key = key.ToUpper();
 
-            // text = Regex.Replace(text, @"[^A-Z]", "");
-            // key = Regex.Replace(key, @"[^A-Z]", "");
+            text = Regex.Replace(text, @"[^A-Z]", "");
+            key = Regex.Replace(key, @"[^A-Z]", "");
 
-            if (PrepareKey(key))
+            if (PrepareKey(key) && key.Length == text.Length)
             {
                 String orig_text = "";
 
@@ -78,7 +78,7 @@ namespace Bezpieczeństwo.Algorithms
                 }
                 return orig_text;
             }
-            return "ERROR!";
+            return "ERROR! Długość klucza i tekstu muszą byc sobie równe";
         }
     }
 }
