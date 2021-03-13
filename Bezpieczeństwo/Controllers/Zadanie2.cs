@@ -116,8 +116,8 @@ namespace Bezpieczeństwo.Controllers
             List<String> result = launchAlgorithmZad2(code, key, algorithm, option);
             ViewBag.result = result;
 
-            filePath = "output.txt";
-            using (var fileStream = new FileStream(Path.Combine(dir, "output.txt"), FileMode.Create, FileAccess.Write))
+            filePath = "output2.txt";
+            using (var fileStream = new FileStream(Path.Combine(dir, "output2.txt"), FileMode.Create, FileAccess.Write))
             {
                 foreach (String line in result)
                 {
@@ -161,14 +161,14 @@ namespace Bezpieczeństwo.Controllers
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
-                            result.Add(cezar.Cipher(code[i],key));
+                            result.Add(cezar.Cipher(code[i], key));
                         }
                     }
                     else
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
-                            result.Add(cezar.Decrypt(code[i],key));
+                            result.Add(cezar.Decrypt(code[i], key));
                         }
                     }
                     break;
@@ -180,14 +180,14 @@ namespace Bezpieczeństwo.Controllers
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
-                            result.Add(vig.Cipher(code[i],key));
+                            result.Add(vig.Cipher(code[i], key));
                         }
                     }
                     else
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
-                            result.Add(vig.Decrypt(code[i],key));
+                            result.Add(vig.Decrypt(code[i], key));
                         }
                     }
                     break;
