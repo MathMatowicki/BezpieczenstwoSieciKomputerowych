@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Bezpieczeństwo.Algorithms
 {
@@ -19,13 +20,26 @@ namespace Bezpieczeństwo.Algorithms
             }
             return false;
         }
+        public bool PrepereText(string text)
+        {
+            foreach(char letter in text)
+            {
+                if (!Char.IsLetterOrDigit(letter))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         public string Cipher(string text, string k)
         {
-            PrepareKey(k);
+            if (!PrepareKey(k)) return "ERROR";
+            if (!PrepereText(text)) return "Text can not have special characters";
+
             string result = "";
             string upper = text.ToUpper();
-            for(int i = 0; i<text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 result += Alfabet(Array.IndexOf(alfabet, upper[i]) + key);
             }
@@ -34,7 +48,9 @@ namespace Bezpieczeństwo.Algorithms
 
         public string Decrypt(string text, string k)
         {
-            PrepareKey(k);
+            if (!PrepereText(k)) return "ERROR";
+            if (!PrepereText(text)) return "Text can not have special characters";
+
             string result = "";
             string upper = text.ToUpper();
             for (int i = 0; i < text.Length; i++)
