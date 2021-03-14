@@ -332,6 +332,13 @@ namespace UnitTests
             Assert.True(algorithmViegnere.PrepareKey(key, text));
 
             Assert.AreEqual("CRYPTOGRAPHY", algorithmViegnere.Decrypt(text, key));
+
+            text = "DICPDPXVAZIP";
+            key = "breakbreakbr";
+
+            Assert.True(algorithmViegnere.PrepareKey(key, text));
+            Assert.AreEqual("CRYPTOGRAPHY", algorithmViegnere.Decrypt(text, key));
+
         }
 
         [Test, Category("Exercies2")]
