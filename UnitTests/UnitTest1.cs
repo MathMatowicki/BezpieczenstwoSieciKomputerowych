@@ -504,7 +504,7 @@ namespace UnitTests
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "73"), "T0ZGSPXBOJF");
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "1"), "RYXEQNV MHD");
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "0"), "SZYFROWANIE");
-            Assert.AreEqual(algorytm.Cipher("Szyfrowanie!!!", "0"), "Text can not have special characters");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie!!!", "0"), "Text can not have special characters");
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "5,9"), "ERROR");
         }
 
