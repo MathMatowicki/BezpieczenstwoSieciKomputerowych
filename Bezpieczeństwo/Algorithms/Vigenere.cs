@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Bezpieczeństwo.Algorithms
@@ -7,25 +8,14 @@ namespace Bezpieczeństwo.Algorithms
     {
 
         private String key;
+        private String text = "";
 
         private static int Mod(int a, int b)
         {
             return (a % b + b) % b;
         }
 
-        public bool PrepareKey(String key)
-        {
-            foreach (var sign in key)
-            {
-                //Each letter is checked by validation method
-                if (!char.IsLetter(sign))
-                    return false;
-            }
-            this.key = key.ToUpper();
-            return true;
-        }
-
-        public String Cipher(String text, String key)
+        public bool PrepareKey(String key, String text)
         {
             text = text.ToUpper();
             key = key.ToUpper();
@@ -33,14 +23,48 @@ namespace Bezpieczeństwo.Algorithms
             text = Regex.Replace(text, @"[^A-Z]", "");
             key = Regex.Replace(key, @"[^A-Z]", "");
 
-            if (PrepareKey(key) && key.Length == text.Length)
+            this.text = text;
+            foreach (var sign in key)
+            {
+                //Each sign is checked by validation method
+                if (!char.IsLetter(sign))
+                    return false;
+            }
+            if (key.Length > this.text.Length)
+            {
+                key = key.Remove(this.text.Length);
+            }
+            else if (key.Length < this.text.Length)
+            {
+                int mod = this.text.Length % key.Length;
+                int howMany = this.text.Length / key.Length;
+
+                key = String.Concat(Enumerable.Repeat(key, howMany));
+                for (int i = 0; i < mod; i++)
+                {
+                    key = key + key[i];
+                }
+            }
+
+            if (this.text.Length == key.Length)
+            {
+                this.key = key;
+                return true;
+            }
+            return false;
+        }
+
+        public String Cipher(String text, String key)
+        {
+
+            if (PrepareKey(key, text))
             {
                 String cipher_text = "";
 
-                for (int i = 0; i < text.Length; i++)
+                for (int i = 0; i < this.text.Length; i++)
                 {
                     // converting in range 0-25 
-                    int x = (text[i] + this.key[i]) % 26;
+                    int x = (this.text[i] + this.key[i]) % 26;
 
                     // convert into alphabets(ASCII) 
                     x += 'A';
@@ -56,20 +80,14 @@ namespace Bezpieczeństwo.Algorithms
         public String Decrypt(String text, String key)
         {
 
-            text = text.ToUpper();
-            key = key.ToUpper();
-
-            text = Regex.Replace(text, @"[^A-Z]", "");
-            key = Regex.Replace(key, @"[^A-Z]", "");
-
-            if (PrepareKey(key) && key.Length == text.Length)
+            if (PrepareKey(key, text))
             {
                 String orig_text = "";
 
-                for (int i = 0; i < text.Length && i < key.Length; i++)
+                for (int i = 0; i < this.text.Length; i++)
                 {
                     // converting in range 0-25 
-                    int x = (text[i] - key[i] + 26) % 26;
+                    int x = (text[i] - this.key[i] + 26) % 26;
 
                     // convert into alphabets(ASCII) 
                     x += 'A';
