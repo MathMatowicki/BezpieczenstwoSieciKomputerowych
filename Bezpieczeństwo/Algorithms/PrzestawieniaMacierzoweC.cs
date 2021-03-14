@@ -48,6 +48,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public string Cipher(string sequence)
         {
+            if(key == null) return "ERROR";
             string result = "";
             int n = this.key.Length;
             List<List<char>> list = new List<List<char>>();
