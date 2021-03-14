@@ -22,7 +22,7 @@ namespace Bezpieczeństwo.Algorithms
             }
             return false;
         }
-        public bool PrepereText(string text)
+        public bool PrepareText(string text)
         {
             foreach(char letter in text)
             {
@@ -37,7 +37,7 @@ namespace Bezpieczeństwo.Algorithms
         public string Cipher(string text, string k)
         {
             if (!PrepareKey(k)) return "ERROR";
-            if (!PrepereText(text)) return "Text can not have special characters";
+            if (!PrepareText(text)) return "Text can not have special characters";
 
             string result = "";
             string upper = text.ToUpper();
@@ -50,8 +50,8 @@ namespace Bezpieczeństwo.Algorithms
 
         public string Decrypt(string text, string k)
         {
-            if (!PrepereText(k)) return "ERROR";
-            if (!PrepereText(text)) return "Text can not have special characters";
+            if (!PrepareKey(k)) return "ERROR";
+            if (!PrepareText(text)) return "Text can not have special characters";
 
             string result = "";
             string upper = text.ToUpper();

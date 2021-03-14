@@ -457,5 +457,68 @@ namespace UnitTests
             string ciphered = algorytm.Cipher(notCiphered);
             Assert.AreEqual(notCiphered, algorytm.Decipher(ciphered));
         }
+
+        [Test, Category("Exercies2")]
+        public void TestCezarPrepareKey()
+        {
+            Cezara algorytm = new Cezara();
+            Assert.AreEqual(algorytm.PrepareKey("3"), true);
+            Assert.AreEqual(algorytm.PrepareKey("2345621"), true);
+            Assert.AreEqual(algorytm.PrepareKey("3 "), true);
+            Assert.AreEqual(algorytm.PrepareKey("3 3"), false);
+            Assert.AreEqual(algorytm.PrepareKey("3 sdax"), false);
+            Assert.AreEqual(algorytm.PrepareKey(""), false);
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestCezarPrepareText()
+        {
+            Cezara algorytm = new Cezara();
+            Assert.AreEqual(algorytm.PrepareText("3"), true);
+            Assert.AreEqual(algorytm.PrepareText("3oidui ox cPx"), true);
+            Assert.AreEqual(algorytm.PrepareText("wed.dcloc posd"), false);
+            Assert.AreEqual(algorytm.PrepareText("(33qeaSDF)"), false);
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestCezarCipher()
+        {
+            Cezara algorytm = new Cezara();
+            Assert.AreEqual(algorytm.Cipher("CRYPTOGRAPHY", "3"), "FUBSWRJUDSKB");
+            Assert.AreEqual(algorytm.Cipher("Bezpieczenstwo", "7"), "IL6WPLJ6LUZ03V");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "7"), "Z65MYV3HUPL");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "73"), "RYXEQNV MHD");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "1"), "T0ZGSPXBOJF");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "0"), "SZYFROWANIE");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie!!!", "0"), "Text can not have special characters");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "5,9"), "ERROR");
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestCezarDecipher()
+        {
+            Cezara algorytm = new Cezara();
+            Assert.AreEqual(algorytm.Decrypt("FUBSWRJUDSKB", "3"), "CRYPTOGRAPHY");
+            Assert.AreEqual(algorytm.Decrypt("IL6WPLJ6LUZ03V", "7"), "BEZPIECZENSTWO");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "7"), "LSR9KHP4GB8");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "73"), "T0ZGSPXBOJF");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "1"), "RYXEQNV MHD");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "0"), "SZYFROWANIE");
+            Assert.AreEqual(algorytm.Cipher("Szyfrowanie!!!", "0"), "Text can not have special characters");
+            Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "5,9"), "ERROR");
+        }
+
+        [Test, Category("Exercies2")]
+        public void TestCezarCipherAndDecipher()
+        {
+            Cezara algorytm = new Cezara();
+            string m = "HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION";
+            string c = algorytm.Cipher(m, "5");
+            Assert.AreEqual(algorytm.Decrypt(c, "5"), m);
+            c = algorytm.Cipher(m, "15");
+            Assert.AreEqual(algorytm.Decrypt(c, "15"), m);
+            c = algorytm.Cipher(m, "9");
+            Assert.AreEqual(algorytm.Decrypt(c, "9"), m);
+        }
     }
 }
