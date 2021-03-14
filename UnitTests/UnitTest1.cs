@@ -289,12 +289,17 @@ namespace UnitTests
         [Test, Category("Exercies2")]
         public void TestVigenerePrepareKey()
         {
-            Assert.False(algorithmViegnere.PrepareKey("23asdf"));
-            Assert.False(algorithmViegnere.PrepareKey("23as^#df"));
-            Assert.False(algorithmViegnere.PrepareKey("1"));
-            Assert.False(algorithmViegnere.PrepareKey(" "));
-            Assert.True(algorithmViegnere.PrepareKey("ASFDAS"));
-            Assert.True(algorithmViegnere.PrepareKey("asdf"));
+            Assert.True(algorithmViegnere.PrepareKey("23asdf", "23asdf"));
+            Assert.True(algorithmViegnere.PrepareKey("1", "1"));
+            Assert.True(algorithmViegnere.PrepareKey("23as^#df", "23as^#df"));
+            Assert.True(algorithmViegnere.PrepareKey(" ", " "));
+            Assert.True(algorithmViegnere.PrepareKey("ASFDAS", "ASFDAS"));
+            Assert.True(algorithmViegnere.PrepareKey("asdf", "asdf"));
+            Console.WriteLine("asdfaasdf".Remove("asdf".Length));
+            Assert.True(algorithmViegnere.PrepareKey("asdfaasdf", "asdf"));
+            Assert.True(algorithmViegnere.PrepareKey("asdfasdf", "asdf"));
+            Assert.True(algorithmViegnere.PrepareKey("asdf", "asdfasdgasdf"));
+
         }
 
         [Test, Category("Exercies2")]
@@ -303,19 +308,19 @@ namespace UnitTests
             string text = "CRYPTOGRAPHY";
             string key = "BREAKBREAKBR";
 
-            Assert.True(algorithmViegnere.PrepareKey(key));
+            Assert.True(algorithmViegnere.PrepareKey(key, text));
             Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
 
             text = "cryptography";
             key = "breakbreakbr";
 
-            Assert.True(algorithmViegnere.PrepareKey(key));
+            Assert.True(algorithmViegnere.PrepareKey(key, text));
             Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
 
             text = "cryptogr$$#?.  aphy";
             key = "breakbr  eakbr";
 
-            Assert.False(algorithmViegnere.PrepareKey(key));
+            Assert.True(algorithmViegnere.PrepareKey(key, text));
             Assert.AreEqual("DICPDPXVAZIP", algorithmViegnere.Cipher(text, key));
 
         }
@@ -325,7 +330,7 @@ namespace UnitTests
         {
             string text = "DICPDPXVAZIP";
             string key = "BREAKBREAKBR";
-            Assert.True(algorithmViegnere.PrepareKey(key));
+            Assert.True(algorithmViegnere.PrepareKey(key, text));
 
             Assert.AreEqual("CRYPTOGRAPHY", algorithmViegnere.Decrypt(text, key));
         }

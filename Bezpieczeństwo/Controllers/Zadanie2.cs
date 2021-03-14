@@ -85,7 +85,8 @@ namespace Bezpieczeństwo.Controllers
             else if (algorithm == 3)
             {
                 Vigenere vig = new Vigenere();
-                if (!vig.PrepareKey(key))
+
+                if (!vig.PrepareKey(key, key))
                 {
                     ViewBag.Message = "W algorytmie szyfr Vigenere'a kluczem musi być wyraz.";
                     return View();
@@ -175,11 +176,12 @@ namespace Bezpieczeństwo.Controllers
 
                 case 3:
                     Vigenere vig = new Vigenere();
-                    vig.PrepareKey(key);
+
                     if (option == 1)
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
+                            vig.PrepareKey(key, code[i]);
                             result.Add(vig.Cipher(code[i], key));
                         }
                     }
@@ -187,6 +189,7 @@ namespace Bezpieczeństwo.Controllers
                     {
                         for (int i = 0; i < code.Length; i++)
                         {
+                            vig.PrepareKey(key, code[i]);
                             result.Add(vig.Decrypt(code[i], key));
                         }
                     }
