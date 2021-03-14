@@ -17,6 +17,8 @@ namespace Bezpieczeństwo.Algorithms
 
         public bool PrepareKey(String key, String text)
         {
+            if (text.Length == 0 || key.Length == 0) return false;
+
             text = text.ToUpper();
             key = key.ToUpper();
 
@@ -24,12 +26,7 @@ namespace Bezpieczeństwo.Algorithms
             key = Regex.Replace(key, @"[^A-Z]", "");
 
             this.text = text;
-            foreach (var sign in key)
-            {
-                //Each sign is checked by validation method
-                if (!char.IsLetter(sign))
-                    return false;
-            }
+
             if (key.Length > this.text.Length)
             {
                 key = key.Remove(this.text.Length);
