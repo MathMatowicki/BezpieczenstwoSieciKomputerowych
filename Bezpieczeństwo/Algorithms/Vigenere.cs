@@ -25,6 +25,8 @@ namespace Bezpieczeństwo.Algorithms
             text = Regex.Replace(text, @"[^A-Z]", "");
             key = Regex.Replace(key, @"[^A-Z]", "");
 
+            if (text.Length == 0 || key.Length == 0) return false;
+
             this.text = text;
 
             if (key.Length > this.text.Length)
