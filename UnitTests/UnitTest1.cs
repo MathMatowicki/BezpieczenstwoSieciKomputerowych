@@ -290,12 +290,11 @@ namespace UnitTests
         public void TestVigenerePrepareKey()
         {
             Assert.True(algorithmViegnere.PrepareKey("23asdf", "23asdf"));
-            Assert.True(algorithmViegnere.PrepareKey("1", "1"));
+            Assert.False(algorithmViegnere.PrepareKey("1", "1"));
             Assert.True(algorithmViegnere.PrepareKey("23as^#df", "23as^#df"));
-            Assert.True(algorithmViegnere.PrepareKey(" ", " "));
+            Assert.False(algorithmViegnere.PrepareKey(" ", " "));
             Assert.True(algorithmViegnere.PrepareKey("ASFDAS", "ASFDAS"));
             Assert.True(algorithmViegnere.PrepareKey("asdf", "asdf"));
-            Console.WriteLine("asdfaasdf".Remove("asdf".Length));
             Assert.True(algorithmViegnere.PrepareKey("asdfaasdf", "asdf"));
             Assert.True(algorithmViegnere.PrepareKey("asdfasdf", "asdf"));
             Assert.True(algorithmViegnere.PrepareKey("asdf", "asdfasdgasdf"));
