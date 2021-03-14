@@ -73,7 +73,7 @@ namespace Bezpieczeństwo.Algorithms
 
                 return cipher_text;
             }
-            return "ERROR! Długość klucza i tekstu muszą byc sobie równe (Pod uwagę brane są tylko litery)";
+            return "";
         }
 
         public String Decrypt(String text, String key)
@@ -95,7 +95,7 @@ namespace Bezpieczeństwo.Algorithms
                 }
                 return orig_text;
             }
-            return "ERROR! Długość klucza i tekstu muszą byc sobie równe (Pod uwagę brane są tylko litery)";
+            return "";
         }
     }
 }
