@@ -8,16 +8,16 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class Cezara
     {
-        char[] alfabet = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+        static char[] alfabet = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
                             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
                             'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ' };
         private int key;
         public bool PrepareKey(String key)
         {
             int n;
-            if (int.TryParse(key, out n) && n > 0)
+            if (int.TryParse(key, out n) && n >= 0)
             {
-                this.key = n;
+                this.key = n % alfabet.Length;
                 return true;
             }
             return false;

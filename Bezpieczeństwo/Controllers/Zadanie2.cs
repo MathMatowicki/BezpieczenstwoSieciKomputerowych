@@ -78,7 +78,7 @@ namespace Bezpieczeństwo.Controllers
                 Cezara cezar = new Cezara();
                 if (!cezar.PrepareKey(key))
                 {
-                    ViewBag.Message = "W algorytmie szyfr Cezara kluczem musi być liczba";
+                    ViewBag.Message = "W algorytmie szyfr Cezara kluczem musi być całkowita liczba nieujemna";
                     return View();
                 }
             }
