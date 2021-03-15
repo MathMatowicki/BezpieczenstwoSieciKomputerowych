@@ -526,10 +526,10 @@ namespace UnitTests
         {
             Lsfr lsfr;
             lsfr = new Lsfr(5, new int[] { 5, 1, 4, 2 });
-            lsfr.initialize();
-            lsfr.iteration();
-            lsfr.iteration();
-            lsfr.iteration();
+            lsfr.Initialize();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
             Assert.AreEqual(true,true);
         }
     }

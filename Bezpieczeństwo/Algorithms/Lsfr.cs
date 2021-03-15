@@ -15,16 +15,18 @@ namespace Bezpieczeństwo.Algorithms
 
         public Lsfr(int size, int[] indexes)
         {
-            this.indexes = indexes;
-            this.size = size;
+            SetUp(size, indexes);
         }
 
         public Lsfr(int[] indexes)
         {
-            this.indexes = indexes;
+            int n = 0;
+            for (int i = 0; i < indexes.Length; i++)
+                n = Math.Max(n, indexes[i]);
+            SetUp(n,indexes);
         }
 
-        public void initialize()
+        public void Initialize()
         {
             Random rand = new Random();
             for(int i=0; i<size; i++)
@@ -35,7 +37,7 @@ namespace Bezpieczeństwo.Algorithms
             maxPower /= 2;
         }
 
-        public void iteration()
+        public void Iteration()
         {
             output = 2 * output + register % 2;
 
@@ -47,6 +49,22 @@ namespace Bezpieczeństwo.Algorithms
             }
             register = register >> 1;
             register = register + maxPower * element;
+        }
+
+        public void SetUp(int size, int[] indexes)
+        {
+            this.indexes = indexes;
+            this.size = size;
+        }
+
+        public void Clear()
+        {
+            size = 0;
+            indexes = null;
+            output = 0;
+            register = 0;
+            maxPower = 1;
+
         }
     }
 }
