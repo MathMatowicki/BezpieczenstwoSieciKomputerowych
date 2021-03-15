@@ -520,5 +520,17 @@ namespace UnitTests
             c = algorytm.Cipher(m, "9");
             Assert.AreEqual(algorytm.Decrypt(c, "9"), m);
         }
+
+        [Test, Category("Exercies2")]
+        public void TestLsfr()
+        {
+            Lsfr lsfr;
+            lsfr = new Lsfr(5, new int[] { 5, 1, 4, 2 });
+            lsfr.initialize();
+            lsfr.iteration();
+            lsfr.iteration();
+            lsfr.iteration();
+            Assert.AreEqual(true,true);
+        }
     }
 }
