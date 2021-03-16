@@ -484,7 +484,7 @@ namespace UnitTests
         public void TestCezarCipher()
         {
             Cezara algorytm = new Cezara();
-            Assert.AreEqual(algorytm.Cipher("CRYPTOGRAPHY", "3"), "FUBSWRJUDSKB");
+            Assert.AreEqual(algorytm.Cipher("CRYPTOGRAPHY", "3"), "FU1SWRJUDSK1");
             Assert.AreEqual(algorytm.Cipher("Bezpieczenstwo", "7"), "IL6WPLJ6LUZ03V");
             Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "7"), "Z65MYV3HUPL");
             Assert.AreEqual(algorytm.Cipher("Szyfrowanie", "73"), "RYXEQNV MHD");
@@ -498,7 +498,7 @@ namespace UnitTests
         public void TestCezarDecipher()
         {
             Cezara algorytm = new Cezara();
-            Assert.AreEqual(algorytm.Decrypt("FUBSWRJUDSKB", "3"), "CRYPTOGRAPHY");
+            Assert.AreEqual(algorytm.Decrypt("FU1SWRJUDSK1", "3"), "CRYPTOGRAPHY");
             Assert.AreEqual(algorytm.Decrypt("IL6WPLJ6LUZ03V", "7"), "BEZPIECZENSTWO");
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "7"), "LSR9KHP4GB8");
             Assert.AreEqual(algorytm.Decrypt("Szyfrowanie", "73"), "T0ZGSPXBOJF");
