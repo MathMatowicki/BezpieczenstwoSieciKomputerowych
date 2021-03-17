@@ -66,5 +66,18 @@ namespace Bezpieczeństwo.Algorithms
             maxPower = 1;
 
         }
+
+        public byte[] getBytes()
+        {
+            int n = size % 8 == 0 ? size / 8 : (size / 8) + 1;
+            byte[] tab = new byte[n];
+            long helpregister = register;
+            for(int i = n - 1; i >= 0; i --)
+            {
+                tab[i] = (byte)helpregister;
+                helpregister = helpregister >> 8;
+            }
+            return tab;
+        }
     }
 }

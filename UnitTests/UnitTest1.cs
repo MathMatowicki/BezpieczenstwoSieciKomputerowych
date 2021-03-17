@@ -525,11 +525,12 @@ namespace UnitTests
         public void TestLsfr()
         {
             Lsfr lsfr;
-            lsfr = new Lsfr(5, new int[] { 5, 1, 4, 2 });
+            lsfr = new Lsfr(11, new int[] { 5, 4, 2, 11, 9, 8 });
             lsfr.Initialize();
             lsfr.Iteration();
             lsfr.Iteration();
             lsfr.Iteration();
+            lsfr.getBytes();
             Assert.AreEqual(true,true);
         }
     }
