@@ -28,15 +28,19 @@
                 <input type="radio" name="option" id="option" checked="checked" value="1"> Szyfrowanie
             </label>
             <label class="btn btn-primary">
-                <input type="radio" name="option" id="option" value="0"> Deszyfrowanie
+                <input type="radio" name="option" id="option" value="2"> Deszyfrowanie
             </label>
             <label class="btn btn-primary">
-                <input type="radio" name="option" id="option" value="0"> LSFR
+                <input type="radio" name="option" id="option" value="3"> LSFR
             </label>
         </div>
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div>
+        <label>Key: </label>
+        <p>@ViewBag.Key</p>
     </div>
     <div>
         <label>Output:</label>
