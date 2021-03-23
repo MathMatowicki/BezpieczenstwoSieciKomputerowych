@@ -85,7 +85,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public long getLong()
         {
-            return regsiter;
+            return register;
         }
 
         public override string ToString()
