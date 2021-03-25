@@ -8,7 +8,7 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class Lsfr
     {
-        //poprawić to string - > chyba output powinien być zwracany
+        //przetestowac get bytes i poprawic to string
         public int size;
         int[] indexes;
         public long output=0;
@@ -75,7 +75,7 @@ namespace Bezpieczeństwo.Algorithms
         {
             int n = size % 8 == 0 ? size / 8 : (size / 8) + 1;
             byte[] tab = new byte[n];
-            long helpregister = register;
+            long helpregister = output;
             for(int i = n - 1; i >= 0; i --)
             {
                 tab[i] = (byte)helpregister;
