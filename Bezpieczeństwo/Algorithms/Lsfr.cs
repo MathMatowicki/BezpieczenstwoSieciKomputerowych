@@ -8,6 +8,7 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class Lsfr
     {
+        //poprawić to string - > chyba output powinien być zwracany
         public int size;
         int[] indexes;
         public long output=0;
@@ -85,16 +86,16 @@ namespace Bezpieczeństwo.Algorithms
 
         public long getLong()
         {
-            return register;
+            return output;
         }
 
         public override string ToString()
         {
-            StringBuilder output = new StringBuilder("");
+            StringBuilder outputl = new StringBuilder("");
             for (int i = size-1; i >= 0; i--)
-                output.Append((register >> i) % 2);
+                outputl.Append((register >> i) % 2);
 
-            return output.ToString();
+            return outputl.ToString();
         }
     }
 }
