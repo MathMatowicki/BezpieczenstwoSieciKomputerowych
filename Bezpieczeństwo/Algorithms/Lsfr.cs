@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Bezpieczeństwo.Algorithms
 {
     public class Lsfr
     {
-        int size;
+        public int size;
         int[] indexes;
         public long output=0;
         long register=0;
@@ -28,6 +29,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public void Initialize()
         {
+            maxPower = 1;
             Random rand = new Random();
             for(int i=0; i<size; i++)
             {
@@ -35,6 +37,7 @@ namespace Bezpieczeństwo.Algorithms
                 maxPower *= 2;
             }
             maxPower /= 2;
+            if (register == 0 || register == maxPower) Initialize();
         }
 
         public void Iteration()
@@ -78,6 +81,20 @@ namespace Bezpieczeństwo.Algorithms
                 helpregister = helpregister >> 8;
             }
             return tab;
+        }
+
+        public long getLong()
+        {
+            return register;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder output = new StringBuilder("");
+            for (int i = size-1; i >= 0; i--)
+                output.Append((register >> i) % 2);
+
+            return output.ToString();
         }
     }
 }
