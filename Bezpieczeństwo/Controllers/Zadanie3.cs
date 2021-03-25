@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+//using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Bezpieczeństwo.Controllers
@@ -15,10 +16,12 @@ namespace Bezpieczeństwo.Controllers
     {
         private readonly ILogger<Zadanie3> _logger;
         private readonly IHostingEnvironment _env;
-        public Zadanie3(ILogger<Zadanie3> logger, IHostingEnvironment env)
+        private Generator _generator;
+        public Zadanie3(ILogger<Zadanie3> logger, IHostingEnvironment env, IHostedService generator)
         {
             _logger = logger;
             _env = env;
+            _generator = generator as Generator;
         }
 
         public IActionResult Index()

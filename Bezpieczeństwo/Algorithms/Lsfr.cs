@@ -9,7 +9,7 @@ namespace Bezpieczeństwo.Algorithms
     {
         int size;
         int[] indexes;
-        long output=0;
+        public long output=0;
         long register=0;
         long maxPower = 1;
 
