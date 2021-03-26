@@ -28,7 +28,7 @@ namespace Bezpieczeństwo
             this.logger = logger;
         }
 
-        public long GetOutput()
+        public ulong GetOutput()
         {
             return lsfr.output;
         }

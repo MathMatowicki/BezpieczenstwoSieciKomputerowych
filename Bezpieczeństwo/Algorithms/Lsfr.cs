@@ -11,9 +11,10 @@ namespace Bezpieczeństwo.Algorithms
         //przetestowac get bytes i poprawic to string
         public int size;
         int[] indexes;
-        public long output=0;
-        long register=0;
-        long maxPower = 1;
+        public ulong output=0;
+        ulong register=0;
+        ulong maxPower = 1;
+        int numberOfIterations = 0;
 
         public Lsfr(int size, int[] indexes)
         {
@@ -34,7 +35,7 @@ namespace Bezpieczeństwo.Algorithms
             Random rand = new Random();
             for(int i=0; i<size; i++)
             {
-                register = 2 * register + rand.Next(2);
+                register = 2 * register + (ulong)rand.Next(2);
                 maxPower *= 2;
             }
             maxPower /= 2;
@@ -43,10 +44,12 @@ namespace Bezpieczeństwo.Algorithms
 
         public void Iteration()
         {
-            output = 2 * output + register % 2;
+            numberOfIterations++;
+            //output = 2 * output + register % 2;
+            output = (output << 1) + register % 2;
 
             //xor dla 1 bitu
-            long element = (register >> (size - indexes[0]))%2;
+            ulong element = (register >> (size - indexes[0]))%2;
             for(int i=1; i < indexes.Length; i++)
             {
                 element = element ^ (register >> (size - indexes[i])) % 2;
@@ -73,10 +76,12 @@ namespace Bezpieczeństwo.Algorithms
 
         public byte[] getBytes()
         {
-            int n = size % 8 == 0 ? size / 8 : (size / 8) + 1;
+            int n = numberOfIterations == 0 ? 1 : numberOfIterations/8;
+            n = numberOfIterations % 8 > 0 ? n + 1 : n;
+            n = Math.Min(n, 64/8);
+            ulong helpregister = output;
             byte[] tab = new byte[n];
-            long helpregister = output;
-            for(int i = n - 1; i >= 0; i --)
+            for(int i = n - 1; helpregister > 0; i --)
             {
                 tab[i] = (byte)helpregister;
                 helpregister = helpregister >> 8;
@@ -84,16 +89,20 @@ namespace Bezpieczeństwo.Algorithms
             return tab;
         }
 
-        public long getLong()
+        public ulong getLong()
         {
             return output;
         }
 
         public override string ToString()
         {
-            StringBuilder outputl = new StringBuilder("");
+            StringBuilder outputl = new StringBuilder("Ostatni rejestr: ");
             for (int i = size-1; i >= 0; i--)
                 outputl.Append((register >> i) % 2);
+
+            outputl.Append("\nWynik: ");
+            for (int i = size - 1; i >= 0; i--)
+                outputl.Append((output >> i) % 2);
 
             return outputl.ToString();
         }

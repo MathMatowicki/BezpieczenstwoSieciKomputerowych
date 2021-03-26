@@ -5,7 +5,7 @@ namespace Bezpieczeństwo
     public interface IWorker
     {
         void DoWork(CancellationToken cancellationToken);
-        long GetOutput();
+        ulong GetOutput();
         void SetActive(bool b);
         void SetLsfr(int size, int[] indexes);
     }

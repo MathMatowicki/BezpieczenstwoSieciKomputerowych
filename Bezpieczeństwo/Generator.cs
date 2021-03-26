@@ -12,7 +12,7 @@ namespace Bezpieczeństwo
 
         public IWorker Worker;
 
-        public long GetOutput()
+        public ulong GetOutput()
         {
             return Worker.GetOutput();
         }

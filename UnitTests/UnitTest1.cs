@@ -530,6 +530,15 @@ namespace UnitTests
             lsfr.Iteration();
             lsfr.Iteration();
             lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
+            lsfr.Iteration();
             lsfr.getBytes();
             string x = lsfr.ToString();
             Assert.AreEqual(true,true);
