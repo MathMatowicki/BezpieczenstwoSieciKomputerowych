@@ -18,6 +18,7 @@ namespace Bezpieczeństwo.Controllers
         private readonly ILogger<Zadanie3> _logger;
         private readonly IHostingEnvironment _env;
         private Generator _generator;
+        private bool lsfrStopped = false;
         public Zadanie3(ILogger<Zadanie3> logger, IHostingEnvironment env, IHostedService generator)
         {
             _logger = logger;
@@ -32,14 +33,19 @@ namespace Bezpieczeństwo.Controllers
 
         public IActionResult Algorithms()
         {
-            List<String> result = new List<string>();
-            ViewBag.result = result;
+            if(!lsfrStopped)
+            {
+                ViewBag.result = "";
+            }
             return View();
         }
 
         [HttpPost]
         public IActionResult Stop()
         {
+            Lsfr lsfr = _generator.GetOutput();
+            lsfrStopped = true;
+            ViewBag.result = lsfr.ToString();
             _generator.SetActive(false);
             return RedirectToAction("Algorithms");
         }
@@ -47,7 +53,7 @@ namespace Bezpieczeństwo.Controllers
         [HttpPost]
         public IActionResult Algorithms(String key, int option, IFormFile file, String sequence)
         {
-            string filePath = "file.rtf";
+            lsfrStopped = false ;
             byte[] code;
             var dir = _env.ContentRootPath;
             ViewBag.Message = "";
@@ -93,29 +99,18 @@ namespace Bezpieczeństwo.Controllers
             {
                 string type = file.ContentType;
 
-                filePath = "file.txt";
-                using (var fileStream = new FileStream(Path.Combine(dir, "file.txt"), FileMode.Create, FileAccess.Write))
+                using (var fileStream = new FileStream(Path.Combine(dir, file.FileName), FileMode.Create, FileAccess.Write))
                 {
                     file.CopyTo(fileStream);
                 }
 
-                code = System.IO.File.ReadAllBytes(filePath);
-
-                ViewBag.type = type;
-            }
-
-            byte[] result = launchAlgorithmZad3(code, key_table, option, keyValue);
-
-            using (var fileStream = new FileStream(Path.Combine(dir, "output3.txt"), FileMode.Create, FileAccess.Write))
-            {
-                foreach (String line in result)
+                code = System.IO.File.ReadAllBytes(file.FileName); 
+                byte[] result = launchAlgorithmZad3(code, key_table, option, keyValue);
+                using (var fileStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
                 {
-                    fileStream.Write(Encoding.UTF8.GetBytes(line), 0, line.Length);
-                    fileStream.Write(Encoding.UTF8.GetBytes(System.Environment.NewLine), 0, System.Environment.NewLine.Length);
+                    fileStream.Write(result);
                 }
             }
-
-            ViewBag.code = code;
             return View();
         }
 
@@ -149,7 +144,9 @@ namespace Bezpieczeństwo.Controllers
             SzyfrStrumieniowy ss;
             if (option == 1)
             {
-                ss = new SzyfrStrumieniowy(_generator.GetOutput());
+                Lsfr lsfr = _generator.GetOutput();
+                ViewBag.result = lsfr.ToString();
+                ss = new SzyfrStrumieniowy(lsfr);
                 return ss.Cipher(code);
             }
             else if(option == 2)
