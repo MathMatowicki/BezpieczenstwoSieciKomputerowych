@@ -95,7 +95,7 @@ namespace Bezpieczeństwo.Controllers
             if (file == null)
             {
                 code = ToBytesArray(sequence == null ? "" :  sequence);
-                if(option == 2)
+                if(option == 3)
                     launchAlgorithmZad3(code, key_table, option, keyValue); 
             }
             else

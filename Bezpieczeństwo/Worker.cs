@@ -21,6 +21,7 @@ namespace Bezpieczeństwo
         public void SetLsfr(int[] indexes)
         {
             lsfr = new Lsfr(indexes);
+            lsfr.Initialize();
         }
 
         public Worker(ILogger<Worker> logger)
