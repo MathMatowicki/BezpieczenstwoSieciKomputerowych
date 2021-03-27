@@ -36,6 +36,7 @@ namespace Bezpieczeństwo.Controllers
             if(!lsfrStopped)
             {
                 ViewBag.result = "";
+                ViewBag.lfsrActive = false;
             }
             return View();
         }
@@ -62,7 +63,7 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.result = new List<String>();
             ViewBag.lfsrActive = false;
 
-            if (file == null && (sequence == null || sequence == ""))
+            if (file == null && (sequence == null || sequence == "") && option != 3)
             {
                 ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
                 return View();
@@ -93,7 +94,9 @@ namespace Bezpieczeństwo.Controllers
 
             if (file == null)
             {
-                code = ToBytesArray(sequence);
+                code = ToBytesArray(sequence == null ? "" :  sequence);
+                if(option == 2)
+                    launchAlgorithmZad3(code, key_table, option, keyValue); 
             }
             else
             {
