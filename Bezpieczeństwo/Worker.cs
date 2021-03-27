@@ -18,9 +18,9 @@ namespace Bezpieczeństwo
             this.active = b;
         }
         private Lsfr lsfr;
-        public void SetLsfr(int size, int[] indexes)
+        public void SetLsfr(int[] indexes)
         {
-            lsfr = new Lsfr(size, indexes);
+            lsfr = new Lsfr(indexes);
         }
 
         public Worker(ILogger<Worker> logger)
@@ -28,9 +28,9 @@ namespace Bezpieczeństwo
             this.logger = logger;
         }
 
-        public ulong GetOutput()
+        public Lsfr GetOutput()
         {
-            return lsfr.output;
+            return lsfr;
         }
         public void DoWork(CancellationToken cancellationToken)
         {

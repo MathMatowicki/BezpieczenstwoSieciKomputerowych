@@ -1,12 +1,13 @@
-﻿using System.Threading;
+﻿using Bezpieczeństwo.Algorithms;
+using System.Threading;
 
 namespace Bezpieczeństwo
 {
     public interface IWorker
     {
         void DoWork(CancellationToken cancellationToken);
-        ulong GetOutput();
+        Lsfr GetOutput();
         void SetActive(bool b);
-        void SetLsfr(int size, int[] indexes);
+        void SetLsfr(int[] indexes);
     }
 }
