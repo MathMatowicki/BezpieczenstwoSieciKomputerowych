@@ -37,6 +37,12 @@ namespace Bezpieczeństwo.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Stop()
+        {
+            _generator.SetActive(false);
+            return RedirectToAction("Algorithms");
+        }
 
         [HttpPost]
         public IActionResult Algorithms(String key, int option, IFormFile file, String sequence)
@@ -48,6 +54,7 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.key = key;
             ViewBag.option = option;
             ViewBag.result = new List<String>();
+            ViewBag.lfsrActive = false;
 
             if (file == null && (sequence == null || sequence == ""))
             {
@@ -63,17 +70,17 @@ namespace Bezpieczeństwo.Controllers
             //key validation
             int[] key_table;
             ulong keyValue;
-            if (key == null || key.Length == 0 || key == "")
+            if ((key == null || key.Length == 0 || key == "") && option != 1)
             {
                 ViewBag.Message = "Nie podano żadnego klucza.";
                 return View();
             }
             else
             {
-                key_table = this.KeyCorrectness(key, keyValue);
-                if (key_table == null)
+                key_table = this.KeyCorrectness(key,out keyValue);
+                if (key_table == null && option != 1)
                 {
-                    ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami.";
+                    ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a desszyfrowaniu pojedyncza liczba.";
                     return View();
                 }
             }
@@ -97,8 +104,7 @@ namespace Bezpieczeństwo.Controllers
                 ViewBag.type = type;
             }
 
-            byte[] result = launchAlgorithmZad3(code, key_table, option);
-            ViewBag.result = result;
+            byte[] result = launchAlgorithmZad3(code, key_table, option, keyValue);
 
             using (var fileStream = new FileStream(Path.Combine(dir, "output3.txt"), FileMode.Create, FileAccess.Write))
             {
@@ -124,12 +130,13 @@ namespace Bezpieczeństwo.Controllers
             return content;
         }
 
-        public int[] KeyCorrectness(String key, out keyValue)
+        public int[] KeyCorrectness(String key, out ulong keyValue)
         {
             String[] split_key = key.Split('-');
             int n = split_key.Length;
             int[] int_key = new int[n];
-            ulong.TryParse(split_key[0], out keyValue);
+            if (!ulong.TryParse(split_key[0], out keyValue))
+                keyValue = 0;
             for (int i = 0; i < n; i++) 
             {
                 if (!int.TryParse(split_key[i], out int_key[i])) return null;
@@ -142,13 +149,20 @@ namespace Bezpieczeństwo.Controllers
             SzyfrStrumieniowy ss;
             if (option == 1)
             {
-                ss = new SzyfrStrumieniowy(key_table);
+                ss = new SzyfrStrumieniowy(_generator.GetOutput());
                 return ss.Cipher(code);
             }
-            else
+            else if(option == 2)
             {
                 ss = new SzyfrStrumieniowy(key);
                 return ss.Decrypt();
+            }
+            else
+            {
+                _generator.SetLsfr(key_table);
+                _generator.SetActive(true);
+                ViewBag.lfsrActive = true;
+                return null;
             }
         }
 

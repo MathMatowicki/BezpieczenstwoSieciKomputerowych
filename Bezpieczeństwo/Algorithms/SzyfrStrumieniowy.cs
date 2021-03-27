@@ -17,7 +17,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public SzyfrStrumieniowy(Lsfr lsfr)
         {
-            this.lsfr = this.lsfr;
+            this.lsfr = lsfr;
         }
 
         /*public SzyfrStrumieniowy(byte[] content, Lsfr lsfr)
