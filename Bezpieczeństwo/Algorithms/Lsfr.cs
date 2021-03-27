@@ -14,7 +14,7 @@ namespace Bezpieczeństwo.Algorithms
         public ulong output=0;
         ulong register=0;
         ulong maxPower = 1;
-        int numberOfIterations = 0;
+        public int numberOfIterations = 0;
 
         public Lsfr(int size, int[] indexes)
         {
