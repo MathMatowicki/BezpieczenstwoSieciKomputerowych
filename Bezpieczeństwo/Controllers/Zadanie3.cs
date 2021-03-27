@@ -18,7 +18,6 @@ namespace Bezpieczeństwo.Controllers
         private readonly ILogger<Zadanie3> _logger;
         private readonly IHostingEnvironment _env;
         private Generator _generator;
-        private bool lsfrStopped = false;
         public Zadanie3(ILogger<Zadanie3> logger, IHostingEnvironment env, IHostedService generator)
         {
             _logger = logger;
@@ -31,13 +30,10 @@ namespace Bezpieczeństwo.Controllers
             return View();
         }
 
-        public IActionResult Algorithms()
+        public IActionResult Algorithms(String result="")
         {
-            if(!lsfrStopped)
-            {
-                ViewBag.result = "";
-                ViewBag.lfsrActive = false;
-            }
+            ViewBag.result = result;
+            ViewBag.lfsrActive = false;
             return View();
         }
 
@@ -45,16 +41,13 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Stop()
         {
             Lsfr lsfr = _generator.GetOutput();
-            lsfrStopped = true;
-            ViewBag.result = lsfr.ToString();
             _generator.SetActive(false);
-            return RedirectToAction("Algorithms");
+            return RedirectToAction("Algorithms", new {result = lsfr.ToString() });
         }
 
         [HttpPost]
         public IActionResult Algorithms(String key, int option, IFormFile file, String sequence)
         {
-            lsfrStopped = false ;
             byte[] code;
             var dir = _env.ContentRootPath;
             ViewBag.Message = "";
