@@ -106,5 +106,10 @@ namespace Bezpieczeństwo.Algorithms
 
             return outputl.ToString();
         }
+
+        public void setKey(ulong key)
+        {
+            this.output = key;
+        }
     }
 }

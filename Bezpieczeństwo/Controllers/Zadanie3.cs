@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bezpieczeństwo.Algorithms;
 //using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Algorithms(String key, int option, IFormFile file, String sequence)
         {
             string filePath = "file.rtf";
-            string[] code;
+            byte[] code;
             var dir = _env.ContentRootPath;
             ViewBag.Message = "";
             ViewBag.key = key;
@@ -60,6 +61,8 @@ namespace Bezpieczeństwo.Controllers
             }
 
             //key validation
+            int[] key_table;
+            ulong keyValue;
             if (key == null || key.Length == 0 || key == "")
             {
                 ViewBag.Message = "Nie podano żadnego klucza.";
@@ -67,7 +70,8 @@ namespace Bezpieczeństwo.Controllers
             }
             else
             {
-                if (!this.KeyCorrectness(key))
+                key_table = this.KeyCorrectness(key, keyValue);
+                if (key_table == null)
                 {
                     ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami.";
                     return View();
@@ -76,10 +80,8 @@ namespace Bezpieczeństwo.Controllers
 
             if (file == null)
             {
-                code = new string[1];
-                code[0] = sequence;
+                code = ToBytesArray(sequence);
             }
-
             else
             {
                 string type = file.ContentType;
@@ -90,12 +92,12 @@ namespace Bezpieczeństwo.Controllers
                     file.CopyTo(fileStream);
                 }
 
-                code = System.IO.File.ReadAllLines(filePath);
+                code = System.IO.File.ReadAllBytes(filePath);
 
                 ViewBag.type = type;
             }
 
-            List<String> result = launchAlgorithmZad3(code, key, option);
+            byte[] result = launchAlgorithmZad3(code, key_table, option);
             ViewBag.result = result;
 
             using (var fileStream = new FileStream(Path.Combine(dir, "output3.txt"), FileMode.Create, FileAccess.Write))
@@ -111,39 +113,43 @@ namespace Bezpieczeństwo.Controllers
             return View();
         }
 
-        public bool KeyCorrectness(String key)
+        public byte[] ToBytesArray(string seq)
+        {
+            char[] text = seq.ToCharArray();
+            byte[] content = new byte[2*text.Length];
+            for(int i = 0; i < 2*text.Length; i++)
+            {
+                content[i] = (byte)(text[i/2] >> (8 * i%2));
+            }
+            return content;
+        }
+
+        public int[] KeyCorrectness(String key, out keyValue)
         {
             String[] split_key = key.Split('-');
             int n = split_key.Length;
             int[] int_key = new int[n];
+            ulong.TryParse(split_key[0], out keyValue);
             for (int i = 0; i < n; i++) 
             {
-                if (!int.TryParse(split_key[i], out int_key[i])) return false;
+                if (!int.TryParse(split_key[i], out int_key[i])) return null;
             }
-            return true;
+            return int_key;
         }
 
-        private List<String> launchAlgorithmZad3(String[] code, String key, int option)
+        private byte[] launchAlgorithmZad3(byte[] code, int[] key_table, int option, ulong key)
         {
-            List<String> result = new List<string>();
-            //SzyfStrumieniowy ss = new SzyfrStrumieniowy();
-
-//WYWOŁANIE DZIAŁANIA ALGORYTMU LSFR I PRZYGOTOWANIE KLUCZA
-
+            SzyfrStrumieniowy ss;
             if (option == 1)
             {
-                for (int i = 0; i < code.Length; i++)
-                {
-                    //result.Add(ss.Cipher(code[i]));
-                } }
+                ss = new SzyfrStrumieniowy(key_table);
+                return ss.Cipher(code);
+            }
             else
             {
-                for (int i = 0; i < code.Length; i++)
-                {
-                    //result.Add(ss.Decipher(code[i]));
-                }
+                ss = new SzyfrStrumieniowy(key);
+                return ss.Decrypt();
             }
-            return result;
         }
 
     }
