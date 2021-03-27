@@ -110,6 +110,8 @@ namespace Bezpieczeństwo.Controllers
                 {
                     fileStream.Write(result);
                 }
+                //usuwa tymczasowy plik
+                System.IO.File.Delete(file.FileName);
             }
             return View();
         }
