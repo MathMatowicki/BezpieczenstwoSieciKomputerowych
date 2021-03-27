@@ -40,6 +40,10 @@ namespace Bezpieczeństwo
                 {
                     lsfr.Iteration();
                 }
+                else
+                {
+                    Console.WriteLine("Działam");
+                }
             }
         }
     }
