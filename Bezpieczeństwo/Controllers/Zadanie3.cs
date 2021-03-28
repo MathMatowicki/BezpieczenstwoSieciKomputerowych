@@ -53,7 +53,7 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.Message = "";
             ViewBag.key = key;
             ViewBag.option = option;
-            ViewBag.result = new List<String>();
+            ViewBag.result = "";
             ViewBag.lfsrActive = false;
 
             if (file == null && option != 3)
@@ -67,8 +67,15 @@ namespace Bezpieczeństwo.Controllers
             ulong keyValue;
             if (key == null || key.Length == 0 || key == "")
             {
-                ViewBag.Message = "Nie podano żadnego klucza.";
-                return View();
+                if(option != 1) 
+                { 
+                    ViewBag.Message = "Nie podano żadnego klucza.";
+                    return View();
+                }
+                else
+                {
+                    key_table = null; keyValue = 0;
+                }
             }
             else
             {
@@ -105,6 +112,13 @@ namespace Bezpieczeństwo.Controllers
 
                 code = System.IO.File.ReadAllBytes(file.FileName); 
                 byte[] result = launchAlgorithmZad3(code, key_table, option, keyValue);
+                if(result == null)
+                {
+                    ViewBag.Message = "Najpierw trzeba wywołać LFSR zanim zaczniesz szyfrować dane! Pamiętaj plik nie powinien być pusty!";
+                    System.IO.File.Delete(file.FileName);
+                    return View();
+                }
+
                 using (var fileStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
                 {
                     fileStream.Write(result);
@@ -151,6 +165,7 @@ namespace Bezpieczeństwo.Controllers
             if (option == 1)
             {
                 Lsfr lsfr = _generator.GetOutput();
+                if (lsfr == null) return null;
                 ViewBag.result = lsfr.ToString();
                 ss = new SzyfrStrumieniowy(lsfr);
                 return ss.Cipher(code);

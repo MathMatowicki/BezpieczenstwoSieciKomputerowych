@@ -17,7 +17,7 @@ namespace Bezpieczeństwo
         {
             this.active = b;
         }
-        private Lsfr lsfr;
+        private Lsfr lsfr = null;
         public void SetLsfr(int[] indexes)
         {
             lsfr = new Lsfr(indexes);
