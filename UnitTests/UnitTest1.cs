@@ -576,5 +576,23 @@ namespace UnitTests
             for (int i = 0; i < content.Length; i++)
                 Assert.AreEqual(content[i], decrypted[i]);
         }
+
+        [Test, Category("Exercies3")]
+        public void TestSzyfrStrumieniowyMP4()
+        {
+            Lsfr lsfr = new Lsfr(new int[] { 5, 4, 2, 20, 17, 8 });
+            lsfr.Initialize();
+            for (int i = 0; i <= 30; i++)
+                lsfr.Iteration();
+
+            byte[] content = System.IO.File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "szyfrstrumieniowymp4.mp4"));
+            SzyfrStrumieniowy ss = new SzyfrStrumieniowy(lsfr);
+            byte[] ciphered = ss.Cipher(content);
+            byte[] decrypted = ss.Decrypt(ciphered);
+
+            Assert.AreEqual(decrypted.Length, content.Length);
+            for (int i = 0; i < content.Length; i++)
+                Assert.AreEqual(content[i], decrypted[i]);
+        }
     }
 }
