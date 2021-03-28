@@ -65,18 +65,26 @@ namespace Bezpieczeństwo.Controllers
             //key validation
             int[] key_table;
             ulong keyValue;
-            if ((key == null || key.Length == 0 || key == "") && option != 1)
+            if (key == null || key.Length == 0 || key == "")
             {
                 ViewBag.Message = "Nie podano żadnego klucza.";
                 return View();
             }
             else
             {
-                key_table = this.KeyCorrectness(key,out keyValue);
-                if ((keyValue == 0 && key_table == null)  && option != 1)
+                if (option == 2 && !ulong.TryParse(key, out keyValue))
                 {
                     ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a przy deszyfrowaniu pojedyncza liczba.";
                     return View();
+                }
+                else
+                {
+                    key_table = this.KeyCorrectness(key, out keyValue);
+                    if (keyValue == 0 && key_table == null)
+                    {
+                        ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a przy deszyfrowaniu pojedyncza liczba.";
+                        return View();
+                    }
                 }
             }
 
