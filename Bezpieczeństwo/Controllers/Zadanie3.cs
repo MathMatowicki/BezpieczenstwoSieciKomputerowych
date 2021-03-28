@@ -78,7 +78,7 @@ namespace Bezpieczeństwo.Controllers
             else
             {
                 key_table = this.KeyCorrectness(key,out keyValue);
-                if (key_table == null && option != 1)
+                if (keyValue == 0 && key_table == null  && option != 1)
                 {
                     ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a desszyfrowaniu pojedyncza liczba.";
                     return View();
@@ -125,6 +125,7 @@ namespace Bezpieczeństwo.Controllers
 
         public int[] KeyCorrectness(String key, out ulong keyValue)
         {
+            if (key == null) { keyValue = 0; return null; }
             String[] split_key = key.Split('-');
             int n = split_key.Length;
             int[] int_key = new int[n];
@@ -150,7 +151,7 @@ namespace Bezpieczeństwo.Controllers
             else if(option == 2)
             {
                 ss = new SzyfrStrumieniowy(key);
-                return ss.Decrypt();
+                return ss.Decrypt(code);
             }
             else
             {

@@ -12,6 +12,7 @@ namespace Bezpieczeństwo.Algorithms
 
         public SzyfrStrumieniowy(ulong key)
         {
+            this.lsfr = new Lsfr();
             this.lsfr.setKey(key);
         }
 
@@ -56,7 +57,7 @@ namespace Bezpieczeństwo.Algorithms
             return XorOperation();
         }
 
-        public byte[] Decrypt()
+        public byte[] Decrypt(byte[] content)
         {
             ChangeContent(content);
             return XorOperation();

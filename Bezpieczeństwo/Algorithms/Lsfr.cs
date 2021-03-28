@@ -16,6 +16,8 @@ namespace Bezpieczeństwo.Algorithms
         ulong maxPower = 1;
         public int numberOfIterations = 0;
 
+        public Lsfr()
+        { }
         public Lsfr(int size, int[] indexes)
         {
             SetUp(size, indexes);
@@ -76,9 +78,10 @@ namespace Bezpieczeństwo.Algorithms
 
         public byte[] getBytes()
         {
-            int n = numberOfIterations == 0 ? 1 : numberOfIterations/8;
+            /*int n = numberOfIterations == 0 ? 1 : numberOfIterations/8;
             n = numberOfIterations % 8 > 0 ? n + 1 : n;
-            n = Math.Min(n, 64/8);
+            n = Math.Min(n, 64/8);*/
+            int n = 64 / 8;
             ulong helpregister = output;
             byte[] tab = new byte[n];
             for(int i = n - 1; helpregister > 0; i --)
