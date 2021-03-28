@@ -87,7 +87,7 @@ namespace Bezpieczeństwo.Controllers
                 else
                 {
                     key_table = this.KeyCorrectness(key, out keyValue);
-                    if (key_table == null || key_table.Length < 2)
+                    if (keyValue == 0 && (key_table == null || key_table.Length < 2))
                     {
                         ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a przy deszyfrowaniu pojedyncza liczba.";
                         return View();
@@ -123,10 +123,19 @@ namespace Bezpieczeństwo.Controllers
                 {
                     fileStream.Write(result);
                 }
+                //var f = File(result, "application/octet-stream", "output" + file.FileName);
                 //usuwa tymczasowy plik
                 System.IO.File.Delete(file.FileName);
+                return RedirectToAction("DownloadFile", new { fileName = "output" + file.FileName});
             }
             return View();
+        }
+
+        public FileResult DownloadFile(string fileName)
+        {
+            byte[] file = System.IO.File.ReadAllBytes(fileName);
+            System.IO.File.Delete(fileName);
+            return File(file, "application/octet-stream", fileName);
         }
 
         public byte[] ToBytesArray(string seq)
