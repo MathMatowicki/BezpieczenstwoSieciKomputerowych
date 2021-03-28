@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Bezpieczeństwo.Algorithms;
 using System;
+using System.IO;
 
 namespace UnitTests
 {
@@ -521,27 +522,59 @@ namespace UnitTests
             Assert.AreEqual(algorytm.Decrypt(c, "9"), m);
         }
 
-        [Test, Category("Exercies2")]
-        public void TestLsfr()
+        [Test, Category("Exercies3")]
+        public void TestLsfrTextFile()
         {
-            Lsfr lsfr;
-            lsfr = new Lsfr(11, new int[] { 5, 4, 2, 11, 9, 8 });
+            Lsfr lsfr = new Lsfr(new int[] { 5, 4, 2, 15, 9, 8 });
             lsfr.Initialize();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.Iteration();
-            lsfr.getBytes();
-            string x = lsfr.ToString();
-            Assert.AreEqual(true,true);
+            for (int i = 0; i <= 65; i++)
+                lsfr.Iteration();
+
+            byte[] content = System.IO.File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "szyfrstrumieniowy.txt"));
+            SzyfrStrumieniowy ss = new SzyfrStrumieniowy(lsfr);
+            byte[] ciphered = ss.Cipher(content);
+            byte[] decrypted = ss.Decrypt(ciphered);
+
+            Assert.AreEqual(decrypted.Length, content.Length);
+            for (int i = 0; i < content.Length; i++)
+                Assert.AreEqual(content[i], decrypted[i]);
+        }
+
+        [Test, Category("Exercies3")]
+        public void TestSzyfrStrumieniowyPNG()
+        {
+            Lsfr lsfr = new Lsfr(new int[] { 5, 20, 9, 8 });
+            lsfr.Initialize();
+            for (int i = 0; i <= 65; i++)
+                lsfr.Iteration();
+
+            byte[] content = System.IO.File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "szyfrstrumieniowyobraz.png"));
+            SzyfrStrumieniowy ss = new SzyfrStrumieniowy(lsfr);
+            byte[] ciphered = ss.Cipher(content);
+            byte[] decrypted = ss.Decrypt(ciphered);
+
+            Assert.AreEqual(decrypted.Length, content.Length);
+            for (int i = 0; i < content.Length; i++)
+                Assert.AreEqual(content[i], decrypted[i]);
+        }
+
+
+        [Test, Category("Exercies3")]
+        public void TestSzyfrStrumieniowyShorterKey()
+        {
+            Lsfr lsfr = new Lsfr(new int[] { 5, 4, 2, 15, 9, 8 });
+            lsfr.Initialize();
+            for (int i = 0; i <= 30; i++)
+                lsfr.Iteration();
+
+            byte[] content = System.IO.File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "szyfrstrumieniowy.txt"));
+            SzyfrStrumieniowy ss = new SzyfrStrumieniowy(lsfr);
+            byte[] ciphered = ss.Cipher(content);
+            byte[] decrypted = ss.Decrypt(ciphered);
+
+            Assert.AreEqual(decrypted.Length, content.Length);
+            for (int i = 0; i < content.Length; i++)
+                Assert.AreEqual(content[i], decrypted[i]);
         }
     }
 }
