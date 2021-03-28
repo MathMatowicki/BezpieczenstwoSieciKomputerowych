@@ -130,6 +130,10 @@ namespace Bezpieczeństwo.Controllers
             {
                 if (!int.TryParse(split_key[i], out int_key[i])) return null;
             }
+            for (int i = 0; i < n; i++)
+            {
+                if (int_key[i] < 0) return null;
+            }
             return int_key;
         }
 
