@@ -103,9 +103,16 @@ namespace Bezpieczeństwo.Algorithms
             for (int i = size-1; i >= 0; i--)
                 outputl.Append((register >> i) % 2);
 
-            outputl.Append("\nWynik: ");
+            outputl.Append("\n");
+            outputl.Append("\n");
+            outputl.Append("Wynik: ");
             for (int i = 64; i >= 0; i--)
                 outputl.Append((output >> i) % 2);
+
+            outputl.Append("\n");
+            outputl.Append("\n");
+            outputl.Append("Wynik - liczbowy: ");
+                outputl.Append(output);
 
             return outputl.ToString();
         }

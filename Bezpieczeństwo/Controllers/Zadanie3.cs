@@ -46,7 +46,7 @@ namespace Bezpieczeństwo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Algorithms(String key, int option, IFormFile file, String sequence)
+        public IActionResult Algorithms(String key, int option, IFormFile file)
         {
             byte[] code;
             var dir = _env.ContentRootPath;
@@ -56,15 +56,10 @@ namespace Bezpieczeństwo.Controllers
             ViewBag.result = new List<String>();
             ViewBag.lfsrActive = false;
 
-            if (file == null && (sequence == null || sequence == "") && option != 3)
+            if (file == null && option != 3)
             {
-                ViewBag.Message = "Nie podano żadnego ciągu do szyforwania/deszyfrowania";
+                ViewBag.Message = "Nie podano pliku do szyforwania/deszyfrowania";
                 return View();
-            }
-            if (file != null && sequence != null && sequence != "")
-            {
-                ViewBag.Message =
-                    "Podano jednoczesnie tekst do szyfrowania/deszyfrowania, jak i plik, dlatego plik został poddany wybranej operacji";
             }
 
             //key validation
@@ -87,7 +82,7 @@ namespace Bezpieczeństwo.Controllers
 
             if (file == null)
             {
-                code = ToBytesArray(sequence == null ? "" :  sequence);
+                code = ToBytesArray("");
                 if(option == 3)
                     launchAlgorithmZad3(code, key_table, option, keyValue); 
             }
