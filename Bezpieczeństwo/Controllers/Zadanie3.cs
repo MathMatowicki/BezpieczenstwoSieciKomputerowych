@@ -75,7 +75,7 @@ namespace Bezpieczeństwo.Controllers
                 key_table = this.KeyCorrectness(key,out keyValue);
                 if (keyValue == 0 && key_table == null  && option != 1)
                 {
-                    ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a desszyfrowaniu pojedyncza liczba.";
+                    ViewBag.Message = "W algorytmie szyfr strumieniowy kluczem muszą być liczby oddzielone myślnikami(lfsr), a przy deszyfrowaniu pojedyncza liczba.";
                     return View();
                 }
             }
