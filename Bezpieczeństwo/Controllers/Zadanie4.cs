@@ -76,7 +76,7 @@ namespace Bezpieczeństwo.Controllers
                 byte[] lastCode = new byte[8];
                 fileStream.Read(lastCode, 0, 8);
                 byte[] lastResult = launchAlgorithmZad4(lastCode, key, option);
-                for (int i = 0; i < lastResult[7]; i++)
+                for (int i = 0; i < 8 - lastResult[7]; i++)
                     outputStream.WriteByte(lastResult[i]);
             }
             return RedirectToAction("DownloadFile", new { fileName = "output" + file.FileName });
