@@ -594,5 +594,13 @@ namespace UnitTests
             for (int i = 0; i < content.Length; i++)
                 Assert.AreEqual(content[i], decrypted[i]);
         }
+
+        [Test, Category("Exercies4")]
+        public void Test4()
+        {
+            DES des = new DES();
+            des.functionF(2875535566, 254632997710694);
+            Assert.AreEqual(true, true);
+        }
     }
 }

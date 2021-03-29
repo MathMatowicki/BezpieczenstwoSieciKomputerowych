@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Text;
+
 namespace Bezpieczeństwo.Algorithms
 {
     public class DES
@@ -169,5 +172,61 @@ namespace Bezpieczeństwo.Algorithms
             { 20, 28, 23, 31, 24, 3, 30, 4},
             { 21, 17, 26, 10, 14, 9, 6, 25}
         };
+
+        private static byte[,] E = new byte[6, 8]
+        {
+            { 32, 4, 8, 12, 16, 20, 24, 28 },
+            { 1, 5, 9, 13, 17, 21, 25, 29},
+            { 2, 6, 10, 14, 18, 22, 26, 30},
+            { 3, 7, 11, 15, 19, 23, 27, 31},
+            { 4, 8, 12, 16, 20, 24, 28, 32},
+            { 5, 9, 13, 17, 21, 25, 29, 1},
+        };
+
+        /*StringBuilder outputl = new StringBuilder("");
+            for (int i = 31; i >= 0; i--)
+                outputl.Append((R >> i) % 2);
+            outputl.Clear();
+            for (int i = 47; i >= 0; i--)
+                outputl.Append((key >> i) % 2);
+            for (int i = 47; i >= 0; i--)
+                outputl.Append((Rchanged >> i) % 2);*/
+
+
+        public uint functionF(uint R, long key)
+        {
+            long Rchanged = 0;
+            uint beforeOutput = 0;
+            for(int i = 0; i < 8; i++)
+                for (int j = 0; j < 6; j++)
+                {
+                    Rchanged = Rchanged << 1;
+                    Rchanged += (R >> (32 - E[j, i])) % 2;
+                }
+
+            List<byte[,]> s = new List<byte[,]>();
+            s.Add(s1); s.Add(s2); s.Add(s3); s.Add(s4); s.Add(s5); s.Add(s6); s.Add(s7); s.Add(s8);
+            long xorResult = Rchanged ^ key;
+            for(int i = 1; i <= 8; i++)
+            {
+                byte row = 0, column = 0, offset;
+                offset = (byte)(48 - i * 6);
+                row = (byte)((xorResult >> offset) % 2);
+                column = (byte)((xorResult >> (offset + 1)) % 16);
+                row += (byte)(((xorResult >> (offset + 5)) % 2) * 2);
+
+                beforeOutput = beforeOutput << 6;
+                beforeOutput += (uint)s[i - 1][column, row];
+            }
+
+            uint output = 0;
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 4; j++)
+                {
+                    output = output << 1;
+                    output += (beforeOutput >> (32 - P[j, i])) % 2;
+                }
+            return output;
+        }
     }
 }
