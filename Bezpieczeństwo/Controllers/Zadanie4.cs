@@ -21,67 +21,28 @@ namespace Bezpieczeństwo.Controllers
             return View();
         }
 
+        public IActionResult Algorithms()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult Algorithms(String key, int option, IFormFile file)
         {
             var dir = _env.ContentRootPath;
-
-            //szyfrowanie
             using (var fileStream = new FileStream(Path.Combine(dir, file.FileName), FileMode.Create, FileAccess.Write))
-            using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
             {
-                while (fileStream.Length - fileStream.Position + 1 >= 8)
-                {
-                    byte[] code = new byte[8];
-                    fileStream.Read(code, 0, 8);
-                    byte[] result = launchAlgorithmZad4(code, key, option);
-                    outputStream.Write(result);
-                }
-
-                if(fileStream.Length - fileStream.Position + 1 > 0)
-                {
-                    byte[] code = new byte[8];
-                    fileStream.Read(code, 0, (int)(fileStream.Length - fileStream.Position + 1));
-                    for(int i = 0; i < 8 - (fileStream.Length - fileStream.Position + 1) - 1; i++)
-                    {
-                        code[(int)(fileStream.Length - fileStream.Position + 1 + i)] = 0;
-                    }
-                    code[7] = (byte)(fileStream.Length - fileStream.Position + 1);
-                    byte[] result = launchAlgorithmZad4(code, key, option);
-                    outputStream.Write(result);
-                }
-                else
-                {
-                    byte[] code = new byte[8];
-                    for (int i = 0; i < 7; i++)
-                        code[i] = 0;
-
-                    code[7] = 8;
-                    byte[] result = launchAlgorithmZad4(code, key, option);
-                    outputStream.Write(result);
-                }
+                file.CopyTo(fileStream);
             }
 
-            //deszyfrowanie
-            using (var fileStream = new FileStream(Path.Combine(dir, file.FileName), FileMode.Create, FileAccess.Write))
-            using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
-            {
-                while (fileStream.Length - fileStream.Position + 1 > 8)
-                {
-                    byte[] code = new byte[8];
-                    fileStream.Read(code, 0, 8);
-                    byte[] result = launchAlgorithmZad4(code, key, option);
-                    outputStream.Write(result);
-                }
+            //szyfrowanie i deszyfrowanie
+            if (option == 1)
+                this.Cipher(file, dir, key);
+            else
+                this.Decrypt(file, dir, key);
 
-                byte[] lastCode = new byte[8];
-                fileStream.Read(lastCode, 0, 8);
-                byte[] lastResult = launchAlgorithmZad4(lastCode, key, option);
-                for (int i = 0; i < 8 - lastResult[7]; i++)
-                    outputStream.WriteByte(lastResult[i]);
-            }
+            System.IO.File.Delete(file.FileName);
             return RedirectToAction("DownloadFile", new { fileName = "output" + file.FileName });
-
-            return View();
         }
 
         public FileResult DownloadFile(string fileName)
@@ -91,9 +52,66 @@ namespace Bezpieczeństwo.Controllers
             return File(file, "application/octet-stream", fileName);
         }
 
+        private void Cipher(IFormFile file, string dir, string key)
+        {
+            using (var fileStream = System.IO.File.OpenRead(file.FileName))
+            using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
+            {
+                while (fileStream.Length - fileStream.Position >= 8)
+                {
+                    byte[] code = new byte[8];
+                    fileStream.Read(code, 0, 8);
+                    byte[] result = launchAlgorithmZad4(code, key, 1);
+                    outputStream.Write(result);
+                }
+
+                if (fileStream.Length - fileStream.Position > 0)
+                {
+                    byte[] code = new byte[8];
+                    int numberOfBytesLeft = (int)(fileStream.Length - fileStream.Position);
+                    fileStream.Read(code, 0, numberOfBytesLeft);
+                    code[7] = (byte)(8 - numberOfBytesLeft);
+                    byte[] result = launchAlgorithmZad4(code, key, 1);
+                    outputStream.Write(result);
+                }
+                else
+                {
+                    byte[] code = new byte[8];
+                    for (int i = 0; i < 7; i++)
+                        code[i] = 0;
+
+                    code[7] = 8;
+                    byte[] result = launchAlgorithmZad4(code, key, 1);
+                    outputStream.Write(result);
+                }
+            }
+        }
+
+        private void Decrypt(IFormFile file, string dir, string key)
+        {
+            using (var fileStream = System.IO.File.OpenRead(file.FileName))
+            using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
+            {
+                while (fileStream.Length - fileStream.Position > 8)
+                {
+                    byte[] code = new byte[8];
+                    fileStream.Read(code, 0, 8);
+                    byte[] result = launchAlgorithmZad4(code, key, 2);
+                    outputStream.Write(result);
+                }
+
+                byte[] lastCode = new byte[8];
+                fileStream.Read(lastCode, 0, 8);
+                byte[] lastResult = launchAlgorithmZad4(lastCode, key, 2);
+                for (int i = 0; i < 8 - lastResult[7]; i++)
+                    outputStream.WriteByte(lastResult[i]);
+            }
+        }
+
+        //2 dla deszyfrowania, 1 dla szyfrowania
         private byte[] launchAlgorithmZad4(byte[] code, string key, int option)
         {
-            return new byte[] { };
+            return code;
         }
     }
 }
