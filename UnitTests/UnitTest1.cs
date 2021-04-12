@@ -606,55 +606,90 @@ namespace UnitTests
         [Test, Category("Exercies4")]
         public void TestKeyPC1()
         {
-            DESkey dk2 = new DESkey();
-            dk2.generateKeyBit(13090691913607963274);
-
             ulong i = 1383827165325090800;
             // i w systemie dwójkowym "0001001100110100010101110111100110011011101111001101111111110001";
-            // wynik w systemie dziesietnym long r = 67779029043144591;
-            string sr = "11110000110011001010101011110101010101100110011110001111";
+            ulong r = 67779029043144591;
+            // r w systemie dwójkowym string sr = "11110000110011001010101011110101010101100110011110001111";
 
             DESkey dk = new DESkey(i);
             //permutedChoice1
-            int[] result =  dk.permutedChoice1();
-            string resultstring = "";
-            foreach (int j in result) resultstring += j;
-            Assert.AreEqual(sr, resultstring);
+            ulong result =  dk.permutedChoice1bit();
+            Assert.AreEqual(r, result);
+        }
+
+        [Test, Category("Exercies4")]
+        public void TestKeySplit()
+        {
+            ulong i = 1383827165325090800;
+
+            DESkey dk = new DESkey(i);
+            //permutedChoice1
+            ulong pc1 = dk.permutedChoice1bit();
 
             //split
-            long l = 252496559;
-            long p = 89548687;
-            long spl_l = dk.split(result, 0, 27);
-            //long spl_p = dk.split(result, 28, 55);
+            int l = 252496559, p = 89548687;
+            int spl_l = dk.splitBit(pc1, true);
+            int spl_p = dk.splitBit(pc1, false);
             Assert.AreEqual(l, spl_l);
+            Assert.AreEqual(p, spl_p);
 
         }
 
-        /*
+        [Test, Category("Exercies4")]
+        public void TestKeyPC2()
+        {
+            ulong i = 1383827165325090800;
+            // i w systemie dwójkowym "0001001100110100010101110111100110011011101111001101111111110001";
+            ulong k = 29699430183026;
+            // r w systemie dwójkowym string sr = "000110110000001011101111111111000111000001110010";
+
+            DESkey dk = new DESkey(i);
+            //permutedChoice1
+            ulong pc1 = dk.permutedChoice1bit();
+            //split
+            int left = dk.splitBit(pc1, true);
+            int right = dk.splitBit(pc1, false);
+
+            //przesunięcie bitowe
+            int ls = 1;
+            int add = left >> (28 - ls);
+            left = (left << ls) + add;
+            left = left % 268435456;
+            add = right >> (28 - ls);
+            right = (right << ls) + add;
+            right = right % 268435456;
+
+            //permutedChoice2
+            ulong pc2 = dk.permutedChoice2bit(left, right);
+            Assert.AreEqual(k, pc2);
+        }
+        
         [Test, Category("Exercies4")]
         public void TestKey()
         {
+            ulong i = 1383827165325090800;
+
             DESkey dk = new DESkey();
-            byte value1=0;
-            int int1 = 128;
-            try
-            {
-                value1 = (byte)int1;
-                Console.WriteLine(value1);
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine("{0} is out of range of a byte.", int1);
-            }
-            long l = Convert.ToInt64(value1);
+            dk.generateKeyBit(i);
+            ulong[] result = dk.getKeyCipher();
 
-            long i = 1383827165325090801;
-            long o1 = 29699430183026;
-            dk.generateKey(i);
-            long[] key = dk.getKeyCipher();
-            Assert.AreEqual(o1, key[0]);
+            //poprawne wartosci klucza
+            ulong[] key = new ulong[16]
+            {
+                29699430183026, 133791886330341, 94543139753881,
+                126090959598877, 137353186988968, 109561366215471,
+                260054766196924, 272173063289851, 247235160696705,
+                195658438559311, 36695460205446, 129132311898089,
+                166875887221313, 104744453596986, 210631860764426,
+                223465186400245
+            };
 
-        }*/
+            for (int j = 0; j < 16; j++)
+            {
+                Assert.AreEqual(result[j], key[j]);
+            }
+
+        }
 
     }
 }
