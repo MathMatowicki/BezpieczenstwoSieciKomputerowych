@@ -602,5 +602,56 @@ namespace UnitTests
             des.functionF(2875535566, 254632997710694);
             Assert.AreEqual(true, true);
         }
+
+        [Test, Category("Exercies4")]
+        public void TestKeyPC1()
+        {
+            long i = 1383827165325090800;
+            // i w systemie dwójkowym "0001001100110100010101110111100110011011101111001101111111110001";
+            // wynik w systemie dziesietnym long r = 67779029043144591;
+            string sr = "11110000110011001010101011110101010101100110011110001111";
+
+            DESkey dk = new DESkey(i);
+            //permutedChoice1
+            int[] result =  dk.permutedChoice1();
+            string resultstring = "";
+            foreach (int j in result) resultstring += j;
+            Assert.AreEqual(sr, resultstring);
+
+            //split
+            long l = 252496559;
+            long p = 89548687;
+            long spl_l = dk.split(result, 0, 27);
+            //long spl_p = dk.split(result, 28, 55);
+            Assert.AreEqual(l, spl_l);
+
+        }
+
+        /*
+        [Test, Category("Exercies4")]
+        public void TestKey()
+        {
+            DESkey dk = new DESkey();
+            byte value1=0;
+            int int1 = 128;
+            try
+            {
+                value1 = (byte)int1;
+                Console.WriteLine(value1);
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("{0} is out of range of a byte.", int1);
+            }
+            long l = Convert.ToInt64(value1);
+
+            long i = 1383827165325090801;
+            long o1 = 29699430183026;
+            dk.generateKey(i);
+            long[] key = dk.getKeyCipher();
+            Assert.AreEqual(o1, key[0]);
+
+        }*/
+
     }
 }
