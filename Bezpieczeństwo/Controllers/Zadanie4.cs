@@ -35,6 +35,20 @@ namespace Bezpieczeństwo.Controllers
                 file.CopyTo(fileStream);
             }
 
+            //walidacja klucza
+            ulong keyValue;
+            int keyCorrectness = this.KeyCorrectness(key, out keyValue);
+            if(keyCorrectness == 0)
+            {
+                ViewBag.Message = "Nie podano żadnego klucza.";
+                return View();
+            }
+            else if(keyCorrectness == 1)
+            {
+                ViewBag.Message = "Podano nieprawidłowy klucz. Klucz musi być liczbą dodatnią (max 64 bitową).";
+                return View();
+            }
+
             //szyfrowanie i deszyfrowanie
             if (option == 1)
                 this.Cipher(file, dir, key);
@@ -106,6 +120,15 @@ namespace Bezpieczeństwo.Controllers
                 for (int i = 0; i < 8 - lastResult[7]; i++)
                     outputStream.WriteByte(lastResult[i]);
             }
+        }
+
+        public int KeyCorrectness(String key, out ulong keyValue)
+        {
+            if (key == null || key.Length == 0 || key == "") { keyValue = 0; return 0; }
+            if (!ulong.TryParse(key, out keyValue)) { keyValue = 0; return 1; }
+            if (keyValue < 0 ) return 1;
+
+            return 2;
         }
 
         //2 dla deszyfrowania, 1 dla szyfrowania
