@@ -606,7 +606,10 @@ namespace UnitTests
         [Test, Category("Exercies4")]
         public void TestKeyPC1()
         {
-            long i = 1383827165325090800;
+            DESkey dk2 = new DESkey();
+            dk2.generateKeyBit(13090691913607963274);
+
+            ulong i = 1383827165325090800;
             // i w systemie dwójkowym "0001001100110100010101110111100110011011101111001101111111110001";
             // wynik w systemie dziesietnym long r = 67779029043144591;
             string sr = "11110000110011001010101011110101010101100110011110001111";

@@ -193,9 +193,9 @@ namespace Bezpieczeństwo.Algorithms
                 outputl.Append((Rchanged >> i) % 2);*/
 
 
-        public uint functionF(uint R, long key)
+        public uint functionF(uint R, ulong key)
         {
-            long Rchanged = 0;
+            ulong Rchanged = 0;
             uint beforeOutput = 0;
             for(int i = 0; i < 8; i++)
                 for (int j = 0; j < 6; j++)
@@ -206,7 +206,7 @@ namespace Bezpieczeństwo.Algorithms
 
             List<byte[,]> s = new List<byte[,]>();
             s.Add(s1); s.Add(s2); s.Add(s3); s.Add(s4); s.Add(s5); s.Add(s6); s.Add(s7); s.Add(s8);
-            long xorResult = Rchanged ^ key;
+            ulong xorResult = Rchanged ^ key;
             for(int i = 1; i <= 8; i++)
             {
                 byte row = 0, column = 0, offset;

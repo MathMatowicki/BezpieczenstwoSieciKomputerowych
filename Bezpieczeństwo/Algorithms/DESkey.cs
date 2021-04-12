@@ -45,14 +45,14 @@ namespace Bezpieczeństwo.Algorithms
         };
 
 
-        private long key;
-        private long[] keyCipher = new long[16];
+        private ulong key;
+        private ulong[] keyCipher = new ulong[16];
 
         public DESkey() { }
-        public DESkey(long k) { this.key = k; }
+        public DESkey(ulong k) { this.key = k; }
         public int[] permutedChoice1()
         {
-            String s = Convert.ToString(this.key, 2);
+            String s = "";//Convert.ToString(this.key, 2);
             while (s.Length < 64) s = "0" + s;
             int[] result = new int[56];
             for(int i = 0; i < 56; i++)
@@ -64,15 +64,29 @@ namespace Bezpieczeństwo.Algorithms
         }
 
         //proba bez zamiany na string
-        public byte[] permutedChoice1bit()
+        public ulong permutedChoice1bit()
         {
-            byte[] bytes = BitConverter.GetBytes(this.key);
-            byte[] result = new byte[7];
+            ulong result = 0;
             for (int i = 0; i < 56; i++)
             {
-                int x = pc1[i] - 1;
-                //nie wiem jak zrobic odwolanie do konkretego bitu 
+                result = result << 1;
+                ulong x = (key >> (64 - pc1[i])) % 2;
+                result += x;
 
+            }
+            return result;
+        }
+
+        public ulong permutedChoice2bit(int left, int right)
+        {
+            ulong leftHelp = (ulong)left;
+            ulong toConversion = (leftHelp << 28) + (ulong)right;
+            ulong result = 0;
+            for (int i = 0; i < 48; i++)
+            {
+                result = result << 1;
+                ulong x = (toConversion >> (56 - pc2[i])) % 2;
+                result += x;
             }
             return result;
         }
@@ -115,7 +129,7 @@ namespace Bezpieczeństwo.Algorithms
             return Convert.ToInt64(b);
         }
 
-        public void generateKey(long key)
+        public void generateKey(ulong key)
         {
             this.key = key;
             int[] result = this.permutedChoice1();
@@ -133,13 +147,45 @@ namespace Bezpieczeństwo.Algorithms
                 String s = "";
                 for (int j = 0; j < 48; j++) s += result[j];
 
-                this.keyCipher[i] = Convert.ToInt64(s);
+                //this.keyCipher[i] = Convert.ToInt64(s);
             }
 
         }
 
+        public int splitBit(ulong key, bool left)
+        {
+            if (left)
+                return (int)(key >> 28);
 
-        public long[] getKeyCipher()
+            return (int)(key % (268435456));
+        }
+
+        public void generateKeyBit(ulong key)
+        {
+            this.key = key;
+            ulong result = this.permutedChoice1bit();
+
+            int left = this.splitBit(result,true);
+            int right = this.splitBit(result,false);
+
+            for (int i = 0; i < 16; i++)
+            {
+                int ls = nols[i];
+                int add = left >> (28 - ls);
+                left = (left << ls) + add;
+                left = left % 268435456;
+                add = right >> (28 - ls);
+                right = (right << ls) + add;
+                right = right % 268435456;
+
+                result = this.permutedChoice2bit(left, right);
+
+                this.keyCipher[i] = result;
+            }
+
+        }
+
+        public ulong[] getKeyCipher()
         {
             return keyCipher;
         }
