@@ -9,6 +9,11 @@ namespace Bezpieczeństwo.Algorithms
         {
             return (uint)(((a[b / 8] >> (7 - (b % 8))) & 0x01) << (c));
         }
+        private static byte BITNUMINTR(uint a, int b, int c)
+        {
+            return (byte)((((a) >> (31 - (b))) & 0x00000001) << (c));
+        }
+
         private static byte[,] s1 = new byte[16, 4]
         {
             { 14, 0 , 4, 15 },
@@ -197,28 +202,28 @@ namespace Bezpieczeństwo.Algorithms
                 outputl.Append((Rchanged >> i) % 2);*/
 
         //Initial Permutation Table
-        private static byte[,] IP = new byte[8, 8]{
-            {58,50,42,34,26,18,10,2},
-            {60,52,44,36,28,20,12,4},
-            {62,54,46,38,30,22,14,6},
-            {64,56,48,40,32,24,16,8},
-            {57,49,41,33,25,17,9,1},
-            {59,51,43,35,27,19,11,3},
-            {61,53,45,37,29,21,13,5},
-            {63,55,47,39,31,23,15,7}
-        };
+        // private static byte[,] IP = new byte[8, 8]{
+        //     {58,50,42,34,26,18,10,2},
+        //     {60,52,44,36,28,20,12,4},
+        //     {62,54,46,38,30,22,14,6},
+        //     {64,56,48,40,32,24,16,8},
+        //     {57,49,41,33,25,17,9,1},
+        //     {59,51,43,35,27,19,11,3},
+        //     {61,53,45,37,29,21,13,5},
+        //     {63,55,47,39,31,23,15,7}
+        // };
 
-        //Final Permutation Table
-        private static byte[,] FP = new byte[8, 8]{
-            {40,8,48,16,56,24,64,32},
-            {39,7,47,15,55,23,63,31},
-            {38,6,46,14,54,22,62,30},
-            {37,5,45,13,53,21,61,29},
-            {36,4,44,12,52,20,60,28},
-            {35,3,43,11,51,19,59,27},
-            {34,2,42,10,50,18,58,26},
-            {33,1,41,9,49,17,57,25}
-        };
+        // //Final Permutation Table
+        // private static byte[,] FP = new byte[8, 8]{
+        //     {40,8,48,16,56,24,64,32},
+        //     {39,7,47,15,55,23,63,31},
+        //     {38,6,46,14,54,22,62,30},
+        //     {37,5,45,13,53,21,61,29},
+        //     {36,4,44,12,52,20,60,28},
+        //     {35,3,43,11,51,19,59,27},
+        //     {34,2,42,10,50,18,58,26},
+        //     {33,1,41,9,49,17,57,25}
+        // };
         public uint functionF(uint R, ulong key)
         {
             ulong Rchanged = 0;
@@ -254,5 +259,70 @@ namespace Bezpieczeństwo.Algorithms
                 }
             return output;
         }
+
+        private static void IP(uint[] state, byte[] input)
+        {
+            state[0] = BITNUM(input, 57, 31) | BITNUM(input, 49, 30) | BITNUM(input, 41, 29) | BITNUM(input, 33, 28) |
+                BITNUM(input, 25, 27) | BITNUM(input, 17, 26) | BITNUM(input, 9, 25) | BITNUM(input, 1, 24) |
+                BITNUM(input, 59, 23) | BITNUM(input, 51, 22) | BITNUM(input, 43, 21) | BITNUM(input, 35, 20) |
+                BITNUM(input, 27, 19) | BITNUM(input, 19, 18) | BITNUM(input, 11, 17) | BITNUM(input, 3, 16) |
+                BITNUM(input, 61, 15) | BITNUM(input, 53, 14) | BITNUM(input, 45, 13) | BITNUM(input, 37, 12) |
+                BITNUM(input, 29, 11) | BITNUM(input, 21, 10) | BITNUM(input, 13, 9) | BITNUM(input, 5, 8) |
+                BITNUM(input, 63, 7) | BITNUM(input, 55, 6) | BITNUM(input, 47, 5) | BITNUM(input, 39, 4) |
+                BITNUM(input, 31, 3) | BITNUM(input, 23, 2) | BITNUM(input, 15, 1) | BITNUM(input, 7, 0);
+
+            state[1] = BITNUM(input, 56, 31) | BITNUM(input, 48, 30) | BITNUM(input, 40, 29) | BITNUM(input, 32, 28) |
+                BITNUM(input, 24, 27) | BITNUM(input, 16, 26) | BITNUM(input, 8, 25) | BITNUM(input, 0, 24) |
+                BITNUM(input, 58, 23) | BITNUM(input, 50, 22) | BITNUM(input, 42, 21) | BITNUM(input, 34, 20) |
+                BITNUM(input, 26, 19) | BITNUM(input, 18, 18) | BITNUM(input, 10, 17) | BITNUM(input, 2, 16) |
+                BITNUM(input, 60, 15) | BITNUM(input, 52, 14) | BITNUM(input, 44, 13) | BITNUM(input, 36, 12) |
+                BITNUM(input, 28, 11) | BITNUM(input, 20, 10) | BITNUM(input, 12, 9) | BITNUM(input, 4, 8) |
+                BITNUM(input, 62, 7) | BITNUM(input, 54, 6) | BITNUM(input, 46, 5) | BITNUM(input, 38, 4) |
+                BITNUM(input, 30, 3) | BITNUM(input, 22, 2) | BITNUM(input, 14, 1) | BITNUM(input, 6, 0);
+        }
+        private static void InvIP(uint[] state, byte[] input)
+        {
+            input[0] = (byte)(BITNUMINTR(state[1], 7, 7) | BITNUMINTR(state[0], 7, 6) | BITNUMINTR(state[1], 15, 5) |
+                BITNUMINTR(state[0], 15, 4) | BITNUMINTR(state[1], 23, 3) | BITNUMINTR(state[0], 23, 2) |
+                BITNUMINTR(state[1], 31, 1) | BITNUMINTR(state[0], 31, 0));
+
+            input[1] = (byte)(BITNUMINTR(state[1], 6, 7) | BITNUMINTR(state[0], 6, 6) | BITNUMINTR(state[1], 14, 5) |
+                BITNUMINTR(state[0], 14, 4) | BITNUMINTR(state[1], 22, 3) | BITNUMINTR(state[0], 22, 2) |
+                BITNUMINTR(state[1], 30, 1) | BITNUMINTR(state[0], 30, 0));
+
+            input[2] = (byte)(BITNUMINTR(state[1], 5, 7) | BITNUMINTR(state[0], 5, 6) | BITNUMINTR(state[1], 13, 5) |
+                BITNUMINTR(state[0], 13, 4) | BITNUMINTR(state[1], 21, 3) | BITNUMINTR(state[0], 21, 2) |
+                BITNUMINTR(state[1], 29, 1) | BITNUMINTR(state[0], 29, 0));
+
+            input[3] = (byte)(BITNUMINTR(state[1], 4, 7) | BITNUMINTR(state[0], 4, 6) | BITNUMINTR(state[1], 12, 5) |
+                BITNUMINTR(state[0], 12, 4) | BITNUMINTR(state[1], 20, 3) | BITNUMINTR(state[0], 20, 2) |
+                BITNUMINTR(state[1], 28, 1) | BITNUMINTR(state[0], 28, 0));
+
+            input[4] = (byte)(BITNUMINTR(state[1], 3, 7) | BITNUMINTR(state[0], 3, 6) | BITNUMINTR(state[1], 11, 5) |
+                BITNUMINTR(state[0], 11, 4) | BITNUMINTR(state[1], 19, 3) | BITNUMINTR(state[0], 19, 2) |
+                BITNUMINTR(state[1], 27, 1) | BITNUMINTR(state[0], 27, 0));
+
+            input[5] = (byte)(BITNUMINTR(state[1], 2, 7) | BITNUMINTR(state[0], 2, 6) | BITNUMINTR(state[1], 10, 5) |
+                BITNUMINTR(state[0], 10, 4) | BITNUMINTR(state[1], 18, 3) | BITNUMINTR(state[0], 18, 2) |
+                BITNUMINTR(state[1], 26, 1) | BITNUMINTR(state[0], 26, 0));
+
+            input[6] = (byte)(BITNUMINTR(state[1], 1, 7) | BITNUMINTR(state[0], 1, 6) | BITNUMINTR(state[1], 9, 5) |
+                BITNUMINTR(state[0], 9, 4) | BITNUMINTR(state[1], 17, 3) | BITNUMINTR(state[0], 17, 2) |
+                BITNUMINTR(state[1], 25, 1) | BITNUMINTR(state[0], 25, 0));
+
+            input[7] = (byte)(BITNUMINTR(state[1], 0, 7) | BITNUMINTR(state[0], 0, 6) | BITNUMINTR(state[1], 8, 5) |
+                BITNUMINTR(state[0], 8, 4) | BITNUMINTR(state[1], 16, 3) | BITNUMINTR(state[0], 16, 2) |
+                BITNUMINTR(state[1], 24, 1) | BITNUMINTR(state[0], 24, 0));
+        }
+        // private static byte[,] FP = new byte[8, 8]{
+        //     {40,8,48,16,56,24,64,32},
+        //     {39,7,47,15,55,23,63,31},
+        //     {38,6,46,14,54,22,62,30},
+        //     {37,5,45,13,53,21,61,29},
+        //     {36,4,44,12,52,20,60,28},
+        //     {35,3,43,11,51,19,59,27},
+        //     {34,2,42,10,50,18,58,26},
+        //     {33,1,41,9,49,17,57,25}
+        // };
     }
 }
