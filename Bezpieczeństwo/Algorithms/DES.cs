@@ -5,6 +5,10 @@ namespace Bezpieczeństwo.Algorithms
 {
     public class DES
     {
+        private static uint BITNUM(byte[] a, int b, int c)
+{
+	return (uint)(((a[b / 8] >> (7 - (b % 8))) & 0x01) << (c));
+}
         private static byte[,] s1 = new byte[16, 4]
         {
             { 14, 0 , 4, 15 },
