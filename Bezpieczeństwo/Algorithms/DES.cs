@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -324,5 +325,48 @@ namespace Bezpieczeństwo.Algorithms
         //     {34,2,42,10,50,18,58,26},
         //     {33,1,41,9,49,17,57,25}
         // };
+
+        //ulong iPKey = initialPermutatuon(key);
+        //ulong L = splitLeft(iPKey);
+        //ulong P = splitRight(iPKey);
+
+        public void desMain(uint input)
+        {
+            DESkey desKey = new DESkey(input);
+            uint L = splitBit(input, true);
+            uint R = splitBit(input, false);
+            desRec(L, R, desKey.getKeyCipher(), 0);
+
+        }
+
+
+        public uint preOutput(uint L, uint R)
+        {
+            return (L << 32) + R;
+        }
+
+        public void desRec(uint L, uint R, ulong[] Keys, int i)
+        {
+            if (i < Keys.Length - 1)
+            {
+                uint xorResult = functionF(R, Keys[i]) ^ L;
+                desRec(R, xorResult, Keys, i + 1);
+            }
+            else if (i == 16)
+            {
+                uint xorResult = functionF(R, Keys[i]) ^ L;
+                //InvIP(state, BitConverter.GetBytes(preOutput(xorResult, R)));
+
+            }
+
+        }
+
+        public uint splitBit(ulong key, bool left)
+        {
+            if (left)
+                return (uint)(key >> 28);
+
+            return (uint)(key % (268435456));
+        }
     }
 }
