@@ -1,5 +1,22 @@
 ﻿<div>
-    @foreach (var item in ViewBag.u)
+    <a>Input: </a>
+    @foreach (var item in ViewBag.input)
+    {
+        <a>@item</a>
+    }
+
+</div>
+<div>
+    <a>Cipher: </a>
+    @foreach (var item in ViewBag.Cipheroutput)
+    {
+        <a>@item</a>
+    }
+
+</div>
+<div>
+    <a>Decipher: </a>
+    @foreach (var item in ViewBag.Decipheroutput)
     {
         <a>@item</a>
     }

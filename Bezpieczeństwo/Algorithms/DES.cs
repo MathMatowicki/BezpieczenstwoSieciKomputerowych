@@ -330,7 +330,7 @@ namespace Bezpieczeństwo.Algorithms
         //     {33,1,41,9,49,17,57,25}
         // };
 
-        public byte[] desMain(byte[] input, byte[]output, ulong[] Keys)
+        public byte[] desCipher(byte[] input, byte[]output, ulong[] Keys)
         {
             uint[] state = new uint[2];
             uint idx, t;
@@ -345,6 +345,27 @@ namespace Bezpieczeństwo.Algorithms
             }
 
             state[0] = functionF(state[1], Keys[15]) ^ state[0];
+
+            output = InvIP(state, output);
+
+            return output;
+
+        }
+        public byte[] desDecipher(byte[] input, byte[] output, ulong[] Keys)
+        {
+            uint[] state = new uint[2];
+            uint idx, t;
+
+            state = IP(state, input);
+
+            for (idx = 15; idx > 0; idx--)
+            {
+                t = state[1];
+                state[1] = functionF(state[1], Keys[idx]) ^ state[0];
+                state[0] = t;
+            }
+
+            state[0] = functionF(state[1], Keys[0]) ^ state[0];
 
             output = InvIP(state, output);
 
