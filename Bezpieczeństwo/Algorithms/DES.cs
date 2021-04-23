@@ -261,7 +261,7 @@ namespace Bezpieczeństwo.Algorithms
             return output;
         }
 
-        private static void IP(uint[] state, byte[] input)
+        private static uint[] IP(uint[] state, byte[] input)
         {
             state[0] = BITNUM(input, 57, 31) | BITNUM(input, 49, 30) | BITNUM(input, 41, 29) | BITNUM(input, 33, 28) |
                 BITNUM(input, 25, 27) | BITNUM(input, 17, 26) | BITNUM(input, 9, 25) | BITNUM(input, 1, 24) |
@@ -280,8 +280,10 @@ namespace Bezpieczeństwo.Algorithms
                 BITNUM(input, 28, 11) | BITNUM(input, 20, 10) | BITNUM(input, 12, 9) | BITNUM(input, 4, 8) |
                 BITNUM(input, 62, 7) | BITNUM(input, 54, 6) | BITNUM(input, 46, 5) | BITNUM(input, 38, 4) |
                 BITNUM(input, 30, 3) | BITNUM(input, 22, 2) | BITNUM(input, 14, 1) | BITNUM(input, 6, 0);
+
+            return state;
         }
-        private static void InvIP(uint[] state, byte[] input)
+        private static byte[] InvIP(uint[] state, byte[] input)
         {
             input[0] = (byte)(BITNUMINTR(state[1], 7, 7) | BITNUMINTR(state[0], 7, 6) | BITNUMINTR(state[1], 15, 5) |
                 BITNUMINTR(state[0], 15, 4) | BITNUMINTR(state[1], 23, 3) | BITNUMINTR(state[0], 23, 2) |
@@ -314,6 +316,8 @@ namespace Bezpieczeństwo.Algorithms
             input[7] = (byte)(BITNUMINTR(state[1], 0, 7) | BITNUMINTR(state[0], 0, 6) | BITNUMINTR(state[1], 8, 5) |
                 BITNUMINTR(state[0], 8, 4) | BITNUMINTR(state[1], 16, 3) | BITNUMINTR(state[0], 16, 2) |
                 BITNUMINTR(state[1], 24, 1) | BITNUMINTR(state[0], 24, 0));
+
+            return input;
         }
         // private static byte[,] FP = new byte[8, 8]{
         //     {40,8,48,16,56,24,64,32},
@@ -326,47 +330,33 @@ namespace Bezpieczeństwo.Algorithms
         //     {33,1,41,9,49,17,57,25}
         // };
 
-        //ulong iPKey = initialPermutatuon(key);
-        //ulong L = splitLeft(iPKey);
-        //ulong P = splitRight(iPKey);
-
-        public void desMain(uint input)
+        public byte[] desMain(byte[] input, byte[]output, ulong[] Keys)
         {
-            DESkey desKey = new DESkey(input);
-            uint L = splitBit(input, true);
-            uint R = splitBit(input, false);
-            desRec(L, R, desKey.getKeyCipher(), 0);
+            uint[] state = new uint[2];
+            uint idx, t;
 
-        }
+            state = IP(state, input);
 
-
-        public uint preOutput(uint L, uint R)
-        {
-            return (L << 32) + R;
-        }
-
-        public void desRec(uint L, uint R, ulong[] Keys, int i)
-        {
-            if (i < Keys.Length - 1)
+            for (idx = 0; idx < 15; ++idx)
             {
-                uint xorResult = functionF(R, Keys[i]) ^ L;
-                desRec(R, xorResult, Keys, i + 1);
-            }
-            else if (i == 16)
-            {
-                uint xorResult = functionF(R, Keys[i]) ^ L;
-                //InvIP(state, BitConverter.GetBytes(preOutput(xorResult, R)));
-
+                t = state[1];
+                state[1] = functionF(state[1], Keys[idx]) ^ state[0];
+                state[0] = t;
             }
 
+            state[0] = functionF(state[1], Keys[15]) ^ state[0];
+
+            output = InvIP(state, output);
+
+            return output;
+
         }
-
-        public uint splitBit(ulong key, bool left)
+        public byte[] Test(byte[] input)
         {
-            if (left)
-                return (uint)(key >> 28);
-
-            return (uint)(key % (268435456));
+            uint[] state = new uint[2];
+            state = IP(state, input);
+            byte[] output = new byte[8];
+            return InvIP(state, output);
         }
     }
 }
