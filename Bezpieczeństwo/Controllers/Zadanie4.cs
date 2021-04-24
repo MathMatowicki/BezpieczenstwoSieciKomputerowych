@@ -52,9 +52,9 @@ namespace Bezpieczeństwo.Controllers
 
             //szyfrowanie i deszyfrowanie
             if (option == 1)
-                this.Cipher(file, dir, key);
+                this.Cipher(file, dir, keyValue);
             else
-                this.Decrypt(file, dir, key);
+                this.Decrypt(file, dir, keyValue);
 
             System.IO.File.Delete(file.FileName);
             return RedirectToAction("DownloadFile", new { fileName = "output" + file.FileName });
@@ -67,7 +67,7 @@ namespace Bezpieczeństwo.Controllers
             return File(file, "application/octet-stream", fileName);
         }
 
-        private void Cipher(IFormFile file, string dir, string key)
+        private void Cipher(IFormFile file, string dir, ulong key)
         {
             using (var fileStream = System.IO.File.OpenRead(file.FileName))
             using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
@@ -102,7 +102,7 @@ namespace Bezpieczeństwo.Controllers
             }
         }
 
-        private void Decrypt(IFormFile file, string dir, string key)
+        private void Decrypt(IFormFile file, string dir, ulong key)
         {
             using (var fileStream = System.IO.File.OpenRead(file.FileName))
             using (var outputStream = new FileStream(Path.Combine(dir, "output" + file.FileName), FileMode.Create, FileAccess.Write))
@@ -133,12 +133,12 @@ namespace Bezpieczeństwo.Controllers
         }
 
         //2 dla deszyfrowania, 1 dla szyfrowania
-        private byte[] launchAlgorithmZad4(byte[] code, string key, int option)
+        private byte[] launchAlgorithmZad4(byte[] code, ulong key, int option)
         {
             ulong ulongKey = Convert.ToUInt64(key);
 
-            DESkey deskey = new DESkey(4231);
-            deskey.generateKeyBit(4231);
+            DESkey deskey = new DESkey(key);
+            deskey.generateKeyBit(key);
             ulong[] keys = deskey.getKeyCipher();
             byte[] output = new byte[8];
 
