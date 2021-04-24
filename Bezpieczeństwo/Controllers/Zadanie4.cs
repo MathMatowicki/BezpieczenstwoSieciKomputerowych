@@ -31,6 +31,11 @@ namespace Bezpieczeństwo.Controllers
         public IActionResult Algorithms(String key, int option, IFormFile file)
         {
             var dir = _env.ContentRootPath;
+            if (file == null)
+            {
+                ViewBag.Message = "Nie podano żadnego pliku.";
+                return View();
+            }
             using (var fileStream = new FileStream(Path.Combine(dir, file.FileName), FileMode.Create, FileAccess.Write))
             {
                 file.CopyTo(fileStream);
