@@ -29,6 +29,7 @@ namespace Bezpieczeństwo.Controllers
             input[6] = 11;
             input[7] = 2;
 
+
             Cipheroutput = des.desCipher(input, Cipheroutput, keys);
             Decipheroutput = des.desDecipher(Cipheroutput, Decipheroutput, keys);
 

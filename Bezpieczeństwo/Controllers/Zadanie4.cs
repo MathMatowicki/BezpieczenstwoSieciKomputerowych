@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Bezpieczeństwo.Algorithms;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -134,7 +135,25 @@ namespace Bezpieczeństwo.Controllers
         //2 dla deszyfrowania, 1 dla szyfrowania
         private byte[] launchAlgorithmZad4(byte[] code, string key, int option)
         {
-            return code;
+            ulong ulongKey = Convert.ToUInt64(key);
+
+            DESkey deskey = new DESkey(4231);
+            deskey.generateKeyBit(4231);
+            ulong[] keys = deskey.getKeyCipher();
+            byte[] output = new byte[8];
+
+            if (option == 1)
+            {
+                DES des = new DES();
+                output = des.desCipher(code, output, keys);
+            }
+            else if (option == 2)
+            {
+                DES des = new DES();
+                output = des.desDecipher(code, output, keys);
+            }
+            
+            return output;
         }
     }
 }
