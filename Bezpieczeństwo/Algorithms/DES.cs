@@ -247,7 +247,7 @@ namespace Bezpieczeństwo.Algorithms
                 column = (byte)((xorResult >> (offset + 1)) % 16);
                 row += (byte)(((xorResult >> (offset + 5)) % 2) * 2);
 
-                beforeOutput = beforeOutput << 6;
+                beforeOutput = beforeOutput << 4;
                 beforeOutput += (uint)s[i - 1][column, row];
             }
 
